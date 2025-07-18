@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr-fr"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name"> | TheSeventhCirle</title>
+<meta property="og:title" content=" | TheSeventhCirle" />
+<meta name="twitter:title" content=" | TheSeventhCirle" />
+<meta itemprop="name" content=" | TheSeventhCirle" />
+<meta name="application-name" content=" | TheSeventhCirle" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre">
+<meta itemprop="description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+<meta property="og:description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+<meta name="twitter:description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+
+<meta property="og:locale" content="fr-fr" />
+<meta name="language" content="fr-fr" />
+
+  <link rel="alternate" hreflang="fr-fr" href="//localhost:1313/posts/chapter-2/" title="French" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=0001-01-01T00:00:00Z />
+    <meta property="article:published_time" content=0001-01-01T00:00:00Z />
+    <meta property="og:url" content="//localhost:1313/posts/chapter-2/" />
+
+    
+    <meta property="og:article:author" content="" />
+    <meta property="article:author" content="" />
+    <meta name="author" content="" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "0001-01-01",
+        "description": "",
+        "wordCount":  1326 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "0001-01-01",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "TheSeventhCirle"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.1">
+
+    
+    <meta property="og:url" content="//localhost:1313/posts/chapter-2/">
+  <meta property="og:site_name" content="TheSeventhCirle">
+  <meta property="og:title" content="TheSeventhCirle">
+  <meta property="og:description" content="Chapter 2 #certifications/CASP
+Core Objective 3.2: Given a scenario, configure and implement endpoint security controls. This chapter focuses on Defense in Depth for endpoints, applying layers of security through hardening, trusted OS concepts, and compensating controls. 1. Hardening Techniques (Reducing Attack Surface)
+Goal: Make endpoints harder to compromise by removing unneeded services/features and securing configurations. Requires standard methodology, OS-specific baselines. Golden Image / System Cloning: Creating a master, hardened image for consistent deployment. Establishes a baseline. Physical Security: Foundational. Secure systems physically. Train users (power off, password screensavers, auto-logoff). Lifecycle Management: EOL (End-of-Life): Remove hardware reaching end of usability from the network. EOS (End-of-Support): Replace software no longer supported by the manufacturer. Boot Loader Protections: Secure systems before the OS fully loads. Secure Boot: UEFI feature using manufacturer-trusted software/keys (X.509 certs) to ensure only signed bootloaders run. Blocks pre-boot malware. Measured Launch/Boot: Works with TPM &amp; Secure Boot. Firmware logs the boot process; logs can be sent to a trusted server for health attestation/verification before allowing OS components to execute. IMA (Integrity Measurement Architecture): Verifies integrity/trust of Linux OS components during boot. BIOS/UEFI Protection: UEFI replaces/augments BIOS, acts like a pre-OS, designed to block rootkits. Requires Secure Boot enablement. General Host Hardening: Application Approved List (Whitelist): Only explicitly listed applications/entities can run/access. Implicit “deny all.” Application Block/Deny List (Blacklist): Explicitly listed applications/entities cannot run/access. Implicit “allow all.” Security/Group Policy (Windows): Centralized configuration management via Active Directory. Enforces consistent settings (Password Policy, Lockout Policy, Kerberos, Audit, User Rights, Security Options). Attestation Services: Validating something (like boot process or hardware state) as true. Can be hardware (TPM), software, or hybrid. TPM enables tamper-resistant full-disk encryption. NX (No-eXecute) / XN (eXecute Never) Bit: CPU feature segregating memory areas for code and data, preventing code execution from data segments. Protects against certain exploits. Intel: XD (eXecute Disable) AMD: EVP (Enhanced Virus Protection) ARM: XN (eXecute Never) Secure Enclaves / Memory Encryption: Hardware-level secure application execution. Data is encrypted in main memory, decrypted only within the secure hardware enclave. Protects even if OS kernel is compromised. ASLR (Address Space Layout Randomization): Security technique randomizing memory locations of key process areas (executables, libraries, stack, heap). Makes buffer overflow exploitation much harder (attacker needs exact address). Requires application compilation support (now common). Note: Can have configuration issues/compatibility challenges. Patching &amp; Updates: Regularly apply OS and application patches to fix known vulnerabilities. Use standard images (golden images) and vulnerability assessment tools (Nessus, SAINT, Retina) to identify needed patches. Test before deploying. Removing Unnecessary Services/Applications: Core hardening principle. Disable/remove unneeded software, services, ports. Reduces potential entry points. (e.g., Bastille Linux tool for automating Linux hardening). Command Shell Restrictions: Limit or disable user access to command prompts (cmd, bash) unless necessary. Prevents misuse or privilege escalation via commands. Note: Can sometimes be bypassed (e.g., StickyKeys exploit example). Warning Banners: Display messages upon login/access informing users of acceptable use policies, monitoring, lack of privacy expectations, and consequences of violations. Needs legal/HR approval. Restricted Interfaces: User profiles limiting available programs, menus, functions to only what’s needed for a specific role/task (e.g., kiosk). Dedicated Interfaces: Physical network ports dedicated to specific types of traffic (e.g., separate NIC/VLAN for wireless traffic). Out-of-Band (OOB) Management: Using a separate, dedicated channel (often a dedicated NIC/network) for managing devices (servers, network gear), isolated from production data traffic. Management Interface: Hardware-level interface (often using OOB NIC) allowing remote management even if the OS is down/unresponsive. Data Interface: Used with databases to generate reusable process templates for manipulating similar data types across clients. Scripting &amp; Replication: Using scripts (e.g., PowerShell) to automate tasks like configuration, disaster recovery setup (replicating objects), and patch management. Standard Operating Environment (SOE): Using a consistent, standard OS build across the organization. Reduces TCO, simplifies testing, patching, and security management. ⠀2. Hardware Security Technologies">
+  <meta property="og:locale" content="fr_fr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TheSeventhCirle">
+  <meta name="twitter:description" content="Chapter 2 #certifications/CASP
+Core Objective 3.2: Given a scenario, configure and implement endpoint security controls. This chapter focuses on Defense in Depth for endpoints, applying layers of security through hardening, trusted OS concepts, and compensating controls. 1. Hardening Techniques (Reducing Attack Surface)
+Goal: Make endpoints harder to compromise by removing unneeded services/features and securing configurations. Requires standard methodology, OS-specific baselines. Golden Image / System Cloning: Creating a master, hardened image for consistent deployment. Establishes a baseline. Physical Security: Foundational. Secure systems physically. Train users (power off, password screensavers, auto-logoff). Lifecycle Management: EOL (End-of-Life): Remove hardware reaching end of usability from the network. EOS (End-of-Support): Replace software no longer supported by the manufacturer. Boot Loader Protections: Secure systems before the OS fully loads. Secure Boot: UEFI feature using manufacturer-trusted software/keys (X.509 certs) to ensure only signed bootloaders run. Blocks pre-boot malware. Measured Launch/Boot: Works with TPM &amp; Secure Boot. Firmware logs the boot process; logs can be sent to a trusted server for health attestation/verification before allowing OS components to execute. IMA (Integrity Measurement Architecture): Verifies integrity/trust of Linux OS components during boot. BIOS/UEFI Protection: UEFI replaces/augments BIOS, acts like a pre-OS, designed to block rootkits. Requires Secure Boot enablement. General Host Hardening: Application Approved List (Whitelist): Only explicitly listed applications/entities can run/access. Implicit “deny all.” Application Block/Deny List (Blacklist): Explicitly listed applications/entities cannot run/access. Implicit “allow all.” Security/Group Policy (Windows): Centralized configuration management via Active Directory. Enforces consistent settings (Password Policy, Lockout Policy, Kerberos, Audit, User Rights, Security Options). Attestation Services: Validating something (like boot process or hardware state) as true. Can be hardware (TPM), software, or hybrid. TPM enables tamper-resistant full-disk encryption. NX (No-eXecute) / XN (eXecute Never) Bit: CPU feature segregating memory areas for code and data, preventing code execution from data segments. Protects against certain exploits. Intel: XD (eXecute Disable) AMD: EVP (Enhanced Virus Protection) ARM: XN (eXecute Never) Secure Enclaves / Memory Encryption: Hardware-level secure application execution. Data is encrypted in main memory, decrypted only within the secure hardware enclave. Protects even if OS kernel is compromised. ASLR (Address Space Layout Randomization): Security technique randomizing memory locations of key process areas (executables, libraries, stack, heap). Makes buffer overflow exploitation much harder (attacker needs exact address). Requires application compilation support (now common). Note: Can have configuration issues/compatibility challenges. Patching &amp; Updates: Regularly apply OS and application patches to fix known vulnerabilities. Use standard images (golden images) and vulnerability assessment tools (Nessus, SAINT, Retina) to identify needed patches. Test before deploying. Removing Unnecessary Services/Applications: Core hardening principle. Disable/remove unneeded software, services, ports. Reduces potential entry points. (e.g., Bastille Linux tool for automating Linux hardening). Command Shell Restrictions: Limit or disable user access to command prompts (cmd, bash) unless necessary. Prevents misuse or privilege escalation via commands. Note: Can sometimes be bypassed (e.g., StickyKeys exploit example). Warning Banners: Display messages upon login/access informing users of acceptable use policies, monitoring, lack of privacy expectations, and consequences of violations. Needs legal/HR approval. Restricted Interfaces: User profiles limiting available programs, menus, functions to only what’s needed for a specific role/task (e.g., kiosk). Dedicated Interfaces: Physical network ports dedicated to specific types of traffic (e.g., separate NIC/VLAN for wireless traffic). Out-of-Band (OOB) Management: Using a separate, dedicated channel (often a dedicated NIC/network) for managing devices (servers, network gear), isolated from production data traffic. Management Interface: Hardware-level interface (often using OOB NIC) allowing remote management even if the OS is down/unresponsive. Data Interface: Used with databases to generate reusable process templates for manipulating similar data types across clients. Scripting &amp; Replication: Using scripts (e.g., PowerShell) to automate tasks like configuration, disaster recovery setup (replicating objects), and patch management. Standard Operating Environment (SOE): Using a consistent, standard OS build across the organization. Reduces TCO, simplifies testing, patching, and security management. ⠀2. Hardware Security Technologies">
+
+
+    
+
+    <link rel="canonical" href="//localhost:1313/posts/chapter-2/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="//localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="//localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>Accueil</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Accueil
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link active" href="/posts/">
+                        Articles
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/about/">
+                        À propos
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title"></h1>
+                
+                
+            </header>
+            
+    
+    <details class="toc" ZgotmplZ>
+        <summary><b>Table des matières</b></summary>
+        <nav id="TableOfContents"></nav>
+    </details>
+            <div class="page-content">
+                <h1 id="chapter-2">Chapter 2</h1>
+<p>#certifications/CASP</p>
+<p><strong>Core Objective 3.2: Given a scenario, configure and implement endpoint security controls.</strong>
+This chapter focuses on <strong>Defense in Depth</strong> for endpoints, applying layers of security through hardening, trusted OS concepts, and compensating controls.
+<strong>1. Hardening Techniques (Reducing Attack Surface)</strong></p>
+<ul>
+<li><strong>Goal:</strong> Make endpoints harder to compromise by removing unneeded services/features and securing configurations. Requires standard methodology, OS-specific baselines.</li>
+<li><strong>Golden Image / System Cloning:</strong> Creating a master, hardened image for consistent deployment. Establishes a baseline.</li>
+<li><strong>Physical Security:</strong> Foundational. Secure systems physically. Train users (power off, password screensavers, auto-logoff).</li>
+<li><strong>Lifecycle Management:</strong>
+<ul>
+<li><strong>EOL (End-of-Life):</strong> Remove hardware reaching end of usability from the network.</li>
+<li><strong>EOS (End-of-Support):</strong> Replace software no longer supported by the manufacturer.</li>
+</ul>
+</li>
+<li><strong>Boot Loader Protections:</strong> Secure systems before the OS fully loads.
+<ul>
+<li><strong>Secure Boot:</strong> UEFI feature using manufacturer-trusted software/keys (X.509 certs) to ensure only signed bootloaders run. Blocks pre-boot malware.</li>
+<li><strong>Measured Launch/Boot:</strong> Works with TPM &amp; Secure Boot. Firmware logs the boot process; logs can be sent to a trusted server for health attestation/verification before allowing OS components to execute.</li>
+<li><strong>IMA (Integrity Measurement Architecture):</strong> Verifies integrity/trust of Linux OS components during boot.</li>
+<li><strong>BIOS/UEFI Protection:</strong> UEFI replaces/augments BIOS, acts like a pre-OS, designed to block rootkits. Requires Secure Boot enablement.</li>
+</ul>
+</li>
+<li><strong>General Host Hardening:</strong>
+<ul>
+<li><strong>Application Approved List (Whitelist):</strong> Only explicitly listed applications/entities can run/access. Implicit &ldquo;deny all.&rdquo;</li>
+<li><strong>Application Block/Deny List (Blacklist):</strong> Explicitly listed applications/entities <em>cannot</em> run/access. Implicit &ldquo;allow all.&rdquo;</li>
+<li><strong>Security/Group Policy (Windows):</strong> Centralized configuration management via Active Directory. Enforces consistent settings (Password Policy, Lockout Policy, Kerberos, Audit, User Rights, Security Options).</li>
+<li><strong>Attestation Services:</strong> Validating something (like boot process or hardware state) as true. Can be hardware (TPM), software, or hybrid. TPM enables tamper-resistant full-disk encryption.</li>
+<li><strong>NX (No-eXecute) / XN (eXecute Never) Bit:</strong> CPU feature segregating memory areas for code and data, preventing code execution from data segments. Protects against certain exploits.
+<ul>
+<li>Intel: <strong>XD</strong> (eXecute Disable)</li>
+<li>AMD: <strong>EVP</strong> (Enhanced Virus Protection)</li>
+<li>ARM: <strong>XN</strong> (eXecute Never)</li>
+</ul>
+</li>
+<li><strong>Secure Enclaves / Memory Encryption:</strong> Hardware-level secure application execution. Data is encrypted in main memory, decrypted only within the secure hardware enclave. Protects even if OS kernel is compromised.</li>
+<li><strong>ASLR (Address Space Layout Randomization):</strong> Security technique randomizing memory locations of key process areas (executables, libraries, stack, heap). Makes buffer overflow exploitation much harder (attacker needs exact address). Requires application compilation support (now common). <em>Note: Can have configuration issues/compatibility challenges.</em></li>
+<li><strong>Patching &amp; Updates:</strong> Regularly apply OS and application patches to fix known vulnerabilities. Use standard images (golden images) and vulnerability assessment tools (Nessus, SAINT, Retina) to identify needed patches. Test before deploying.</li>
+<li><strong>Removing Unnecessary Services/Applications:</strong> Core hardening principle. Disable/remove unneeded software, services, ports. Reduces potential entry points. (e.g., Bastille Linux tool for automating Linux hardening).</li>
+<li><strong>Command Shell Restrictions:</strong> Limit or disable user access to command prompts (cmd, bash) unless necessary. Prevents misuse or privilege escalation via commands. <em>Note: Can sometimes be bypassed (e.g., StickyKeys exploit example).</em></li>
+<li><strong>Warning Banners:</strong> Display messages upon login/access informing users of acceptable use policies, monitoring, lack of privacy expectations, and consequences of violations. Needs legal/HR approval.</li>
+<li><strong>Restricted Interfaces:</strong> User profiles limiting available programs, menus, functions to only what&rsquo;s needed for a specific role/task (e.g., kiosk).</li>
+<li><strong>Dedicated Interfaces:</strong> Physical network ports dedicated to specific types of traffic (e.g., separate NIC/VLAN for wireless traffic).</li>
+<li><strong>Out-of-Band (OOB) Management:</strong> Using a separate, dedicated channel (often a dedicated NIC/network) for managing devices (servers, network gear), isolated from production data traffic.</li>
+<li><strong>Management Interface:</strong> Hardware-level interface (often using OOB NIC) allowing remote management even if the OS is down/unresponsive.</li>
+<li><strong>Data Interface:</strong> Used with databases to generate reusable process templates for manipulating similar data types across clients.</li>
+<li><strong>Scripting &amp; Replication:</strong> Using scripts (e.g., PowerShell) to automate tasks like configuration, disaster recovery setup (replicating objects), and patch management.</li>
+<li><strong>Standard Operating Environment (SOE):</strong> Using a consistent, standard OS build across the organization. Reduces TCO, simplifies testing, patching, and security management.</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>2. Hardware Security Technologies</strong></p>
+<ul>
+<li><strong>HSM (Hardware Security Module):</strong> Secure cryptoprocessor device managing cryptographic keys (generation, signing, validation). High-assurance key management.</li>
+<li><strong>TPM (Trusted Platform Module):</strong> Specialized chip on motherboard providing hardware-based security functions:
+<ul>
+<li><strong>Hardware Authentication:</strong> Authenticates the <em>computer</em> itself (not the user).</li>
+<li><strong>Secure Key Storage:</strong> Creates and stores crypto keys securely.</li>
+<li><strong>Platform Integrity Measurement:</strong> Used by Measured Boot to securely report on the boot environment.</li>
+<li><strong>Tamper Resistance:</strong> Enables features like full-disk encryption tied to the specific hardware (drive won&rsquo;t work easily in another machine).</li>
+</ul>
+</li>
+<li><strong>SED (Self-Encrypting Drive):</strong> HDD or SSD that automatically encrypts/decrypts data written to/read from it at the hardware level. Encryption is always on and transparent to the OS/user.</li>
+</ul>
+<p>⠀<strong>3. Trusted Operating Systems (Trusted OS)</strong></p>
+<ul>
+<li><strong>Definition:</strong> An OS designed and tested to meet specific security standards (like Common Criteria) enabling it to handle information at different security levels (<strong>multilevel security</strong>).</li>
+<li><strong>TCB (Trusted Computer Base):</strong> The totality of protection mechanisms within a computer (hardware, firmware, software, controls, processes) responsible for enforcing the security policy. The core trusted part of the system.</li>
+<li><strong>Security Kernel:</strong> The core part of the TCB that handles all access requests between subjects (users/processes) and objects (files/resources). Designed to be small, verifiable, and always invoked.</li>
+<li><strong>Core Attributes of Trusted OS:</strong>
+<ul>
+<li>Hardware Protection</li>
+<li>Long-Term Protected Storage (across reboots)</li>
+<li>Isolation (between processes)</li>
+<li>Separation of User vs. Supervisor (Kernel) modes.</li>
+</ul>
+</li>
+<li><strong>Validation Standards:</strong>
+<ul>
+<li><strong>TCSEC (Orange Book):</strong> <em>Deprecated</em>. US DoD standard, focused on Confidentiality. Levels D (Minimal) to A (Verified).</li>
+<li><strong>ITSEC:</strong> <em>Deprecated</em>. European standard, evaluated Confidentiality, Integrity, Availability (CIA). Functionality (F) &amp; Assurance (E) ratings.</li>
+<li><strong>Common Criteria (CC) (ISO 15408):</strong> <em>Current Global Standard</em>. Evaluates security functions and provides <strong>EAL (Evaluation Assurance Level)</strong> ratings (EAL1 to EAL7). Higher EAL = higher assurance. Can be &ldquo;augmented&rdquo; (e.g., EAL4+).</li>
+</ul>
+</li>
+<li><strong>MAC (Mandatory Access Control):</strong> Access decisions are enforced by the OS based on security labels/levels (e.g., Classified, Secret, Top Secret) assigned to subjects and objects. Users cannot override (unlike DAC).</li>
+<li><strong>Trusted OS Examples:</strong>
+<ul>
+<li><strong>SELinux (Security-Enhanced Linux):</strong> Adds MAC capabilities to the Linux <em>kernel</em>. NSA/Red Hat collaboration.</li>
+<li><strong>SEAndroid (Security-Enhanced Android):</strong> Brings SELinux MAC benefits to the Android <em>kernel</em>, enhancing application sandboxing. Fully enforced since Android 5.0.</li>
+<li><strong>Trusted Solaris:</strong> Provides MAC and features like &ldquo;immutable zones&rdquo; (read-only file system protection).</li>
+</ul>
+</li>
+<li><strong>Kernel vs. Middleware:</strong>
+<ul>
+<li><strong>Kernel:</strong> The core of the OS, providing fundamental services. SELinux/SEAndroid operate here.</li>
+<li><strong>Middleware:</strong> Software layer providing services to applications <em>beyond</em> the OS kernel (e.g., Android libraries for data storage, display, web browsing). &ldquo;Software glue.&rdquo;</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>4. Compensating Controls</strong></p>
+<ul>
+<li><strong>Definition (per CompTIA Objectives):</strong> Controls implemented to satisfy a security requirement when the primary/desired control is not feasible or available. <em>(Note: Often overlaps with Mitigating Controls which aim to reduce likelihood/impact).</em> Used to enhance endpoint security layers.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><strong>Antivirus (AV):</strong> Detects/removes known malware. Essential endpoint protection.</li>
+<li><strong>Application Controls:</strong> Security measures within applications (e.g., input validation, authentication checks, authorization).</li>
+<li><strong>HIDS/HIPS (Host-based Intrusion Detection/Prevention System):</strong> Monitors endpoint activity for malicious behavior; HIPS can block detected threats. Provides visibility for SOC.</li>
+<li><strong>Host-Based Firewall:</strong> Software firewall on the endpoint controlling network traffic in/out of that specific host. Adds layer beyond network firewall.</li>
+<li><strong>EDR (Endpoint Detection and Response):</strong> Advanced endpoint security solution providing real-time monitoring, threat detection (especially APTs), investigation tools, and automated response capabilities. Examples: Microsoft Defender for Endpoint, Carbon Black, Palo Alto Traps.</li>
+<li><strong>Redundant Hardware:</strong> Using duplicate components (power supplies, NICs, disks) to improve availability (HA) and reduce downtime risk.</li>
+<li><strong>Self-Healing Hardware/Software:</strong> Systems designed to automatically detect, respond to, and potentially fix failures or security issues (e.g., hardware automatically recovering, software rolling back a bad patch).</li>
+<li><strong>SED (Self-Encrypting Drives):</strong> (Also listed under Hardware) Automatic hardware-level disk encryption.</li>
+<li><strong>UEBA (User and Entity Behavior Analytics):</strong> Analyzes user <em>and</em> system/entity behavior patterns to detect anomalies indicating threats (insider threats, compromised accounts/devices).</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>Exam Essentials Summary:</strong></p>
+<ul>
+<li>Endpoints face different risks; apply hardening/controls accordingly.</li>
+<li>Apply multiple hardening techniques (not one-size-fits-all) based on effectiveness for the specific scenario/risk. Layer controls (Defense in Depth).</li>
+<li>Understand the purpose of each compensating control and how it mitigates specific endpoint risks (e.g., EDR for APTs, HIPS for intrusions, Host Firewall for network threats, Redundancy for availability).</li>
+<li>Know the core concepts of Trusted OS (TCB, Kernel, MAC) and their advantages (smaller attack surface, stronger enforcement).</li>
+<li>Recognize hardware security features (TPM, HSM, SED, NX Bit) and their roles.</li>
+<li>Be aware of lifecycle management (EOL/EOS) importance.</li>
+</ul>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+</div>
+</footer><a href="#" title="Aller en haut" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+    
+    
+        
+    
+
+    
+    
+        
+    
+
+
+
+    
+    <script async src="//localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

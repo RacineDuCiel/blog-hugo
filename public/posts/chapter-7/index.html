@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr-fr"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name"> | TheSeventhCirle</title>
+<meta property="og:title" content=" | TheSeventhCirle" />
+<meta name="twitter:title" content=" | TheSeventhCirle" />
+<meta itemprop="name" content=" | TheSeventhCirle" />
+<meta name="application-name" content=" | TheSeventhCirle" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre">
+<meta itemprop="description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+<meta property="og:description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+<meta name="twitter:description" content="Thème minimal pour blog Hugo avec prise en charge des modes clair et sombre" />
+
+<meta property="og:locale" content="fr-fr" />
+<meta name="language" content="fr-fr" />
+
+  <link rel="alternate" hreflang="fr-fr" href="//localhost:1313/posts/chapter-7/" title="French" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=0001-01-01T00:00:00Z />
+    <meta property="article:published_time" content=0001-01-01T00:00:00Z />
+    <meta property="og:url" content="//localhost:1313/posts/chapter-7/" />
+
+    
+    <meta property="og:article:author" content="" />
+    <meta property="article:author" content="" />
+    <meta name="author" content="" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "0001-01-01",
+        "description": "",
+        "wordCount":  2179 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "0001-01-01",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "TheSeventhCirle"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.1">
+
+    
+    <meta property="og:url" content="//localhost:1313/posts/chapter-7/">
+  <meta property="og:site_name" content="TheSeventhCirle">
+  <meta property="og:title" content="TheSeventhCirle">
+  <meta property="og:description" content="Chapter 7 #certifications/CASP
+Core Objective 2.7: Given an incident, implement the appropriate response. 1. Foundational Concepts &amp; Importance
+Need for Speed: Rapid response is critical, especially against advanced actors (per Mandiant CEO testimony re: SolarWinds). Maturity Matters: Org security maturity dictates IR capability (Untested Plan -&gt; Mature SOC/Threat Hunting). Many orgs are reactive (notified by 3rd parties). Dwell Time: Time attackers remain undetected; stresses analysts for real-time response. CASP&#43; Role: Must conduct IR quickly, efficiently, follow documented recovery procedures. Design for Response: Systems should facilitate IR (roots in Morris worm -&gt; CSIRT creation). ⠀2. Event Classifications &amp; Triage">
+  <meta property="og:locale" content="fr_fr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TheSeventhCirle">
+  <meta name="twitter:description" content="Chapter 7 #certifications/CASP
+Core Objective 2.7: Given an incident, implement the appropriate response. 1. Foundational Concepts &amp; Importance
+Need for Speed: Rapid response is critical, especially against advanced actors (per Mandiant CEO testimony re: SolarWinds). Maturity Matters: Org security maturity dictates IR capability (Untested Plan -&gt; Mature SOC/Threat Hunting). Many orgs are reactive (notified by 3rd parties). Dwell Time: Time attackers remain undetected; stresses analysts for real-time response. CASP&#43; Role: Must conduct IR quickly, efficiently, follow documented recovery procedures. Design for Response: Systems should facilitate IR (roots in Morris worm -&gt; CSIRT creation). ⠀2. Event Classifications &amp; Triage">
+
+
+    
+
+    <link rel="canonical" href="//localhost:1313/posts/chapter-7/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="//localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="//localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>Accueil</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Accueil
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link active" href="/posts/">
+                        Articles
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/about/">
+                        À propos
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title"></h1>
+                
+                
+            </header>
+            
+    
+    <details class="toc" ZgotmplZ>
+        <summary><b>Table des matières</b></summary>
+        <nav id="TableOfContents"></nav>
+    </details>
+            <div class="page-content">
+                <h1 id="chapter-7">Chapter 7</h1>
+<p>#certifications/CASP</p>
+<p><strong>Core Objective 2.7: Given an incident, implement the appropriate response.</strong>
+<strong>1. Foundational Concepts &amp; Importance</strong></p>
+<ul>
+<li><strong>Need for Speed:</strong> Rapid response is critical, especially against advanced actors (per Mandiant CEO testimony re: SolarWinds).</li>
+<li><strong>Maturity Matters:</strong> Org security maturity dictates IR capability (Untested Plan -&gt; Mature SOC/Threat Hunting). Many orgs are reactive (notified by 3rd parties).</li>
+<li><strong>Dwell Time:</strong> Time attackers remain undetected; stresses analysts for real-time response.</li>
+<li><strong>CASP+ Role:</strong> Must conduct IR quickly, efficiently, follow documented recovery procedures.</li>
+<li><strong>Design for Response:</strong> Systems should facilitate IR (roots in Morris worm -&gt; CSIRT creation).</li>
+</ul>
+<p>⠀<strong>2. Event Classifications &amp; Triage</strong></p>
+<ul>
+<li><strong>Event:</strong> An observed occurrence; potentially malicious, potentially benign (e.g., admin password change alert).</li>
+<li><strong>Triage Event:</strong> Process of determining if an event is a true incident or a false positive. Prioritizes investigation efforts.</li>
+<li><strong>Incident:</strong> An event with a <em>confirmed negative consequence</em> (e.g., system breach, outage, data loss/destruction). Requires IR playbook activation. (Example: Password change + data exfiltration to <em>known malicious</em> IP).</li>
+<li><strong>Crisis:</strong> An incident escalating out of control, requiring immediate attention due to significant business impact or threat of public disclosure. (Example: Exfiltration of critical IP from classified server by terminated admin + ransom demand).</li>
+<li><strong>Classification Accuracy:</strong> Critical to avoid wrong conclusions.
+<ul>
+<li><strong>False Positive (FP):</strong> Determined true when it&rsquo;s false (False Alarm). <em>Security Preference:</em> Prefer FP (metal detector alarms) over FN for high risk.</li>
+<li><strong>False Negative (FN):</strong> Determined false when it&rsquo;s true (Missed detection). <em>Security Preference:</em> Huge risk if threat missed (gun gets through detector). <em>Court Preference:</em> Prefer FN (guilty found innocent) over FP (innocent convicted).</li>
+<li><strong>True Positive (TP):</strong> Correctly identified as true/malicious.</li>
+<li><strong>True Negative (TN):</strong> Correctly identified as false/benign.</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>3. Pre-Escalation Tasks &amp; Preparation (Step 1 of IR Process)</strong></p>
+<ul>
+<li><strong>Understand Attack Vectors:</strong> Know likely threats (NIST examples: removable media, phishing, web attacks, lost/stolen equip).</li>
+<li><strong>Develop Specific Playbooks:</strong> Different responses needed for different incidents (e.g., lost phone playbook includes encryption status, remote wipe procedure).</li>
+<li><strong>Establish Policies &amp; Procedures:</strong> Foundation for IR activities. Define CSIRT roles.</li>
+<li><strong>Address Common Violations:</strong> Plan should cover DoS, ransomware, exfiltration, social engineering, theft, malware, data breach, terrorism, unauthorized access/software, physical intrusion, web attacks, viruses/worms.</li>
+<li><strong>Incorporate Threat Intelligence:</strong> Prioritize responses based on likely actors targeting the industry/org (e.g., APT35 targeting US Gov/Energy/Telecom via spear phishing, specific malware like DRUBOT). Scan for specific TTPs/IoCs.</li>
+</ul>
+<p>⠀<strong>4. The Incident Response Process (PICERL + Lessons Learned)</strong></p>
+<ul>
+<li><strong>Goal:</strong> Reduce damage, maintain/restore business continuity, defend future attacks, enable legal action.</li>
+<li><strong>CSIRT (Computer Security Incident Response Team):</strong> Team executing the plan.</li>
+<li><strong>IRP (Incident Response Plan):</strong> The documented plan/playbook.</li>
+<li><strong>Steps:</strong>
+<strong>1</strong> <strong>Preparation:</strong> Policies, procedures, tools, training, threat intelligence (Covered above).
+<strong>2</strong> <strong>Detection (Identification):</strong> Identifying events/incidents. Use automated tools: IDS/IPS, firewalls, logs, SIEM (centralized log analysis/anomaly detection).
+<strong>3</strong> <strong>Analysis:</strong> Evaluating incident nature, specifics, threat level. Verify if real (not FP). Use detection tools + expertise.
+<strong>4</strong> <strong>Containment:</strong> Stopping the incident from spreading/worsening. Execute plan steps. Requires trained team. Includes removing the problem.
+<strong>5</strong> <strong>Recovery (Eradication &amp; Recovery):</strong> Restoring affected systems to full functionality safely and quickly. Restore data from backups, re-establish settings per plan.
+<strong>6</strong> <strong>Investigation &amp; Closure (Post-Incident Activity):</strong> Determine what/who/how. Prepare report (formal/informal) for policy evaluation. (<em>Text slightly differs from standard PICERL by including Investigation here</em>).
+<strong>7</strong> <strong>Lessons Learned (Post-Incident Activity):</strong> Review what happened, successes, failures, necessary changes to prevent recurrence. Document in <strong>AAR (After-Action Report)</strong>.</li>
+</ul>
+<p>⠀<strong>5. Response Playbooks &amp; Processes</strong></p>
+<ul>
+<li><strong>Playbook:</strong> Overarching response strategy for a specific incident type (e.g., ransomware, phishing). May incorporate multiple runbooks.
+<ul>
+<li><em>Components:</em> Triggering condition, major steps (policy/procedure), best practices, end goal/desired state, compliance addressed.</li>
+<li><em>Building:</em> Identify triggers -&gt; Map possible actions -&gt; Categorize required actions -&gt; Define process order -&gt; Define end state/compliance.</li>
+<li><em>Resources:</em> MITRE ATT&amp;CK (TTPs), Vendor examples (Rapid7 ransomware playbook), incidentresponse.com.</li>
+</ul>
+</li>
+<li><strong>Runbook:</strong> Detailed procedures for <em>specific, routine</em> tasks/processes. A &ldquo;chapter&rdquo; within a playbook. Can be automated.</li>
+<li><strong>Response Methods:</strong>
+<ul>
+<li><strong>Non-automated:</strong> Human intervention/decision-making.</li>
+<li><strong>Automated:</strong> Crucial for speed.
+<ul>
+<li><em>Automated Runbooks:</em> Translate Ops/Sec knowledge into procedures run automatically based on criteria. Reduces wait times.</li>
+<li><strong>SOAR (Security Orchestration, Automation, and Response):</strong> Advanced tooling. Collects threat data from multiple sources, automates responses. Integrates tools, provides pre-built actions. Increases efficiency, consistency; combats alert fatigue/skill gaps. Requires proper configuration/customization.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>6. Communication Plan &amp; Stakeholder Management</strong></p>
+<ul>
+<li><strong>Stakeholders (CSIRT members):</strong> Diverse skills needed. InfoSec, Legal, Admins (Network/System), Physical Security, PR, HR.</li>
+<li><strong>Communication Plan:</strong>
+<ul>
+<li>Crucial for managing media/public perception.</li>
+<li>Designate ONE spokesperson.</li>
+<li>Communicate only verified facts: what happened, customer impact, remediation steps.</li>
+<li>Forward all media/stockholder questions to spokesperson. Avoid speculation.</li>
+</ul>
+</li>
+<li><strong>Stakeholder Management (Senior Management):</strong>
+<ul>
+<li>Immediate question: &ldquo;How bad is it?&rdquo;</li>
+<li>Factors: Scope (systems/data affected), Impact (effort/time to recover), Cost (monetary, downtime), Legal Ramifications (data disclosure, regulations).</li>
+<li>Answers require full identification/containment first. Legal counsel involvement needed for damage control.</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>7. Hunt Teaming (Proactive Detection)</strong></p>
+<ul>
+<li><strong>Definition:</strong> In-house, <em>proactive</em> search for vulnerabilities/compromises <em>before</em> an incident forces reaction.</li>
+<li><strong>Methods:</strong> Log analysis (SIEM helps), Heuristics, Behavioral analysis (leverages security pro &ldquo;gut feeling&rdquo;).</li>
+<li><strong>Overlap with Vuln Management:</strong> Finds OS, Application, Firmware vulnerabilities.</li>
+<li><strong>Mitigation:</strong> Host-based firewalls/IDS help vs. OS vulns. Patching helps vs. local exploits. Firmware vulns harder to exploit without local access (less risk in secured enclaves).</li>
+<li><strong>Secured Encrypted Enclaves:</strong> Separate hardware coprocessors enhancing device security.</li>
+</ul>
+<p>⠀<strong>Core Objective 2.8: Explain the importance of forensic concepts.</strong>
+<strong>1. Definition &amp; Purpose</strong></p>
+<ul>
+<li><strong>Digital Forensics:</strong> Structured analysis of digital data in a legally approved way for court-admissible evidence.</li>
+<li><strong>Categories:</strong>
+<ul>
+<li><strong>Computer Forensics:</strong> Examining physical media.</li>
+<li><strong>Software Analysis:</strong> Reviewing malware/code.</li>
+<li><strong>Network Analysis:</strong> Analyzing traffic/logs.</li>
+</ul>
+</li>
+<li><strong>Legal vs. Internal:</strong> Forensic process must <em>always</em> meet legal standards, regardless of internal corporate needs. Legal requirements often stricter.</li>
+</ul>
+<p>⠀<strong>2. Principles, Standards &amp; Practices (IOCE)</strong></p>
+<ul>
+<li><strong>IOCE Principles (International Organization on Computer Evidence):</strong>
+1 Apply general forensic principles.
+2 Actions must <em>not change</em> original digital evidence.
+3 Only <em>trained personnel</em> should access original evidence when necessary.
+<em>4</em> <em>Fully document</em> all activities (seizure, access, storage, transfer).
+5 Individual handler is <em>responsible</em> for evidence in their possession.
+6 Responsible <em>agency</em> must ensure compliance.</li>
+<li><strong>Best Practices (Handling Media):</strong>
+1 Secure original (unchanged state).
+2 Hash original.
+3 Make two <strong>bit-level copies</strong> (exact duplicates incl. hidden/slack space).
+4 Hash both copies upon creation (verify exactness).
+5 Secure original + primary copy (library/control).
+6 Use second copy (working image) for analysis.</li>
+</ul>
+<p>⠀<strong>3. The Forensic Process</strong></p>
+<ul>
+<li><strong>Goal:</strong> Discover what occurred, decide sanctions, prepare court-admissible evidence.</li>
+<li><strong>General Steps:</strong>
+<strong>1</strong> <strong>Identification &amp; Acquisition:</strong> Identify relevant info, retrieve it. Create bit-level copy. Original remains intact.
+<strong>2</strong> <strong>Preservation &amp; Authentication:</strong> Maintain evidence in unchanged state. Use <strong>hashing</strong> (MD5 - still used for integrity checks, SHA-256 - NIST recommended) to prove integrity. Document everything.
+<strong>3</strong> <strong>Analysis, Recording &amp; Presentation:</strong> Examine working copy carefully (slack space, hidden files, cache, logs). <em>Document all activities</em>. Extract findings. Present results.</li>
+<li><strong>E-discovery (Electronic Discovery):</strong> Process of finding, extracting, reviewing electronic info (structured &amp; unstructured data like emails, chats) for legal cases. Governed by legal rules.</li>
+</ul>
+<p>⠀<strong>4. Key Forensic Concepts</strong></p>
+<ul>
+<li><strong>Chain of Custody:</strong> Critical for evidence reliability/credibility. Continuous, documented log answering: <em>Who</em> collected/possessed? <em>Where</em> collected/stored? <em>How</em> collected/stored? <em>Why</em> accessed/moved? Starts at seizure, ends at disposal/return.</li>
+<li><strong>Order of Volatility (IETF RFC 3227):</strong> Collect evidence from most volatile to least volatile components.
+1 Registers, Cache
+2 Routing table, ARP cache, Process table, Kernel stats, <strong>Memory (RAM)</strong>
+3 Temporary file systems
+<strong>4</strong> <strong>Disk</strong> (HDD, SSD)
+5 Remote logging/monitoring data
+6 Physical configuration, Network topology
+7 Archival media (backups)</li>
+<li><strong>Evidence Preservation:</strong> Secure storage, backups, preventing tampering/contamination. Evidence is fragile.</li>
+<li><strong>Integrity Preservation:</strong> Using hashing (MD5, SHA-256) to prove data hasn&rsquo;t changed since collection.</li>
+<li><strong>Legal Holds (Litigation Holds):</strong> Formal process to preserve ESI (Electronically Stored Information) &amp; paper documents when litigation is anticipated. Prevents <strong>spoliation</strong> (destruction/alteration of evidence). Covers content &amp; metadata. Requires process/tools. Supports e-discovery.</li>
+<li><strong>Data Ownership:</strong> Legal rights holder over data; influences protection decisions.</li>
+<li><strong>Data Recovery &amp; Storage:</strong> Relates to backups (RAID, shadowing), DR, compliance needs.</li>
+<li><strong>Electronic Inventory &amp; Asset Identification:</strong> Knowing what assets exist and their value is crucial for forensics (identifying compromised assets). Asset management foundation.</li>
+<li><strong>Data Retention Policies:</strong> Dictate how long data is kept (influences e-discovery scope). (IRS 7-year example).</li>
+<li><strong>Systems Designed for Incident Response:</strong> Build security/logging/response capabilities in from the start (SDLC involvement). Cheaper than adding later. (NIST approach: Implementation, Monitoring, Compliance, Strategy, Policy, Awareness).</li>
+</ul>
+<p>⠀<strong>5. Related Analysis Concepts</strong></p>
+<ul>
+<li><strong>Cryptanalysis:</strong> Breaking codes/ciphers <em>without</em> the key. Finds weaknesses. <strong>Work Factor:</strong> Effort needed. Tools: CrypTool, EverCrack, CryptoBench.</li>
+<li><strong>Steganalysis:</strong> Detecting/recovering hidden data (steganography). Techniques: Stego-Only (only stego file), Known-Stego (original + stego file), Known-Message (hidden message + stego file). Made harder by encryption.</li>
+</ul>
+<p>⠀<strong>Core Objective 2.9: Given a scenario, use forensic analysis tools.</strong>
+<strong>1. Tool Categories &amp; Purpose</strong></p>
+<ul>
+<li>Variety of tools used; common command-line utils often supplement specialized tools.</li>
+</ul>
+<p>⠀<strong>2. File Carving Tools</strong></p>
+<ul>
+<li><strong>Definition:</strong> Selectively extracting structured data (files) from raw data (often unallocated disk space) by analyzing headers/footers.</li>
+<li><strong>Foremost:</strong> Linux-based recovery tool (images, iPhones). Reads drive portions into memory. Free, originally for law enforcement.</li>
+<li><strong>Strings:</strong> Used by tools like Scalpel (open-source carving tool) to find headers/footers. Scalpel uses algorithms like Boyer-Moore for efficient pattern searching.</li>
+</ul>
+<p>⠀<strong>3. Binary Analysis Tools</strong></p>
+<ul>
+<li><strong>Definition:</strong> Threat/vulnerability analysis at the binary code level (when source code unavailable).</li>
+<li><strong>Hex Dump (hexdump):</strong> Linux utility (or Windows freeware) to view file contents in hex/decimal/octal/ASCII at byte level.</li>
+<li><strong>Binwalk:</strong> Analyzes/extracts firmware images (IoT). Uses libmagic library.</li>
+<li><strong>Ghidra:</strong> NSA reverse engineering tool (decompiler) for malware analysis. Free alternative to IDA-Pro.</li>
+<li><strong>GDB (GNU Project Debugger):</strong> Linux/Unix debugger. Finds bugs, analyzes crashes (core dumps).</li>
+<li><strong>OllyDbg:</strong> Windows 32-bit assembler level debugger. Malware analysis, attach to running processes.</li>
+<li><strong>Objdump:</strong> Linux command; displays info about object files.</li>
+<li><strong>readelf:</strong> Linux command; displays detailed info about ELF files (executables, libraries). Doesn&rsquo;t use BFD library (unlike objdump).</li>
+<li><strong>Strace:</strong> Linux diagnostic tool; monitors process-kernel interactions (system calls, state changes). Debugging without source code.</li>
+<li><strong>file:</strong> Linux command; identifies file type (filesystem, magic, language tests). Starting point for binary analysis.</li>
+</ul>
+<p>⠀<strong>4. Analysis Tools</strong></p>
+<ul>
+<li><strong>Purpose:</strong> General analysis, threat intelligence, reverse engineering.</li>
+<li><strong>VM Distributions:</strong> REMnux (Linux, malware analysis), Mandiant Threat Pursuit VM (Windows, TI tools: OpenCTI, Splunk, Maltego, Caldera).</li>
+<li><strong>ExifTool:</strong> Reads/writes/edits metadata in images, audio, video, PDF files. Reveals info like camera model, date/time, owner, GPS.</li>
+<li><strong>Nmap:</strong> Network scanner. Finds live hosts, open ports, services, OS versions. Command-line (Nmap) &amp; GUI (Zenmap).</li>
+<li><strong>Aircrack-ng:</strong> Wireless security toolkit (monitoring, attacking, testing, cracking WEP/WPA/WPA2). Command-line, in Kali. <em>Less effective vs. WPA3</em> due to Dragonfly handshake (resists offline dictionary attacks).</li>
+<li><strong>Volatility:</strong> Open-source memory forensics tool (Python). Analyzes RAM dumps (live memory captures) for running processes, network connections, command history, clipboard data. Plugin support. Alternatives: SANS SIFT, Redline.</li>
+<li><strong>The Sleuth Kit (TSK):</strong> Command-line tools for disk image analysis (find/recover files). Used by Autopsy (GUI frontend). Commands like <strong>blkls</strong> (display data blocks).</li>
+<li><strong>Dynamically vs. Statically Linked Libraries:</strong>
+<ul>
+<li><em>Static:</em> All library code copied into final executable. Larger file, independent.</li>
+<li><em>Dynamic:</em> Libraries linked at runtime by OS. Smaller file, dependencies required. Affects reverse engineering approach.</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>5. Imaging Tools</strong></p>
+<ul>
+<li><strong>Purpose:</strong> Create bit-for-bit forensic copies of drives/devices.</li>
+<li><strong>FTK Imager:</strong> Free tool (AccessData). Creates images (raw, E01, AFF, SMART formats). Can image physical/logical drives, files/folders, capture live memory.</li>
+<li><strong>dd:</strong> Standard Linux/Unix command-line utility. Copies data block-by-block. Creates images (ISO), backups (MBR), converts formats. Can calculate hashes (MD5, SHA). Powerful, free. Can be used from bootable Linux distros (e.g., Trinux).</li>
+<li><strong>Clonezilla:</strong> Imaging/cloning software (Live for single machine, SE for server/enterprise). Can create/restore images. Used with bootable USB (Rufus helps create).</li>
+</ul>
+<p>⠀<strong>6. Hashing Utilities</strong></p>
+<ul>
+<li><strong>Purpose:</strong> Verify data integrity and authenticity.</li>
+<li><strong>sha256sum:</strong> Linux utility computes SHA-256 hash. Verifies integrity.</li>
+<li><strong>ssdeep:</strong> Computes fuzzy hashes (CTPH - context-triggered piecewise hashes). Can find similar/modified files, even with deletions/insertions. Fast identification. In Kali.</li>
+</ul>
+<p>⠀<strong>7. Live Collection vs. Post-Mortem Tools</strong></p>
+<ul>
+<li><strong>Live Collection:</strong> Gathering volatile data from a running system.</li>
+<li><strong>Post-Mortem:</strong> Analyzing data after system shutdown (disk images, logs).</li>
+<li><strong>Tools:</strong>
+<ul>
+<li><strong>nbtstat:</strong> Windows command; finds NetBIOS names associated with IP addresses.</li>
+<li><strong>netstat:</strong> Displays network connections (TCP/UDP, listening ports, established sessions), routing tables, protocol stats. <strong>-an</strong> (all, numeric), <strong>-sp</strong> (stats per protocol). Useful for identifying active connections on compromised host. Understand ports (0-65535), TCP vs. UDP, well-known (0-1023), registered (1024-49151), dynamic (49152+).</li>
+<li><strong>ps:</strong> Linux/Unix command; shows current process status (PID, TTY, TIME, CMD). Used to identify/kill processes.</li>
+<li><strong>vmstat:</strong> Linux command; reports virtual memory statistics (processes, memory, paging, CPU activity).</li>
+<li><strong>ldd:</strong> Linux command; shows shared library dependencies of an executable.</li>
+<li><strong>lsof:</strong> Linux command; lists open files and the processes using them.</li>
+<li><strong>conntrack:</strong> Linux command; manages connection tracking subsystem (list/monitor connections).</li>
+<li><strong>memdump:</strong> Dumps memory contents for a specific process (or kernel - risk of system lock).</li>
+<li><strong>tcpdump:</strong> Command-line packet analyzer. Captures/displays network traffic.</li>
+<li><strong>Wireshark:</strong> GUI packet analyzer/sniffer. Captures traffic (.pcap files), analyzes packets layer by layer (OSI). Powerful for troubleshooting and attack analysis. <em>Requires permission</em> due to potential eavesdropping. Needs supported NIC.</li>
+<li><strong>Netcat (nc):</strong> Networking utility (&ldquo;Swiss Army knife&rdquo;). Reads/writes data across network connections (TCP/UDP). Versatile backend tool.</li>
+</ul>
+</li>
+</ul>
+<p>⠀<strong>Exam Essentials Summary:</strong></p>
+<ul>
+<li><strong>Incidents vs. Events:</strong> Understand the difference (Event=observed, Incident=confirmed negative impact, Crisis=escalated incident). Know FP/FN implications. Triage is key.</li>
+<li><strong>IR Process:</strong> Know the steps (Prep, Detect, Analyze, Contain, Recover, Investigate/Close, Lessons Learned). Understand the role of CSIRT, IRP.</li>
+<li><strong>Playbooks/Runbooks/SOAR:</strong> Playbooks guide response to specific incident types (Ransomware, Exfil, Social Eng.). Runbooks detail specific tasks. SOAR provides automation/orchestration.</li>
+<li><strong>Forensic Concepts:</strong> Legality is paramount. Follow IOCE principles. Master Chain of Custody &amp; Order of Volatility. Understand Hashing for Integrity. Know Legal Holds.</li>
+<li><strong>Forensic Tools:</strong> Recognize key tools by category/purpose: File Carving (Foremost, strings/Scalpel), Binary Analysis (Ghidra, debuggers, hex viewers), Analysis (Volatility, Nmap, Wireshark, TSK), Imaging (FTK Imager, dd), Hashing (sha256sum, ssdeep), Live Collection (netstat, ps, lsof, tcpdump).</li>
+</ul>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+</div>
+</footer><a href="#" title="Aller en haut" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+    
+    
+        
+    
+
+    
+    
+        
+    
+
+
+
+    
+    <script async src="//localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

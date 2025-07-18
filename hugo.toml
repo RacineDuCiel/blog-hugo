@@ -1,0 +1,83 @@
+title = "RacineDuCiel"
+baseURL = ""
+theme = "ablog"
+enableEmoji = true
+enableRobotsTXT = true
+ignoreErrors = ["additional-script-loading-error"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.typographer]
+        disable = false
+      [markup.goldmark.extensions.extras]
+        [markup.goldmark.extensions.extras.mark]
+          enable = true
+
+[privacy]
+  [privacy.googleAnalytics]
+    respectDoNotTrack = true
+  [privacy.youtube]
+    privacyEnhanced = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
+
+[Languages.fr-fr]
+  languageName = "French"
+  languageCode = "fr-fr"
+  contentDir = "content/"
+  weight = 1
+
+  [Languages.fr-fr.menu]
+    [[Languages.fr-fr.menu.main]]
+      pageRef = "/"
+      name = "Accueil"
+      url = "/"
+      weight = 10
+    [[Languages.fr-fr.menu.main]]
+      pageRef = "posts"
+      name = "Articles"
+      url = "/posts/"
+      weight = 20
+
+  [Languages.fr-fr.params]
+    defaultColor = "auto"
+    mainSections = ["posts"]
+    toc = false
+    goToTop = true
+    dateFormat = "2 January 2006"
+    rssFeedDescription = "summary"
+    additionalScripts = ["js/custom.js"]
+    
+    [Languages.fr-fr.params.author]
+      avatar = "avatar.jpg"
+      description = "𝕎𝕙𝕒𝕥 𝕕𝕠𝕖𝕤 𝕚𝕥 𝕞𝕖𝕒𝕟 𝕥𝕠 𝕓𝕖 𝕙𝕦𝕞𝕒𝕟"
+      name = "RacineDuCiel"
+      
+    [Languages.fr-fr.params.social]
+      twitter = ""
+      github = ""
+      linkedin = ""
+      email = ""
+      
+    [Languages.fr-fr.params.webmanifest]
+      start_url = "/"
+      theme_color = "#434648"
+      background_color = "#fff"
+      display = "standalone"
+      
+    [Languages.fr-fr.params.seo]
+      images = ["og-image.jpg"]
+      
+[params]
+  browserconfig.TileColor = "#2d89ef"
+  
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+
