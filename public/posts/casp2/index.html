@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr-fr"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Cheat sheet CASP&#43; | Chapter 2 | RacineDuCiel</title>
+<meta property="og:title" content="Cheat sheet CASP&#43; | Chapter 2 | RacineDuCiel" />
+<meta name="twitter:title" content="Cheat sheet CASP&#43; | Chapter 2 | RacineDuCiel" />
+<meta itemprop="name" content="Cheat sheet CASP&#43; | Chapter 2 | RacineDuCiel" />
+<meta name="application-name" content="Cheat sheet CASP&#43; | Chapter 2 | RacineDuCiel" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="">
+<meta itemprop="description" content="" />
+<meta property="og:description" content="" />
+<meta name="twitter:description" content="" />
+
+<meta property="og:locale" content="fr-fr" />
+<meta name="language" content="fr-fr" />
+
+  <link rel="alternate" hreflang="fr-fr" href="//localhost:1313/posts/casp2/" title="French" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-07-20T00:00:00Z />
+    <meta property="article:published_time" content=2025-07-20T00:00:00Z />
+    <meta property="og:url" content="//localhost:1313/posts/casp2/" />
+
+    
+    <meta property="og:article:author" content="RacineDuCiel" />
+    <meta property="article:author" content="RacineDuCiel" />
+    <meta name="author" content="RacineDuCiel" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Cheat sheet CASP+ | Chapter 2",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-07-20",
+        "description": "",
+        "wordCount":  1850 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-07-20",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "RacineDuCiel"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.1">
+
+    
+    <meta property="og:url" content="//localhost:1313/posts/casp2/">
+  <meta property="og:site_name" content="RacineDuCiel">
+  <meta property="og:title" content="Cheat sheet CASP&#43; | Chapter 2">
+  <meta property="og:description" content="Key Terminology &amp; Definitions Address Space Layout Randomization (ASLR): A security technique that randomizes the memory locations of key areas of a process, making it significantly harder for an attacker to predict target addresses and succeed with buffer overflow attacks.
+Application Sandboxing: A security mechanism used in operating systems like SEAndroid to isolate applications in their own memory and disk space, restricting their access to system resources and other applications.">
+  <meta property="og:locale" content="fr_fr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-07-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-20T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cheat sheet CASP&#43; | Chapter 2">
+  <meta name="twitter:description" content="Key Terminology &amp; Definitions Address Space Layout Randomization (ASLR): A security technique that randomizes the memory locations of key areas of a process, making it significantly harder for an attacker to predict target addresses and succeed with buffer overflow attacks.
+Application Sandboxing: A security mechanism used in operating systems like SEAndroid to isolate applications in their own memory and disk space, restricting their access to system resources and other applications.">
+
+
+    
+
+    <link rel="canonical" href="//localhost:1313/posts/casp2/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="//localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <style>
+mark {
+  background-color: #ff808c;
+  color: #2c2c2c;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+ 
+[data-theme="dark"] mark {
+  background-color: #ff808c;
+  color: #1a1a1a;
+  box-shadow: 0 1px 2px rgba(255,255,255,0.1);
+}
+</style>
+
+
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="//localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>Accueil</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Accueil
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link active" href="/posts/">
+                        Articles
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Cheat sheet CASP&#43; | Chapter 2</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-07-20T00:00:00&#43;00:00" itemprop="datePublished"> 20 juillet 2025 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="key-terminology--definitions"><strong>Key Terminology &amp; Definitions</strong></h2>
+<ul>
+<li>
+<p><strong>Address Space Layout Randomization (ASLR):</strong> A security technique that randomizes the memory locations of key areas of a process, making it significantly harder for an attacker to predict target addresses and succeed with buffer overflow attacks.</p>
+</li>
+<li>
+<p><strong>Application Sandboxing:</strong> A security mechanism used in operating systems like SEAndroid to isolate applications in their own memory and disk space, restricting their access to system resources and other applications.</p>
+</li>
+<li>
+<p><strong>Attestation:</strong> The process of validating something as true. In a computing context, attestation services validate the integrity of a system&rsquo;s boot process and software, often using a TPM.</p>
+</li>
+<li>
+<p><strong>Compensating Controls:</strong> Controls used when a normally required control is unavailable or impractical. In the context of the CASP+ exam, this term is used more broadly to include controls that mitigate risk.</p>
+</li>
+<li>
+<p><strong>Defense in Depth:</strong> A security strategy that uses a series of layered, redundant defenses to protect an asset. If one layer fails, another is in place to resist the attack.</p>
+</li>
+<li>
+<p><strong>Endpoint Detection and Response (EDR):</strong> A comprehensive security solution that monitors endpoints for threats, provides real-time visibility, and helps security teams investigate and remediate incidents. It is more capable than traditional HIDS/HIPS.</p>
+</li>
+<li>
+<p><strong>Golden Image:</strong> A standardized, pre-configured template of an operating system and its applications used for cloning and deploying new systems consistently and securely.</p>
+</li>
+<li>
+<p><strong>Hardening:</strong> The process of securing a system by reducing its attack surface. This involves removing unneeded services, disabling unnecessary accounts, closing ports, and applying restrictive permissions.</p>
+</li>
+<li>
+<p><strong>Hardware Security Module (HSM):</strong> A dedicated, secure cryptoprocessor designed for managing, creating, and storing cryptographic keys.</p>
+</li>
+<li>
+<p><strong>Measured Boot/Launch:</strong> A process that works with a TPM and Secure Boot to log the components of the boot process. This log can be sent to a remote server to objectively assess the PC&rsquo;s health and integrity before granting network access.</p>
+</li>
+<li>
+<p><strong>Middleware:</strong> Software that provides services to applications beyond what the operating system offers, often described as &ldquo;software glue&rdquo;. It facilitates communication and I/O for developers.</p>
+</li>
+<li>
+<p><strong>NX/XN Bit:</strong> A CPU feature that segregates memory areas for instructions and data storage, preventing code from executing in memory regions marked as non-executable. It is known as the <strong>XD bit</strong> (eXecute Disable) by Intel, <strong>EVP</strong> (Enhanced Virus Protection) by AMD, and <strong>XN</strong> (eXecute Never) in ARM processors.</p>
+</li>
+<li>
+<p><strong>Secure Boot:</strong> A security standard that ensures a PC boots using only software trusted by the manufacturer, preventing malware from loading during the boot process. It is enabled in the UEFI/BIOS.</p>
+</li>
+<li>
+<p><strong>Secure Enclave:</strong> A hardware-level feature that allows an application to run in a secure, isolated environment where all data is encrypted in memory and only decrypted within the hardware itself.</p>
+</li>
+<li>
+<p><strong>Self-Encrypting Drive (SED):</strong> A hard drive or solid-state drive that automatically encrypts all data written to it and decrypts all data read from it without requiring user interaction or external software.</p>
+</li>
+<li>
+<p><strong>Trusted Computer Base (TCB):</strong> The totality of a computer&rsquo;s protection mechanisms—including hardware, software, and controls—responsible for enforcing the system&rsquo;s security policy.</p>
+</li>
+<li>
+<p><strong>Trusted Operating System (Trusted OS):</strong> An operating system that has been formally evaluated and verified to support multilevel security and enforce confidentiality and integrity policies. Examples include SELinux and SEAndroid.</p>
+</li>
+<li>
+<p><strong>Trusted Platform Module (TPM):</strong> A specialized chip on a computer&rsquo;s motherboard used for hardware-based authentication and creating and storing cryptographic keys. It authenticates the computer platform itself, not the user.</p>
+</li>
+<li>
+<p><strong>User and Entity Behavior Analytics (UEBA):</strong> A security technology that analyzes user and system behavior to detect anomalies and potential threats, such as an unauthorized user or a compromised device.</p>
+</li>
+</ul>
+<h2 id="core-concepts--principles"><strong>Core Concepts &amp; Principles</strong></h2>
+<ul>
+<li>
+<p><strong>Defense in Depth:</strong> The fundamental principle for comprehensive security is layering controls. Endpoint security is a critical layer in this strategy, acting as the last line of defense.</p>
+</li>
+<li>
+<p><strong>Reducing the Attack Surface:</strong> The primary goal of hardening is to minimize the number of potential vulnerabilities an attacker can exploit. This is achieved by implementing the principle of least privilege, removing anything that is not essential for the system&rsquo;s function, such as unneeded services, accounts, and applications.</p>
+</li>
+<li>
+<p><strong>Trusted Computing:</strong> This concept is built upon a foundation of secure hardware and a trusted OS. The <strong>Trusted Computer Base (TCB)</strong> encompasses all components that enforce security policy. A trusted OS is built upon the TCB and must provide isolation, protected storage, and separation of user and supervisor processes.</p>
+</li>
+<li>
+<p><strong>Standardization for Security:</strong> Using a <strong>Standard Operating Environment (SOE)</strong> or &ldquo;golden image&rdquo; ensures configuration consistency across an organization. This simplifies testing, patching, and overall security management, reducing the Total Cost of Ownership (TCO).</p>
+</li>
+<li>
+<p><strong>System Lifecycle Management:</strong> Security planning must account for the entire lifecycle of hardware and software. Devices that have reached <strong>end-of-life (EOL)</strong> or software that is <strong>end-of-support</strong> must be removed from the network to prevent exposure to unpatched vulnerabilities.</p>
+</li>
+</ul>
+<h2 id="technical-deep-dive"><strong>Technical Deep Dive</strong></h2>
+<h2 id="hardening-techniques"><strong>Hardening Techniques</strong></h2>
+<ul>
+<li>
+<p><strong>Boot Loader Protections:</strong></p>
+<ul>
+<li>
+<p><strong>Secure Boot:</strong> Uses manufacturer-trusted keys in the UEFI/BIOS to ensure only signed, legitimate boot loaders can run, blocking rootkits.</p>
+</li>
+<li>
+<p><strong>Measured Launch:</strong> Works with a TPM to create a log of all boot components. A remote server can analyze this log to verify the system&rsquo;s integrity before it connects to the network.</p>
+</li>
+<li>
+<p><strong>BIOS/UEFI Protection:</strong> UEFI is a modern replacement for BIOS that provides a more secure pre-boot environment and is a prerequisite for features like Secure Boot.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Memory Protections:</strong></p>
+<ul>
+<li>
+<p><strong>NX/XN Bit:</strong> A hardware-level control that prevents the execution of code from data memory segments, thwarting many types of malware and buffer overflow attacks.</p>
+</li>
+<li>
+<p><strong>Address Space Layout Randomization (ASLR):</strong> A software-level control that randomizes the memory addresses for key parts of an application (like the stack, heap, and libraries). This makes it extremely difficult for an attacker to execute a successful buffer overflow attack, as the target address is no longer predictable.</p>
+</li>
+<li>
+<p><strong>Secure Encrypted Enclaves:</strong> Hardware-enforced isolation that encrypts an application&rsquo;s data in memory, protecting it even if the main OS kernel is compromised.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Access and Application Controls:</strong></p>
+<ul>
+<li>
+<p><strong>Shell Restrictions:</strong> Limiting or disabling access to command-line interfaces (e.g., cmd.exe, PowerShell) for standard users or in kiosk environments to prevent unauthorized system changes or privilege escalation.</p>
+</li>
+<li>
+<p><strong>Application Approved/Deny Lists:</strong> An &ldquo;approved list&rdquo; (formerly whitelisting) allows only specified applications to run, adopting a &ldquo;deny-by-default&rdquo; stance. A &ldquo;deny list&rdquo; (formerly blacklisting) prevents specified applications from running.</p>
+</li>
+<li>
+<p><strong>Group Policy:</strong> A Microsoft Active Directory feature that allows administrators to enforce consistent security configurations (e.g., password policies, user rights) across many computers.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>System Maintenance:</strong></p>
+<ul>
+<li>
+<p><strong>Patching:</strong> Regularly applying security patches for the firmware, operating system, and applications is a critical part of hardening. A fully patched system should be part of the standard &ldquo;golden image&rdquo;.</p>
+</li>
+<li>
+<p><strong>Removing Unneeded Services/Accounts:</strong> Disabling or uninstalling any software or user account that is not required for the system&rsquo;s business function reduces the potential attack surface.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="hardware-security-comparison"><strong>Hardware Security Comparison</strong></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Feature</th>
+          <th>Hardware Security Module (HSM)</th>
+          <th>Trusted Platform Module (TPM)</th>
+          <th>Self-Encrypting Drive (SED)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Primary Function</strong></td>
+          <td>Securely manages, stores, and processes cryptographic keys.</td>
+          <td>Authenticates the hardware platform and provides secure storage for keys used in boot integrity and disk encryption.</td>
+          <td>Automatically encrypts and decrypts all data written to and read from the drive.</td>
+      </tr>
+      <tr>
+          <td><strong>Form Factor</strong></td>
+          <td>A plug-in card or a separate network-attached appliance.</td>
+          <td>A specialized chip installed on a computer&rsquo;s motherboard.</td>
+          <td>An integrated feature of a hard disk drive (HDD) or solid-state drive (SSD).</td>
+      </tr>
+      <tr>
+          <td><strong>Use Case</strong></td>
+          <td>High-volume key management, digital signing, and cryptographic acceleration in enterprise environments.</td>
+          <td>Platform integrity validation (Secure/Measured Boot), tamper-resistant full-disk encryption, and hardware authentication.</td>
+          <td>Data-at-rest encryption for endpoints and servers without performance overhead or reliance on software.</td>
+      </tr>
+      <tr>
+          <td><strong>Key Storage</strong></td>
+          <td>Secure, tamper-resistant hardware designed specifically for key protection.</td>
+          <td>Stores cryptographic keys securely, but its main role is platform attestation.</td>
+          <td>Manages its own encryption keys internally, transparent to the user and OS.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="trusted-operating-systems-trusted-os"><strong>Trusted Operating Systems (Trusted OS)</strong></h2>
+<ul>
+<li>
+<p><strong>Core Function:</strong> A Trusted OS is formally evaluated to enforce <strong>multilevel security</strong>, meaning it can handle data at different classification levels using mechanisms like <strong>Mandatory Access Control (MAC)</strong>.</p>
+</li>
+<li>
+<p><strong>Evaluation Criteria:</strong></p>
+<ul>
+<li>
+<p><strong>TCSEC (Orange Book):</strong> An early US standard focused on confidentiality, now deprecated. Rated systems from D (minimal) to A (verified).</p>
+</li>
+<li>
+<p><strong>ITSEC:</strong> A European standard that evaluated confidentiality, integrity, and availability. Also deprecated.</p>
+</li>
+<li>
+<p><strong>Common Criteria (ISO 15408):</strong> The current global standard. It evaluates systems against <strong>Evaluation Assurance Levels (EALs)</strong>, from EAL1 (functionally tested) to EAL7 (formally verified). Most commercial OSs are certified at EAL3 or EAL4.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>
+<p><strong>SELinux (Security-Enhanced Linux):</strong> An NSA and Red Hat collaboration that integrates MAC directly into the Linux <strong>kernel</strong>, providing stricter access controls than standard Linux permissions.</p>
+</li>
+<li>
+<p><strong>SEAndroid (Security-Enhanced Android):</strong> Brings MAC benefits to the Android kernel, enforcing <strong>application sandboxing</strong> to strictly isolate apps from each other and the system.</p>
+</li>
+<li>
+<p><strong>Trusted Solaris:</strong> Provides MAC and &ldquo;immutable zones,&rdquo; which are read-only file system environments to protect the OS.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="compensating-controls"><strong>Compensating Controls</strong></h2>
+<p>These controls add layers of defense or mitigate risks when primary controls are insufficient or cannot be implemented.</p>
+<ul>
+<li>
+<p><strong>Antivirus:</strong> Provides baseline protection against known malware.</p>
+</li>
+<li>
+<p><strong>HIDS/HIPS:</strong> A Host-based Intrusion Detection/Prevention System monitors a single host for suspicious activity and can either alert (HIDS) or block it (HIPS).</p>
+</li>
+<li>
+<p><strong>Host-Based Firewall:</strong> Provides a network security layer directly on the endpoint, protecting it from malicious network traffic even on a trusted internal network.</p>
+</li>
+<li>
+<p><strong>Endpoint Detection and Response (EDR):</strong> Advanced tools that offer deep visibility into endpoint activity to detect, investigate, and respond to sophisticated threats like APTs.</p>
+</li>
+<li>
+<p><strong>Redundant Hardware:</strong> A form of high availability (HA) that uses duplicate components (e.g., power supplies, servers) to reduce the risk of an outage from a single hardware failure.</p>
+</li>
+<li>
+<p><strong>Self-Healing Hardware:</strong> Hardware capable of detecting a failure or security issue and automatically responding to fix or remediate the impact.</p>
+</li>
+<li>
+<p><strong>User and Entity Behavior Analytics (UEBA):</strong> Monitors normal patterns of behavior for users and devices, flagging anomalies that could indicate a threat, such as a compromised account or insider threat.</p>
+</li>
+</ul>
+<h2 id="practical-application--scenarios"><strong>Practical Application &amp; Scenarios</strong></h2>
+<ul>
+<li>
+<p><strong>Vulnerability Scanning (Exercise 2.1):</strong> Tools like N-Stalker can be used to scan hosts for known vulnerabilities. The results are categorized by risk level (e.g., high, medium, low) to help prioritize remediation efforts, which is a key part of maintaining a secure baseline.</p>
+</li>
+<li>
+<p><strong>Bypassing Shell Restrictions (Exercise 2.2):</strong> An attacker could bypass command shell restrictions by replacing an accessibility executable like <code>sethc.exe</code> (Sticky Keys) with <code>cmd.exe</code>. Pressing the Shift key five times would then launch a command prompt, highlighting that single controls are insufficient and that physical access can undermine software-based security.</p>
+</li>
+<li>
+<p><strong>Kiosk Security:</strong> A public-facing kiosk is a prime example where security must be tightened. This involves implementing <strong>shell restrictions</strong> to prevent access to the command line, using a <strong>restricted interface</strong> to limit available programs, and using <strong>application approved lists</strong> to ensure only necessary software can run.</p>
+</li>
+</ul>
+<h2 id="exam-essentials--key-takeaways"><strong>Exam Essentials &amp; Key Takeaways</strong></h2>
+<ul>
+<li>
+<p>Understand that different endpoints face different risks, and controls must be applied accordingly based on a risk assessment.</p>
+</li>
+<li>
+<p>Know the specific purpose of each hardening technique and be able to choose the most effective one for a given scenario.</p>
+</li>
+<li>
+<p>Recognize that security relies on a multi-layered approach; techniques are not mutually exclusive and should be combined to maximize risk mitigation.</p>
+</li>
+<li>
+<p>Be able to identify the best compensating control to mitigate a specific risk described in an exam scenario. You should be familiar with the function of antivirus, HIDS/HIPS, EDR, UEBA, and others.</p>
+</li>
+<li>
+<p>Understand that a trusted OS provides a more secure foundation than a standard OS by implementing security controls, like MAC, at the kernel level.</p>
+</li>
+</ul>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+</div>
+</footer><a href="#" title="Aller en haut" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+    
+    
+        
+    
+
+
+
+    
+    <script async src="//localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

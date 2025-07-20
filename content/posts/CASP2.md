@@ -1,5 +1,5 @@
 ---
-title: Cybersecurity - CASP+ - Chapter2
+title: Cheat sheet CASP+ | Chapter 2
 date: 2025-07-20
 ---
 ## **Key Terminology & Definitions**
