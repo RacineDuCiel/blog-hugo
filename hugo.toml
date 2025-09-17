@@ -1,10 +1,9 @@
 title = "RacineDuCiel"
-baseURL = "https://www.racineduciel.fr/"
+baseURL = "https://racineduciel.fr/"
 theme = "ablog"
 enableEmoji = true
 enableRobotsTXT = true
 ignoreErrors = ["additional-script-loading-error"]
-canonifyURLs = true
 
 [markup]
   [markup.goldmark]
