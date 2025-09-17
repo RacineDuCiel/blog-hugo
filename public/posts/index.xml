@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RacineDuCiel</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content on RacineDuCiel</description>
+    <title>Posts on RacineDuCiel</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on RacineDuCiel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Wed, 17 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 17 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dépense énergétique totale (TDEE)</title>
       <link>http://localhost:1313/posts/tdee/</link>
