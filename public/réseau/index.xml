@@ -1,33 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RacineDuCiel</title>
-    <link>//localhost:1313/</link>
-    <description>Recent content on RacineDuCiel</description>
+    <title>Réseaux on RacineDuCiel</title>
+    <link>//localhost:1313/r%C3%A9seau/</link>
+    <description>Recent content in Réseaux on RacineDuCiel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Sat, 20 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>VLANs</title>
-      <link>//localhost:1313/posts/vlans/</link>
-      <pubDate>Sat, 20 Sep 2025 00:00:00 +0000</pubDate>
-      
-      <guid>//localhost:1313/posts/vlans/</guid>
-      
-      <description></description>
-      
-    </item>
-    
+    <lastBuildDate>Wed, 17 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/r%C3%A9seau/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dépense énergétique totale (TDEE)</title>
-      <link>//localhost:1313/posts/tdee/</link>
+      <link>//localhost:1313/r%C3%A9seau/reseautest/</link>
       <pubDate>Wed, 17 Sep 2025 00:00:00 +0000</pubDate>
       
-      <guid>//localhost:1313/posts/tdee/</guid>
+      <guid>//localhost:1313/r%C3%A9seau/reseautest/</guid>
       
-      <description>&lt;p&gt;La dépense énergétique totale quotidienne (TDEE, Total Daily Energy Expenditure) représente l’ensemble des calories brûlées par l’organisme en 24 heures. Ce total se divise en plusieurs composantes :&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Métabolisme de base (BMR/RMR)&lt;/strong&gt; : Il s’agit des calories nécessaires au fonctionnement vital du corps (respiration, circulation, maintien de la température, etc.), représentant environ 60 à 75 % du TDEE chez l’adulte.&lt;/li&gt;
+      <description>&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Thermogenèse alimentaire (TEF)&lt;/strong&gt; : Ce sont les calories dépensées pour digérer, absorber et métaboliser les aliments, soit environ 8 à 15 % du TDEE.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Thermogenèse d’activité physique planifiée (EAT)&lt;/strong&gt; : Cela inclut toutes les activités physiques structurées (entraînement, sport…), soit environ 5 % du TDEE pour la population générale et jusqu’à 20 % chez les athlètes.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;NEAT&lt;/strong&gt; (Non-Exercise Activity Thermogenesis) : Il s’agit de la dépense liée à toutes les activités non planifiées et spontanées du quotidien. Le NEAT représente en moyenne 15 % du TDEE, avec une variabilité extrême selon le mode de vie (de 6-10 % chez les très sédentaires à plus de 50 % chez des personnes très actives).&lt;/li&gt;

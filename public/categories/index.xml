@@ -2,9 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on RacineDuCiel</title>
-    <link>http://localhost:1313/categories/</link>
+    <link>//localhost:1313/categories/</link>
     <description>Recent content in Categories on RacineDuCiel</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>fr-fr</language><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>fr-fr</language>
+    <lastBuildDate>Sat, 20 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Réseau</title>
+      <link>//localhost:1313/categories/r%C3%A9seau/</link>
+      <pubDate>Sat, 20 Sep 2025 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/categories/r%C3%A9seau/</guid>
+      
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Sport</title>
+      <link>//localhost:1313/categories/sport/</link>
+      <pubDate>Wed, 17 Sep 2025 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/categories/sport/</guid>
+      
+      <description></description>
+      
+    </item>
+    
   </channel>
 </rss>

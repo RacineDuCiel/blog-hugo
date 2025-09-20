@@ -1,9 +1,13 @@
 title = "RacineDuCiel"
-baseURL = "https://racineduciel.fr/"
+baseURL = ""
 theme = "ablog"
 enableEmoji = true
 enableRobotsTXT = true
 ignoreErrors = ["additional-script-loading-error"]
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
 
 [markup]
   [markup.goldmark]
@@ -40,13 +44,17 @@ ignoreErrors = ["additional-script-loading-error"]
       weight = 10
     [[Languages.fr-fr.menu.main]]
       pageRef = "posts"
-      name = "Articles"
+      name = "Tous les articles"
       url = "/posts/"
       weight = 20
+    [[Languages.fr-fr.menu.main]]
+      name = "Catégories"
+      url = "/categories/"
+      weight = 30
 
   [Languages.fr-fr.params]
     defaultColor = "auto"
-    mainSections = ["posts"]
+    mainSections = ["posts", "réseau", "Sport"]
     toc = false
     goToTop = true
     dateFormat = "2 January 2006"

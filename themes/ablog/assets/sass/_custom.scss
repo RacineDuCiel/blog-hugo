@@ -1,0 +1,14 @@
+/* Liens des catégories cohérents avec le mode sombre/claire du thème */
+.terms-list a,
+.post-title a {
+    color: #0d122b; /* couleur des titres en thème clair */
+    text-decoration: none;
+    font-weight: 700;
+}
+
+html.dark .terms-list a,
+html.dark .post-title a {
+    color: #eaeaea !important; /* couleur des titres en thème sombre */
+    text-decoration: none;
+    font-weight: 700;
+}

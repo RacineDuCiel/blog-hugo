@@ -20,10 +20,10 @@
         <main aria-label="Content">
             <h3 class="posts-item-note" aria-label="Recent Posts">{{ T "home.recent_posts" }}</h3>
             {{/* Show last 5 posts in reverse date order */}}
-            {{ $pagesToShow := where .Site.RegularPages "Type" "in" site.Params.mainSections }}
+            {{ $pagesToShow := where .Site.RegularPages "Params.showOnHome" true }}
             {{ $posts := $pagesToShow.ByDate.Reverse }}
             {{ range first 5 $posts }}
-            {{ partial "postCard" . }}
+                {{ partial "postCard" . }}
             {{ end }}
             {{ if gt (len $posts) 5 }}
             <p>

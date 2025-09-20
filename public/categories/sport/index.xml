@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RacineDuCiel</title>
-    <link>//localhost:1313/</link>
-    <description>Recent content on RacineDuCiel</description>
+    <title>Sport on RacineDuCiel</title>
+    <link>//localhost:1313/categories/sport/</link>
+    <description>Recent content in Sport on RacineDuCiel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>fr-fr</language>
-    <lastBuildDate>Sat, 20 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>VLANs</title>
-      <link>//localhost:1313/posts/vlans/</link>
-      <pubDate>Sat, 20 Sep 2025 00:00:00 +0000</pubDate>
-      
-      <guid>//localhost:1313/posts/vlans/</guid>
-      
-      <description></description>
-      
-    </item>
-    
+    <lastBuildDate>Wed, 17 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/categories/sport/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dépense énergétique totale (TDEE)</title>
       <link>//localhost:1313/posts/tdee/</link>

@@ -1,6 +1,8 @@
 ---
 title: Dépense énergétique totale (TDEE)
 date: 2025-09-17
+categories: ["Sport"]
+showOnHome: true
 ---
 
 La dépense énergétique totale quotidienne (TDEE, Total Daily Energy Expenditure) représente l’ensemble des calories brûlées par l’organisme en 24 heures. Ce total se divise en plusieurs composantes :
