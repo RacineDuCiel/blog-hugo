@@ -15,7 +15,9 @@
       <guid>//localhost:1313/posts/ccna-labs/</guid>
       
       <description>&lt;h3 id=&#34;network-fundamentals&#34;&gt;Network fundamentals&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;//localhost:1313/content/posts/CCNA_Challenge_Lab_1.md&#34;&gt;CCNA Challenge Lab 1&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;//localhost:1313/posts/ccna_challenge_lab_1/&#34;&gt;CCNA Challenge Lab 1&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;network-access&#34;&gt;Network access&lt;/h3&gt;</description>
       
     </item>
@@ -39,7 +41,7 @@
     </item>
     
     <item>
-      <title></title>
+      <title>CCNA Challenge Lab 1</title>
       <link>//localhost:1313/posts/ccna_challenge_lab_1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

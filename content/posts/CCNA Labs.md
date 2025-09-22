@@ -7,7 +7,7 @@ showDate: false
 ---
 
 ### Network fundamentals
-[CCNA Challenge Lab 1](/content/posts/CCNA_Challenge_Lab_1.md)
+- [CCNA Challenge Lab 1](/posts/CCNA_Challenge_Lab_1.md)
 
 ### Network access
  
