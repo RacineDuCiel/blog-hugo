@@ -12,3 +12,42 @@ html.dark .post-title a {
     text-decoration: none;
     font-weight: 700;
 }
+
+a {
+  color: #000000;
+}
+
+a:hover,
+a:focus {
+  color: #000000;
+}
+
+/* Mode sombre, si tu veux une autre couleur */
+html.dark a {
+  color: #ffffff;             
+}
+
+html.dark a:hover,
+html.dark a:focus {
+  color: #ffffff;
+}
+
+
+.page-content a {
+  color: #454545;             /* Remplace par ta couleur préférée */
+}
+
+/* Hover/focus dans .page-content (clair) */
+.page-content a:hover,
+.page-content a:focus {
+  color: #454545;             /* Couleur au survol (adapter si besoin) */
+}
+
+/* Mode sombre */
+html.dark .page-content a {
+  color: #d3d3d3;             /* Couleur des liens en dark */
+}
+html.dark .page-content a:hover,
+html.dark .page-content a:focus {
+  color: #d3d3d3;
+}
