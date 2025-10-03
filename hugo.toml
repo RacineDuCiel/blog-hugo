@@ -51,6 +51,11 @@ ignoreErrors = ["additional-script-loading-error"]
       name = "Catégories"
       url = "/categories/"
       weight = 30
+    [[Languages.fr-fr.menu.main]]
+      pageRef = "about"
+      name = "À propos"
+      url = "/about/"
+      weight = 40
 
   [Languages.fr-fr.params]
     defaultColor = "auto"
