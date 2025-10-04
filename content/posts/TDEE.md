@@ -1,7 +1,7 @@
 ---
 title: Dépense énergétique totale (TDEE)
 date: 2025-09-17
-categories: ["Sport"]
+categories: ["Sport/Santé"]
 showOnHome: true
 ---
 

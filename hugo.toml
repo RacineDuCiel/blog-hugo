@@ -4,6 +4,7 @@ theme = "ablog"
 enableEmoji = true
 enableRobotsTXT = true
 ignoreErrors = ["additional-script-loading-error"]
+defaultContentLanguage = "fr-fr"
 
 [taxonomies]
   category = "categories"
@@ -62,7 +63,7 @@ ignoreErrors = ["additional-script-loading-error"]
     mainSections = ["posts", "réseau", "Sport"]
     toc = false
     goToTop = true
-    dateFormat = "2 January 2006"
+    dateFormat = ":date_long"
     rssFeedDescription = "summary"
     additionalScripts = ["js/custom.js"]
     
