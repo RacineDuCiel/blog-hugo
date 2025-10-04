@@ -27,7 +27,9 @@ Les athlètes en début de cycle d'entraînement ou moins expérimentés peuvent
 Les organismes internationaux recommandent actuellement 1,2 à 2,0 g/kg/jour selon l'état d'entraînement et les objectifs. Cependant, une méta-analyse de Morton et al. a pointé l'absence d'évidence pour des bénéfices au-delà de 1,6 g/kg pour l'augmentation de la masse maigre. Cette conclusion est aujourd'hui remise en question par des études plus récentes.
 L'analyse de Tagawa et al. (2020) montre des bénéfices continus jusqu'à environ 3 g/kg d'apport protéique, avec des rendements décroissants mais toujours positifs au-delà de 2 g/kg. L'étude de Nunes et al. (2022) confirme l'absence de plateau clair même à des apports supérieurs à 2,2 g/kg.
 Pour les sportifs de streetlifting avancés, les recommandations pratiques se situent entre 2,0 et 2,4 g/kg/jour, avec possibilité d'ajuster selon la masse maigre (2,35-2,75 g/kg de masse maigre).
-Quantité maximale de protéines par prise
+
+### Quantité maximale de protéines par prise
+
 Contrairement à la croyance populaire limitant l'absorption à 30 g par repas, la recherche démontre que l'organisme peut absorber pratiquement toutes les protéines consommées, indépendamment de la quantité. L'étude de Trommelen et al. (2023) a révolutionné cette compréhension en montrant que l'ingestion de 100 g de protéines produit une réponse anabolique supérieure et plus prolongée (>12h) comparée à 25 g.
 Les études classiques de Moore et al. suggéraient une réponse logarithmique avec plateau vers 20-40 g, mais cette limitation concernait principalement la stimulation maximale de la SPM sur des périodes courtes. La recherche récente indique que la réponse anabolique n'a pas de limite supérieure en magnitude et en durée.
 Pour l'optimisation pratique, l'apport de 0,4 g/kg de poids corporel par repas (soit 25-40 g pour la plupart des individus) maximise la SPM sur une prise, mais des quantités supérieures restent bénéfiques pour d'autres processus physiologiques et l'extension de la fenêtre anabolique.
