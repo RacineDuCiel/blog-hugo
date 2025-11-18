@@ -12,7 +12,7 @@
     {{ end }}
     {{ if (ne .Params.showDate false) }}
     {{ $displayDate := .Lastmod }}
-    <time class="post-item-meta" datetime="{{ $displayDate.Format $ISO_date }}">
+    <time class="post-item-meta" datetime="{{ $displayDate.Format $ISO_date }}" title="Date: {{ .Date.Format "2006-01-02" }} | Lastmod: {{ .Lastmod.Format "2006-01-02" }}">
         {{ $displayDate.Format "2 January 2006" }}
     </time>
     {{ end }}

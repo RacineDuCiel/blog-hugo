@@ -7,6 +7,9 @@ enableRobotsTXT = true
 ignoreErrors = ["additional-script-loading-error"]
 defaultContentLanguage = "fr-fr"
 
+[frontmatter]
+  lastmod = [":git", ":fileModTime", "lastmod", "date"]
+
 [taxonomies]
   category = "categories"
   tag = "tags"

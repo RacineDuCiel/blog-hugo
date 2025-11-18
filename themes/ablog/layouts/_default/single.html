@@ -6,10 +6,12 @@
                 <h1 class="header-title">{{ .Title }}</h1>
                 {{ $configDateFormat := .Site.Params.dateFormat | default ":date_medium" }}
                 {{ if and (.Date) (ne .Params.showDate false) }}
-                {{ $ISO_time := dateFormat "2006-01-02T15:04:05-07:00" .Date }}
+                {{ $displayDate := .Lastmod }}
+                {{ $ISO_time := dateFormat "2006-01-02T15:04:05-07:00" $displayDate }}
                 <div class="post-meta">
-                    <time datetime="{{ $ISO_time }}" itemprop="datePublished"> {{ .Date | time.Format $configDateFormat }} </time>
+                    <time datetime="{{ $ISO_time }}" itemprop="dateModified">Dernière modification de l'article : {{ $displayDate | time.Format $configDateFormat }}</time>
                 </div>
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e0e0e0;">
                 {{ end }}
             </header>
             {{ partial "toc.html" .}}
