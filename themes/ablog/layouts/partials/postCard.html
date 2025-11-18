@@ -11,8 +11,9 @@
     </div>
     {{ end }}
     {{ if (ne .Params.showDate false) }}
-    <time class="post-item-meta" datetime="{{ .Date }}">
-        {{ .Date.Format "2 January 2006" }}
+    {{ $displayDate := .Lastmod }}
+    <time class="post-item-meta" datetime="{{ $displayDate.Format $ISO_date }}">
+        {{ $displayDate.Format "2 January 2006" }}
     </time>
     {{ end }}
 </article>

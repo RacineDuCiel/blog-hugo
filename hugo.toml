@@ -1,6 +1,7 @@
 title = "RacineDuCiel"
 baseURL = "https://racineduciel.fr/"
 theme = "ablog"
+enableGitInfo = true
 enableEmoji = true
 enableRobotsTXT = true
 ignoreErrors = ["additional-script-loading-error"]
