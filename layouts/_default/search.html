@@ -3,7 +3,7 @@
     <h1>{{ .Title }}</h1>
 
     <div class="search-box">
-        <input type="text" id="search-input" placeholder="Tapez votre recherche..." aria-label="Recherche">
+        <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche">
     </div>
 
     <div id="search-results"></div>
@@ -66,6 +66,26 @@
         margin-top: 5px;
         color: #888;
         font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+        div.search-container {
+            padding: 10px !important;
+            /* Reduced padding with !important to force change */
+        }
+
+        div.search-box input#search-input {
+            padding: 10px !important;
+            font-size: 16px !important;
+            /* 16px prevents zoom on iOS */
+            width: 100%;
+            box-sizing: border-box;
+            /* Ensure padding doesn't overflow width */
+        }
+
+        div.search-box {
+            margin-bottom: 15px;
+        }
     }
 </style>
 {{ end }}
