@@ -90,3 +90,8 @@ defaultContentLanguage = "fr-fr"
   page = ["HTML"]
   section = ["HTML", "RSS"]
 
+[[Languages.fr-fr.menu.main]]
+  name = "Recherche"
+  url = "/search/"
+  weight = 35
+
