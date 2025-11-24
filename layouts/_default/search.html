@@ -8,84 +8,10 @@
     <div id="search-results"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+{{ $fuse := resources.Get "js/fuse.js" }}
+<script src="{{ $fuse.RelPermalink }}"></script>
 <script src="/js/search.js?v={{ now.Unix }}"></script>
 
-<style>
-    .search-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        margin-top: 50px;
-    }
-
-    .search-box {
-        margin-bottom: 30px;
-    }
-
-    #search-input {
-        width: 100%;
-        padding: 15px;
-        font-size: 1.2rem;
-        border: 2px solid #eee;
-        border-radius: 8px;
-        background: var(--bg-color);
-        color: var(--text-color);
-    }
-
-    #search-input:focus {
-        outline: none;
-        border-color: var(--link-color);
-    }
-
-    .search-result-item {
-        margin-bottom: 15px;
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .search-result-item h3 {
-        margin: 0 0 5px 0;
-        font-size: 1.1rem;
-    }
-
-    .search-result-item h3 a {
-        text-decoration: none;
-        color: var(--link-color);
-    }
-
-    .search-result-item p {
-        margin: 0;
-        color: var(--text-color);
-        opacity: 0.8;
-        font-size: 0.9rem;
-    }
-
-    .search-result-item small {
-        display: block;
-        margin-top: 5px;
-        color: #888;
-        font-size: 0.8rem;
-    }
-
-    @media (max-width: 768px) {
-        div.search-container {
-            padding: 10px !important;
-            /* Reduced padding with !important to force change */
-        }
-
-        div.search-box input#search-input {
-            padding: 10px !important;
-            font-size: 16px !important;
-            /* 16px prevents zoom on iOS */
-            width: 100%;
-            box-sizing: border-box;
-            /* Ensure padding doesn't overflow width */
-        }
-
-        div.search-box {
-            margin-bottom: 15px;
-        }
-    }
-</style>
+{{ $searchStyle := resources.Get "sass/search.scss" | toCSS | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $searchStyle.RelPermalink }}">
 {{ end }}
