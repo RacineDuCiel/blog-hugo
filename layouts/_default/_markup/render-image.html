@@ -1,0 +1,31 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+
+{{- if $u.IsAbs -}}
+{{/* Remote image: just render standard tag */}}
+<img src="{{ $src }}" alt="{{ $alt }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+{{- else -}}
+{{/* Local image: try to find in Page Bundle */}}
+{{- $img := .Page.Resources.GetMatch $src -}}
+
+{{- if $img -}}
+{{/* Image found in bundle: Resize if too large, convert to WebP */}}
+{{- $processed := $img -}}
+
+{{/* Only resize if wider than 800px */}}
+{{- if gt $img.Width 800 -}}
+{{- $processed = $img.Resize "800x webp q90" -}}
+{{- else -}}
+{{/* Just convert to WebP */}}
+{{- $processed = $img.Resize (printf "%dx%d webp q90" $img.Width $img.Height) -}}
+{{- end -}}
+
+<img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" width="{{ $processed.Width }}"
+    height="{{ $processed.Height }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+{{- else -}}
+{{/* Image not found in bundle (maybe in static?): Fallback */}}
+<img src="{{ $src | safeURL }}" alt="{{ $alt }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+{{- end -}}
+{{- end -}}
