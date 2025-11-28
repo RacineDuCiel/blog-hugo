@@ -12,7 +12,7 @@ La dépense énergétique totale quotidienne (TDEE, Total Daily Energy Expenditu
 - **Thermogenèse d’activité physique planifiée (EAT)** : Cela inclut toutes les activités physiques structurées (entraînement, sport…), soit environ 5 % du TDEE pour la population générale et jusqu’à 20 % chez les athlètes.
 - **NEAT** (Non-Exercise Activity Thermogenesis) : Il s’agit de la dépense liée à toutes les activités non planifiées et spontanées du quotidien. Le NEAT représente en moyenne 15 % du TDEE, avec une variabilité extrême selon le mode de vie (de 6-10 % chez les très sédentaires à plus de 50 % chez des personnes très actives).
 
-![Daily_energy_expenditure](/images/daily_energy_expenditure.png)
+![Daily_energy_expenditure](daily_energy_expenditure.png)
 
 
 ## Variabilité du NEAT et importance individuelle
