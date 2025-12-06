@@ -106,7 +106,7 @@ figure {
 }
 
 // Image inside Figure tag
-figure > img {
+figure>img {
   display: block;
   position: relative;
 }
@@ -145,8 +145,8 @@ li {
     color: $black;
   }
 
-  > ul,
-  > ol {
+  >ul,
+  >ol {
     margin-bottom: 2px;
     margin-top: 0;
   }
@@ -161,8 +161,9 @@ h5,
 h6 {
   color: $black;
   font-weight: $bold-weight;
-  & + ul,
-  & + ol {
+
+  &+ul,
+  &+ol {
     margin-top: 10px;
   }
 
@@ -172,12 +173,12 @@ h6 {
 }
 
 // Headings with link
-h1 > a,
-h2 > a,
-h3 > a,
-h4 > a,
-h5 > a,
-h6 > a {
+h1>a,
+h2>a,
+h3>a,
+h4>a,
+h5>a,
+h6>a {
   text-decoration: none;
   border: none;
 
@@ -242,8 +243,8 @@ blockquote {
   @include media-query($on-mobile) {
     max-width: -webkit-calc(#{$narrow-size} - (#{$spacing-full}));
     max-width: calc(#{$narrow-size} - (#{$spacing-full}));
-    padding-right: $spacing-full - 10;
-    padding-left: $spacing-full - 10;
+    padding-right: $spacing-full;
+    padding-left: $spacing-full;
 
     &.blurry {
       animation: 0.2s ease-in forwards blur;

@@ -1,8 +1,8 @@
 // Post wrapper
 .wrapper.post {
   @include media-query($on-mobile) {
-    padding-left: $spacing-half;
-    padding-right: $spacing-half;
+    padding-left: $spacing-full;
+    padding-right: $spacing-full;
   }
 }
 
@@ -65,6 +65,7 @@
   a {
     color: $text-link-blue;
     text-decoration: none;
+
     &[target="_blank"]::after {
       content: " \2197";
       font-size: $small-font-size;
@@ -83,7 +84,7 @@
     }
   }
 
-  > p {
+  >p {
     margin: 0;
     padding-top: $spacing-full - 15;
     padding-bottom: $spacing-full - 15;

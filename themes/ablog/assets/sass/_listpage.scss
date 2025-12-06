@@ -1,7 +1,30 @@
-.list-page .post-year {
-    padding-bottom: .5rem;
+// Mobile padding for list pages (responsive at ~768px)
+@mixin mobile-list-padding {
+  @include media-query($on-mobile) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
-  
+
+.list-page {
+  .post-year {
+    padding-bottom: .5rem;
+    @include mobile-list-padding;
+  }
+
+  .header-title {
+    @include mobile-list-padding;
+  }
+}
+
+// Home page elements
+.posts-item-note {
+  @include media-query($on-mobile) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
 .icon-star {
   color: orange;
   height: 16px;

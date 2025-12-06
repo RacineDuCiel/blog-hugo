@@ -27,7 +27,7 @@
         {{ $pinnedPages := $scratch.Get "pinnedList" }}
         {{ if gt (len $pinnedPages) 0 }}
         <section class="pinned-posts">
-            <h2 class="post-year">📌</h2>
+            <h2 class="post-year">⚲</h2>
             {{ range sort $pinnedPages "Date" "desc" }}
             {{ partial "postCard" . }}
             {{ end }}

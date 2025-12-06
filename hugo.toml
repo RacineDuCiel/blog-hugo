@@ -23,6 +23,12 @@ defaultContentLanguage = "fr-fr"
 [markup.goldmark.extensions.extras.mark]
   enable = true
 
+[markup.goldmark.extensions.passthrough]
+  enable = true
+  [markup.goldmark.extensions.passthrough.delimiters]
+    block = [['$$', '$$'], ['\\[', '\\]']]
+    inline = [['$', '$'], ['\\(', '\\)']]
+
 [privacy.googleAnalytics]
   respectDoNotTrack = true
 
@@ -34,6 +40,7 @@ defaultContentLanguage = "fr-fr"
   priority = 0.5
 
 [params]
+  math = true
   browserconfig.TileColor = "#2d89ef"
 
 [Languages.fr-fr]

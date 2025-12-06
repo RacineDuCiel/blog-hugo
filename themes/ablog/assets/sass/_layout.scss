@@ -50,6 +50,11 @@
   flex-direction: row;
   align-items: center;
 
+  @include media-query($on-mobile) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
   &:not(:first-child) {
     border-top: 1px solid $light;
   }
@@ -68,11 +73,12 @@
     border: 0;
     padding: 0;
     font-size: $base-font-size;
-    font-weight: normal;
+
+
     letter-spacing: 0.1px;
 
     @include media-query($on-mobile) {
-      max-width: 15rem;
+      max-width: 70%;
     }
 
     a {
@@ -109,6 +115,7 @@
 
     &:not(:last-child) {
       margin-right: 10px;
+
       &:hover {
         opacity: 1;
       }
@@ -130,10 +137,12 @@
       margin-right: .31rem;
 
     }
+
     svg {
       color: #888a90;
       height: 24px;
       width: 24px;
+
       &:hover {
         color: rgb(221, 221, 221);
       }
@@ -148,6 +157,7 @@
   justify-content: center;
   flex-direction: column;
   height: 75vh;
+
   .title {
     font-size: 5em;
     font-weight: $bold-weight;
@@ -155,13 +165,16 @@
     color: $black;
     text-shadow: 1px 0px 0px $text-link-blue;
   }
+
   .phrase {
     color: $text-base-color;
   }
+
   .solution {
     color: $text-link-blue;
     letter-spacing: 0.5px;
   }
+
   .solution:hover {
     color: $text-link-blue-active;
   }
@@ -193,9 +206,11 @@
     font-size: $base-font-size;
     background-color: rgba(128, 128, 128, 0.1);
     border: 1px solid rgba(128, 128, 128, 0.1);
+
     &::-webkit-input-placeholder {
       color: #808080;
     }
+
     &::-webkit-search-decoration,
     &::-webkit-search-results-decoration {
       display: none;
@@ -205,6 +220,7 @@
 
 #search-results {
   text-align: center;
+
   li {
     text-align: left;
   }
@@ -212,6 +228,7 @@
 
 .archive-tags {
   height: auto;
+
   .tag-item {
     padding: 1px 3px;
     border-radius: 2px;
@@ -223,7 +240,8 @@
 
 /* Add styles for sub, sup, kbd, mark */
 
-sub, sup {
+sub,
+sup {
   font-size: 79%;
   line-height: 0;
   position: relative;

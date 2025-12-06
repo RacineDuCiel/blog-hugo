@@ -35,7 +35,7 @@ $dark-smoke: #4a4d56;
 $dark-gray: #767f87;
 
 //////////////// 3. Fonts preferences /////////////////
-$sans-family: Roboto, sans-serif;
+$sans-family: 'JetBrains Mono', monospace;
 $mono-family: Consolas, monospace;
 $base-font-size: 16px;
 $medium-font-size: $base-font-size * 0.938;
@@ -49,8 +49,8 @@ $bold-weight: 700;
 // $black-weight: 900; // uncomment if necessary
 
 //////////////// 4.Responsive design (media queries) /////////////////
-$wide-size: 890px;
-$narrow-size: 720px;
+$wide-size: 1080px;
+$narrow-size: 900px;
 
 // Padding unit
 $spacing-full: 30px;
@@ -87,6 +87,4 @@ $on-widescreen: 1152px;
 @import "listpage";
 @import "custom";
 
-{{ with .Site.Params.goToTop }}
 @import "goToTop";
-{{ end }}
