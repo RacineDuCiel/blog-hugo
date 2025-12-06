@@ -39,6 +39,10 @@
   padding-bottom: .3rem;
   font-weight: 500;
   color: $black;
+
+  @include media-query($on-mobile) {
+    font-size: 14px;
+  }
 }
 
 // List of posts
@@ -64,7 +68,8 @@
     color: $black;
 
     @include media-query($on-mobile) {
-      font-size: 16px;
+      font-size: 13px;
+      min-width: 80px;
     }
   }
 
@@ -79,6 +84,7 @@
 
     @include media-query($on-mobile) {
       max-width: 70%;
+      font-size: 14px;
     }
 
     a {
