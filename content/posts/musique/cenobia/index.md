@@ -6,7 +6,7 @@ showOnHome: false
 ---
 
 ## Throne Of Want
-{{< youtube > "YGxvx3APSzA"}}
+{{< youtube "YGxvx3APSzA" >}}
 
 ## Devour me
-{{< youtube > "UWRAw8MR98c"}}
+{{< youtube "UWRAw8MR98c" >}}

@@ -5,4 +5,4 @@ categories: ["Musique"]
 showOnHome: false
 ---
 
-{{< youtube > "zniQ_hHAsPM"}}
+{{< youtube "zniQ_hHAsPM" >}}

@@ -6,7 +6,7 @@ showOnHome: false
 ---
 
 ## Black Dove
-{{< youtube > "txy7Z4wETvs"}}
+{{< youtube "txy7Z4wETvs" >}}
 
 ## Covert One
-{{< youtube > "SnPlSC0z7j8"}}
+{{< youtube "SnPlSC0z7j8" >}}

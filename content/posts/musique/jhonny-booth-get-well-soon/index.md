@@ -5,4 +5,4 @@ categories: ["Musique"]
 showOnHome: false
 ---
 
-{{< youtube > "OjfARxxQBY8"}}
+{{< youtube "OjfARxxQBY8" >}}
