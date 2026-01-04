@@ -1,0 +1,105 @@
+/**
+ * ===========================================================================
+ * BEST PRACTICE: Styles externalisés pour les shortcodes
+ * ---------------------------------------------------------------------------
+ * - Séparation des responsabilités : HTML = structure, CSS = présentation
+ * - Maintenance facilitée : un seul fichier pour tous les styles de shortcodes
+ * - Performances : CSS optimisé et mis en cache par le navigateur
+ * - Accessibilité : transitions CSS plutôt que JS inline pour le hover
+ * ===========================================================================
+ */
+
+// ============================================================================
+// Shortcode: Album Card
+// ============================================================================
+.album-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    // Conteneur de l'image avec effet hover
+    .album-cover {
+        margin-bottom: 1rem;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    // Image de couverture
+    .album-cover-img {
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+
+    // Informations de l'album
+    .album-info {
+        h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0.25rem 0 0;
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+    }
+}
+
+// ============================================================================
+// Shortcode: Cover (version simplifiée de album-card)
+// ============================================================================
+.cover-container {
+    margin: 1rem 0;
+
+    .cover-img {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+    }
+}
+
+// ============================================================================
+// Shortcode: Grid
+// ============================================================================
+.shortcode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+// ============================================================================
+// Shortcode: YouTube Playlist (responsive iframe)
+// ============================================================================
+.youtube-playlist-container {
+    position: relative;
+    padding-bottom: 56.25%; // Ratio 16:9
+    height: 0;
+    overflow: hidden;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+}
+
+// ============================================================================
+// Erreur générique (image non trouvée)
+// ============================================================================
+.shortcode-error {
+    color: red;
+    font-weight: bold;
+}

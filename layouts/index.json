@@ -1,5 +1,28 @@
-{{- $.Scratch.Add "index" slice -}}
+{{/*
+    ===========================================================================
+    Output: index.json (pour la recherche Fuse.js)
+    ---------------------------------------------------------------------------
+    Génère un index JSON de tous les articles pour la recherche côté client.
+    
+    BEST PRACTICE: 
+    - Utilise `newScratch` au lieu de `$.Scratch` (déprécié depuis Hugo 0.89)
+    - Inclut tous les champs nécessaires pour Fuse.js
+    ===========================================================================
+*/}}
+
+{{- $scratch := newScratch -}}
+{{- $scratch.Set "index" slice -}}
+
 {{- range .Site.RegularPages -}}
-    {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "categories" .Params.categories "contents" .Plain "permalink" .Permalink "date" .Date "summary" (.Summary | plainify)) -}}
+    {{- $scratch.Add "index" (dict 
+        "title" .Title 
+        "tags" .Params.tags 
+        "categories" .Params.categories 
+        "contents" .Plain 
+        "permalink" .Permalink 
+        "date" .Date 
+        "summary" (.Summary | plainify)
+    ) -}}
 {{- end -}}
-{{- $.Scratch.Get "index" | jsonify -}}
+
+{{- $scratch.Get "index" | jsonify -}}

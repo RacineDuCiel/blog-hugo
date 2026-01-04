@@ -1,22 +1,28 @@
-{{/* layouts/shortcodes/cover.html */}}
-{{ $src := .Get 0 }}
-{{ $alt := .Get 1 | default $src }}
+{{/*
+===========================================================================
+Shortcode: Cover Image
+---------------------------------------------------------------------------
+Usage: {{< cover "image.jpg" "Alt text optional">}}
 
-{{/* Tentative de trouver l'image dans les ressources de la page (Page Bundle) */}}
-{{ $image := .Page.Resources.GetMatch $src }}
+    BEST PRACTICE: Styles externalisés dans assets/sass/shortcodes.scss
+    - Séparation structure (HTML) / présentation (CSS)
+    ===========================================================================
+    */}}
+    {{ $src := .Get 0 }}
+    {{ $alt := .Get 1 | default $src }}
+    {{ $image := .Page.Resources.GetMatch $src }}
 
-<div class="album-cover-container" style="margin: 1rem 0;">
-    {{ if $image }}
-    {{/* 1x: 300x300 */}}
-    {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
-    {{/* 2x: 600x600 (Retina) */}}
-    {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
+    <div class="cover-container">
+        {{ if $image }}
+        {{/* Image Processing: génère 1x et 2x pour les écrans Retina */}}
+        {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
+        {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
 
-    <img srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x" src="{{ $thumb1x.RelPermalink }}"
-        alt="{{ $alt }}" width="{{ $thumb1x.Width }}" height="{{ $thumb1x.Height }}"
-        style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); object-fit: cover;" loading="lazy">
-    {{ else }}
-    {{/* Fallback si l'image n'est pas trouvée (pour éviter de casser le build) */}}
-    <p style="color: red;">Image introuvable : {{ $src }}</p>
-    {{ end }}
-</div>
+        <img class="cover-img" srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x"
+            src="{{ $thumb1x.RelPermalink }}" alt="{{ $alt }}" width="{{ $thumb1x.Width }}"
+            height="{{ $thumb1x.Height }}" loading="lazy">
+        {{ else }}
+        {{/* Fallback si l'image n'est pas trouvée */}}
+        <p class="shortcode-error">Image introuvable : {{ $src }}</p>
+        {{ end }}
+    </div>

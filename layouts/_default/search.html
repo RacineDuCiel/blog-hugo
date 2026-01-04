@@ -1,17 +1,29 @@
 {{ define "main" }}
-<div class="search-container">
+{{/* 
+    ===========================================================================
+    BEST PRACTICE: Hugo Pipes pour les assets
+    ---------------------------------------------------------------------------
+    - CSS chargé en premier pour éviter le FOUC (Flash of Unstyled Content)
+    - JS minifié et fingerprinted pour un cache optimal (cache-busting automatique)
+    - SRI (Subresource Integrity) pour la sécurité (vérifie l'intégrité du fichier)
+    =========================================================================== 
+*/}}
 
+{{/* CSS — Chargé en premier */}}
+{{ $searchStyle := resources.Get "sass/search.scss" | toCSS | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $searchStyle.RelPermalink }}" integrity="{{ $searchStyle.Data.Integrity }}" crossorigin="anonymous">
+
+{{/* HTML — Conteneur de recherche avec role="search" pour l'accessibilité */}}
+<div class="search-container" role="search">
     <div class="search-box">
         <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche">
     </div>
-
-    <div id="search-results"></div>
+    <div id="search-results" aria-live="polite" aria-atomic="true"></div>
 </div>
 
-{{ $fuse := resources.Get "js/fuse.js" }}
-<script src="{{ $fuse.RelPermalink }}"></script>
-<script src="/js/search.js?v={{ now.Unix }}"></script>
-
-{{ $searchStyle := resources.Get "sass/search.scss" | toCSS | minify | fingerprint }}
-<link rel="stylesheet" href="{{ $searchStyle.RelPermalink }}">
+{{/* JS — Minifié + Fingerprint + SRI */}}
+{{ $fuse := resources.Get "js/fuse.js" | minify | fingerprint }}
+{{ $search := resources.Get "js/search.js" | minify | fingerprint }}
+<script src="{{ $fuse.RelPermalink }}" integrity="{{ $fuse.Data.Integrity }}" crossorigin="anonymous"></script>
+<script src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}" crossorigin="anonymous"></script>
 {{ end }}

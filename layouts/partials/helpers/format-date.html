@@ -1,0 +1,33 @@
+{{/*
+===========================================================================
+Partial: Format Date Helper
+---------------------------------------------------------------------------
+Usage: {{ partial "helpers/format-date" (dict "date" .Date "context" .) }}
+
+BEST PRACTICE: DRY (Don't Repeat Yourself)
+- Centralise le formatage de date ISO 8601 et affichage
+- Utilisé par postCard.html et single.html
+- Respecte le format configuré dans hugo.toml (params.dateFormat)
+
+Paramètres:
+- date : La date à formater (obligatoire)
+- context : Le contexte Hugo "." pour accéder à .Site (obligatoire)
+- showDate: Optionnel, si false ne rien afficher
+===========================================================================
+*/}}
+
+{{- $date := .date -}}
+{{- $ctx := .context -}}
+{{- $showDate := .showDate | default true -}}
+
+{{- if $showDate -}}
+{{/* Format ISO 8601 pour l'attribut datetime (SEO + accessibilité) */}}
+{{- $ISO_date := "2006-01-02T15:04:05Z07:00" -}}
+
+{{/* Format d'affichage selon la config du site */}}
+{{- $configDateFormat := $ctx.Site.Params.dateFormat | default ":date_long" -}}
+
+<time datetime="{{ $date.Format $ISO_date }}">
+    {{- $date | time.Format $configDateFormat -}}
+</time>
+{{- end -}}

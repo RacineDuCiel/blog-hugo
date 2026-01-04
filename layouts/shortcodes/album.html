@@ -1,27 +1,36 @@
-{{ $src := .Get "cover" }}
-{{ $artist := .Get "artist" }}
-{{ $title := .Get "title" }}
+{{/*
+===========================================================================
+Shortcode: Album Card
+---------------------------------------------------------------------------
+Usage: {{< album cover="image.jpg" artist="Nom" title="Titre">}}
 
-{{ $image := .Page.Resources.GetMatch $src }}
+    BEST PRACTICE: Styles externalisés dans assets/sass/shortcodes.scss
+    - CSS :hover au lieu de onmouseover/onmouseout inline (plus performant)
+    - Classes sémantiques plutôt que styles inline
+    ===========================================================================
+    */}}
+    {{ $src := .Get "cover" }}
+    {{ $artist := .Get "artist" }}
+    {{ $title := .Get "title" }}
+    {{ $image := .Page.Resources.GetMatch $src }}
 
-<div class="album-card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-    {{ if $image }}
-    {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
-    {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
+    <div class="album-card">
+        {{ if $image }}
+        {{/* Image Processing: génère 1x et 2x pour les écrans Retina */}}
+        {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
+        {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
 
-    <div style="margin-bottom: 1rem; transition: transform 0.2s ease-in-out;"
-        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-        <img srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x" src="{{ $thumb1x.RelPermalink }}"
-            alt="{{ $title }} by {{ $artist }}" width="{{ $thumb1x.Width }}" height="{{ $thumb1x.Height }}"
-            style="border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); aspect-ratio: 1/1; object-fit: cover;"
-            loading="lazy">
+        <div class="album-cover">
+            <img class="album-cover-img" srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x"
+                src="{{ $thumb1x.RelPermalink }}" alt="{{ $title }} by {{ $artist }}" width="{{ $thumb1x.Width }}"
+                height="{{ $thumb1x.Height }}" loading="lazy">
+        </div>
+        {{ else }}
+        <p class="shortcode-error">Image not found: {{ $src }}</p>
+        {{ end }}
+
+        <div class="album-info">
+            <h3>{{ $artist }}</h3>
+            <p>{{ $title }}</p>
+        </div>
     </div>
-    {{ else }}
-    <p style="color: red;">Image not found: {{ $src }}</p>
-    {{ end }}
-
-    <div class="album-info">
-        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700;">{{ $artist }}</h3>
-        <p style="margin: 0.25rem 0 0; font-size: 1rem; color: #666; font-style: italic;">{{ $title }}</p>
-    </div>
-</div>
