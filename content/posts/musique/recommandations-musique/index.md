@@ -7,16 +7,16 @@ pinned: true
 pinCategories: ["Musique"]
 ---
 
-Cette page regroupe des recommandations personnelles d'albums et d'EPs s'apparentant, pour la plupart, au metalcore. Cette sélection est amenée à évoluer au fil du temps.
+Recommandations personnelles d'albums et EPs s'apparentant, pour la plupart, au metalcore.
 
 # Chefs-d'œuvre
 {{< grid >}}
 {{< album artist="Architects" title="Holy Hell" cover="HH.jpg" >}}
 {{< album artist="Architects" title="All Our Gods Have Abandoned Us" cover="AOGHAU.jpg" >}}
 {{< album artist="Like Moths To Flames" title="The Cycles of Trying to Cope" cover="TCOTTC.jpg" >}}
-{{< album artist="Bad Omens" title="The Death of Peace of Mind" cover="TDOPOM.jpg" >}}
+{{< album artist="Boundaries" title="Death Is Little More" cover="DILM.jpg" >}}
+
 {{< album artist="Sleep Token" title="Take Me Back to Eden" cover="TMBTE.jpg" >}}
-{{< album artist="Invent Animate" title="Heavener" cover="Heavener.jpg" >}}
 {{< album artist="Imminence" title="Turn The Light On" cover="TTLO.jpg" >}}
 {{< /grid >}}
 
@@ -24,6 +24,8 @@ Cette page regroupe des recommandations personnelles d'albums et d'EPs s'apparen
 {{< grid >}}
 {{< album artist="Slipknot" title="Slipknot" cover="Slipknot.jpg" >}}
 {{< album artist="Like Moths To Flames" title="No eternity in gold" cover="NEIG.jpg" >}}
+{{< album artist="Bad Omens" title="The Death of Peace of Mind" cover="TDOPOM.jpg" >}}
+{{< album artist="Invent Animate" title="Heavener" cover="Heavener.jpg" >}}
 {{< album artist="The Devil Wears Prada" title="Color Decay" cover="CD.jpg" >}}
 {{< album artist="Jhonny Booth" title="Moments elsewhere" cover="ME.jpg" >}}
 {{< album artist="Allt" title="From The New World" cover="FTNW.jpg" >}}
@@ -33,6 +35,7 @@ Cette page regroupe des recommandations personnelles d'albums et d'EPs s'apparen
 
 # Dignes d'intérêt
 {{< grid >}}
-{{< album artist="Bring Me the Horizon" title="POST HUMAN: SURVIVAL HORROR" cover="PHSH.jpg" >}}
+{{< album artist="Bring Me The Horizon" title="POST HUMAN: SURVIVAL HORROR" cover="PHSH.jpg" >}}
 {{< album artist="Polaris" title="The Death Of Me" cover="TDOM.jpg" >}}
+{{< album artist="Half Me" title="Soma" cover="Soma.jpg" >}}
 {{< /grid >}}
