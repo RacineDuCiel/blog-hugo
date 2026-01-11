@@ -151,6 +151,125 @@
 }
 
 // ============================================================================
+// Shortcode: YouTube Card
+// ============================================================================
+.youtube-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    background: transparent;
+    border-radius: 16px;
+    padding: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid transparent;
+    gap: 1.25rem;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.15);
+        background: var(--bg-hover, #f8f9fa);
+
+        @media (prefers-color-scheme: dark) {
+            background: var(--bg-hover, #333333);
+        }
+
+        .youtube-card-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .youtube-card-play {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .youtube-card-thumbnail {
+        position: relative;
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px; // 16:9 ratio
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+    }
+
+    .youtube-card-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 0, 0, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.85;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+        svg {
+            width: 16px;
+            height: 16px;
+            color: white;
+            margin-left: 2px; // Visual centering for play icon
+        }
+    }
+
+    .youtube-card-info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h3 {
+            margin: 0 0 0.35rem 0;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-primary, inherit);
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary, #666);
+            font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                color: #aaa;
+            }
+
+            .playlist-badge {
+                display: inline-block;
+                margin-left: 0.5rem;
+                padding: 0.15rem 0.5rem;
+                font-size: 0.7rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.03em;
+                background: linear-gradient(135deg, #ff4444, #cc0000);
+                color: white;
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+// ============================================================================
 // Erreur générique (image non trouvée)
 // ============================================================================
 .shortcode-error {

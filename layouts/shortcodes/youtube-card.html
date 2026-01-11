@@ -1,0 +1,49 @@
+{{/*
+===========================================================================
+Shortcode: YouTube Card
+---------------------------------------------------------------------------
+Usage (video): {{< youtube-card id="VIDEO_ID" artist="Artiste" title="Titre">}}
+    Usage (playlist): {{< youtube-card id="PLAYLIST_ID" artist="Artiste" title="Titre" type="playlist"
+        thumb="FIRST_VIDEO_ID">}}
+
+        Affiche une carte avec la thumbnail YouTube, cliquable vers la vidéo/playlist.
+        Pour les playlists, utilisez "thumb" avec l'ID d'une vidéo de la playlist pour la miniature.
+        ===========================================================================
+        */}}
+        {{ $id := .Get "id" }}
+        {{ $artist := .Get "artist" }}
+        {{ $title := .Get "title" }}
+        {{ $type := .Get "type" | default "video" }}
+        {{ $thumbId := .Get "thumb" | default $id }}
+
+        {{ $url := "" }}
+        {{ if eq $type "playlist" }}
+        {{ $url = printf "https://www.youtube.com/playlist?list=%s" $id }}
+        {{ else }}
+        {{ $url = printf "https://www.youtube.com/watch?v=%s" $id }}
+        {{ end }}
+
+        {{ $thumb := printf "https://img.youtube.com/vi/%s/mqdefault.jpg" $thumbId }}
+
+        <a href="{{ $url }}" target="_blank" rel="noopener" class="youtube-card{{ if eq $type " playlist" }}
+            is-playlist{{ end }}">
+            <div class="youtube-card-thumbnail">
+                <img src="{{ $thumb }}" alt="{{ $title }} by {{ $artist }}" loading="lazy">
+                <div class="youtube-card-play">
+                    {{ if eq $type "playlist" }}
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z" />
+                    </svg>
+                    {{ else }}
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="youtube-card-info">
+                <h3>{{ $artist }}</h3>
+                <p>{{ $title }}{{ if eq $type "playlist" }} <span class="playlist-badge">Playlist</span>{{ end }}</p>
+            </div>
+        </a>
