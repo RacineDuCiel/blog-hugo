@@ -1,0 +1,307 @@
+{{/*
+===========================================================================
+Shortcode: TDEE Calculator (Enhanced v2)
+---------------------------------------------------------------------------
+Usage: {{< calculator>}}
+    Méthodes utilisées :
+    - BMR : Mifflin-St Jeor (1990)
+    - NEAT : Pas quotidiens + activités non-marchées
+    - TEF : 10% du BMR
+    - EAT : Sessions × durée × METs
+    ===========================================================================
+    */}}
+
+    <style>
+        .calc-container {
+            background: var(--bg-secondary, #f5f5f5);
+            border: 1px solid var(--border, #ddd);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            max-width: 480px;
+        }
+
+        html.dark .calc-container {
+            background: #1a1a2e;
+            border-color: #333;
+        }
+
+        .calc-container h4 {
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .calc-section {
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border, #eee);
+        }
+
+        html.dark .calc-section {
+            border-color: #333;
+        }
+
+        .calc-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .calc-container label {
+            display: block;
+            margin-top: 0.6rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .calc-container .label-hint {
+            font-weight: 400;
+            color: #666;
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        html.dark .calc-container .label-hint {
+            color: #999;
+        }
+
+        .calc-row {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .calc-row>div {
+            flex: 1;
+        }
+
+        .calc-container input,
+        .calc-container select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.25rem;
+            border: 1px solid var(--border, #ccc);
+            border-radius: 4px;
+            background: var(--bg, #fff);
+            color: var(--text, #000);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        html.dark .calc-container input,
+        html.dark .calc-container select {
+            background: #16213e;
+            border-color: #444;
+            color: #eee;
+        }
+
+        .calc-container button {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.7rem;
+            background: #2d3436;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .calc-container button:hover {
+            background: #636e72;
+        }
+
+        .calc-results {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg, #e8f5e9);
+            border-radius: 4px;
+        }
+
+        html.dark .calc-results {
+            background: #0f3460;
+        }
+
+        .calc-results table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .calc-results td {
+            padding: 0.3rem 0;
+        }
+
+        .calc-results td:last-child {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .calc-results .total {
+            border-top: 1px solid var(--border, #ccc);
+            font-size: 1.1rem;
+        }
+
+        html.dark .calc-results .total {
+            border-color: #555;
+        }
+
+        .calc-method {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: var(--bg, #f9f9f9);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        html.dark .calc-method {
+            background: #16213e;
+            color: #aaa;
+        }
+
+        .calc-method summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+    </style>
+
+    <div class="calc-container">
+
+        <div class="calc-section">
+            <h4>Données personnelles</h4>
+            <div class="calc-row">
+                <div>
+                    <label for="calc-sex">Sexe</label>
+                    <select id="calc-sex">
+                        <option value="m">Homme</option>
+                        <option value="f">Femme</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="calc-age">Âge</label>
+                    <input type="number" id="calc-age" min="15" max="100" value="30">
+                </div>
+            </div>
+            <div class="calc-row">
+                <div>
+                    <label for="calc-weight">Poids (kg)</label>
+                    <input type="number" id="calc-weight" min="30" max="250" value="75">
+                </div>
+                <div>
+                    <label for="calc-height">Taille (cm)</label>
+                    <input type="number" id="calc-height" min="100" max="250" value="175">
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-section">
+            <h4>NEAT – Activité non planifiée</h4>
+            <label for="calc-steps">Pas quotidiens
+                <span class="label-hint">Moyenne sur 7 jours (montre, téléphone)</span>
+            </label>
+            <input type="number" id="calc-steps" min="0" max="50000" value="8000" step="500">
+
+            <label for="calc-standing">Temps debout actif (hors marche)
+                <span class="label-hint">Cuisine, ménage, bricolage, travail debout...</span>
+            </label>
+            <select id="calc-standing">
+                <option value="0">
+                    < 1h/jour</option>
+                <option value="1" selected>1-2h/jour</option>
+                <option value="2">2-4h/jour</option>
+                <option value="3">> 4h/jour</option>
+            </select>
+        </div>
+
+        <div class="calc-section">
+            <h4>EAT – Entraînement structuré</h4>
+            <label for="calc-training">Sessions par semaine
+                <span class="label-hint">Sessions ≥ 30 min</span>
+            </label>
+            <select id="calc-training">
+                <option value="0">0 – Aucun</option>
+                <option value="1">1-2 sessions</option>
+                <option value="2" selected>3-4 sessions</option>
+                <option value="3">5-6 sessions</option>
+                <option value="4">7+ sessions</option>
+            </select>
+
+            <label for="calc-intensity">Intensité moyenne</label>
+            <select id="calc-intensity">
+                <option value="3.5">Légère (yoga, marche rapide)</option>
+                <option value="5.5" selected>Modérée (musculation, course)</option>
+                <option value="8">Intense (HIIT, CrossFit, sprint)</option>
+            </select>
+
+            <label for="calc-duration">Durée moyenne par session (min)</label>
+            <input type="number" id="calc-duration" min="15" max="180" value="60" step="5">
+        </div>
+
+        <button type="button" onclick="calcTDEE()">Calculer</button>
+
+        <div id="calc-output"></div>
+    </div>
+
+    <script>
+        function calcTDEE() {
+            const sex = document.getElementById('calc-sex').value;
+            const age = parseFloat(document.getElementById('calc-age').value);
+            const weight = parseFloat(document.getElementById('calc-weight').value);
+            const height = parseFloat(document.getElementById('calc-height').value);
+            const steps = parseFloat(document.getElementById('calc-steps').value) || 0;
+            const standing = parseInt(document.getElementById('calc-standing').value);
+            const trainingLevel = parseInt(document.getElementById('calc-training').value);
+            const mets = parseFloat(document.getElementById('calc-intensity').value);
+            const duration = parseFloat(document.getElementById('calc-duration').value);
+
+            // 1. BMR - Mifflin-St Jeor (1990)
+            let bmr;
+            if (sex === 'm') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            // 2. TEF - Thermic Effect of Food (~10%)
+            const tef = bmr * 0.10;
+
+            // 3. NEAT
+            // a) Pas : ~0.04 kcal/pas pour 70kg, ajusté au poids
+            const stepsKcal = steps * 0.04 * (weight / 70);
+            // b) Activité debout : ~1.5 METs au-dessus du repos
+            // Formule MET : (MET × 3.5 × poids) / 200 = kcal/min
+            const standingHours = [0.5, 1.5, 3, 5][standing];
+            const standingKcal = standingHours * 60 * (1.5 * 3.5 * weight) / 200;
+            const neat = stepsKcal + standingKcal;
+
+            // 4. EAT - Sessions × durée × METs
+            const sessionsPerWeek = [0, 1.5, 3.5, 5.5, 7][trainingLevel];
+            const eatWeekly = sessionsPerWeek * duration * (mets * 3.5 * weight) / 200;
+            const eat = eatWeekly / 7;
+
+            // 5. TDEE total
+            const tdee = Math.round(bmr + tef + neat + eat);
+
+            document.getElementById('calc-output').innerHTML =
+                '<div class="calc-results">' +
+                '<table>' +
+                '<tr><td>BMR</td><td>' + Math.round(bmr) + ' kcal</td></tr>' +
+                '<tr><td>TEF (10%)</td><td>+' + Math.round(tef) + ' kcal</td></tr>' +
+                '<tr><td>NEAT (' + steps.toLocaleString('fr-FR') + ' pas + activité)</td><td>+' + Math.round(neat) + ' kcal</td></tr>' +
+                '<tr><td>EAT (entraînement)</td><td>+' + Math.round(eat) + ' kcal</td></tr>' +
+                '<tr class="total"><td><strong>TDEE</strong></td><td><strong>' + tdee.toLocaleString('fr-FR') + ' kcal/j</strong></td></tr>' +
+                '</table>' +
+                '</div>' +
+                '<details class="calc-method">' +
+                '<summary>Méthode de calcul</summary>' +
+                '<p><strong>BMR</strong> : Mifflin-St Jeor (1990).<br>' +
+                '<strong>TEF</strong> : 10% du BMR.<br>' +
+                '<strong>NEAT (pas)</strong> : 0.04 kcal/pas × (poids/70).<br>' +
+                '<strong>NEAT (debout)</strong> : 1.5 METs × durée.<br>' +
+                '<strong>EAT</strong> : Sessions × durée × METs.<br>' +
+                '<em>Estimation indicative, non une mesure exacte.</em></p>' +
+                '</details>';
+        }
+    </script>
