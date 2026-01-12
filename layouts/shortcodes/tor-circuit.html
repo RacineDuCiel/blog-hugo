@@ -1,0 +1,162 @@
+{{/*
+Shortcode: Tor Circuit - Simple, Clear & Responsive
+Usage: {{< tor-circuit>}}
+    */}}
+
+    <style>
+        .tor-circuit {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg-secondary, #f5f5f5);
+            border-radius: 8px;
+        }
+
+        html.dark .tor-circuit {
+            background: #1a1a2e;
+        }
+
+        .tor-circuit svg {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+        }
+
+        .tor-circuit text {
+            font-family: system-ui, sans-serif;
+        }
+
+        .tor-circuit .label {
+            fill: #fff;
+            font-weight: 600;
+        }
+
+        .tor-circuit .info {
+            fill: #555;
+        }
+
+        html.dark .tor-circuit .info {
+            fill: #aaa;
+        }
+
+        .tor-circuit-legend {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        html.dark .tor-circuit-legend {
+            color: #999;
+        }
+
+        .tor-circuit-legend span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .tor-circuit-legend .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .tor-circuit-legend .dg {
+            background: #e74c3c;
+        }
+
+        .tor-circuit-legend .dm {
+            background: #f39c12;
+        }
+
+        .tor-circuit-legend .de {
+            background: #27ae60;
+        }
+
+        .tor-circuit-legend .dd {
+            background: #3498db;
+        }
+    </style>
+
+    <div class="tor-circuit">
+        <svg viewBox="0 0 260 520" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- CLIENT -->
+            <rect x="80" y="5" width="100" height="36" rx="8" fill="#8e44ad" />
+            <text x="130" y="28" text-anchor="middle" class="label" font-size="12">Vous (Client)</text>
+
+            <!-- Arrow -->
+            <polygon points="130,48 125,42 135,42" fill="#888" />
+
+            <!-- PACKET 3 layers -->
+            <circle cx="130" cy="72" r="20" fill="#e74c3c" />
+            <circle cx="130" cy="72" r="14" fill="#f39c12" />
+            <circle cx="130" cy="72" r="9" fill="#27ae60" />
+            <circle cx="130" cy="72" r="4" fill="#3498db" />
+            <text x="130" y="105" text-anchor="middle" class="info" font-size="9">Chiffré 3×</text>
+
+            <!-- Arrow -->
+            <polygon points="130,118 125,112 135,112" fill="#888" />
+
+            <!-- GUARD -->
+            <rect x="80" y="125" width="100" height="36" rx="8" fill="#e74c3c" />
+            <text x="130" y="148" text-anchor="middle" class="label" font-size="12">Guard</text>
+            <text x="130" y="175" text-anchor="middle" class="info" font-size="9">Voit : votre IP</text>
+            <text x="130" y="187" text-anchor="middle" class="info" font-size="9">Ne voit pas : destination</text>
+
+            <!-- Arrow -->
+            <polygon points="130,200 125,194 135,194" fill="#888" />
+
+            <!-- PACKET 2 layers -->
+            <circle cx="130" cy="222" r="16" fill="#f39c12" />
+            <circle cx="130" cy="222" r="10" fill="#27ae60" />
+            <circle cx="130" cy="222" r="5" fill="#3498db" />
+            <text x="130" y="250" text-anchor="middle" class="info" font-size="9">Chiffré 2×</text>
+
+            <!-- Arrow -->
+            <polygon points="130,263 125,257 135,257" fill="#888" />
+
+            <!-- MIDDLE -->
+            <rect x="80" y="270" width="100" height="36" rx="8" fill="#f39c12" />
+            <text x="130" y="293" text-anchor="middle" class="label" font-size="12">Middle</text>
+            <text x="130" y="320" text-anchor="middle" class="info" font-size="9">Voit : rien</text>
+            <text x="130" y="332" text-anchor="middle" class="info" font-size="9">(simple relais)</text>
+
+            <!-- Arrow -->
+            <polygon points="130,345 125,339 135,339" fill="#888" />
+
+            <!-- PACKET 1 layer -->
+            <circle cx="130" cy="365" r="12" fill="#27ae60" />
+            <circle cx="130" cy="365" r="6" fill="#3498db" />
+            <text x="130" y="390" text-anchor="middle" class="info" font-size="9">Chiffré 1×</text>
+
+            <!-- Arrow -->
+            <polygon points="130,403 125,397 135,397" fill="#888" />
+
+            <!-- EXIT -->
+            <rect x="80" y="410" width="100" height="36" rx="8" fill="#27ae60" />
+            <text x="130" y="433" text-anchor="middle" class="label" font-size="12">Exit</text>
+            <text x="130" y="460" text-anchor="middle" class="info" font-size="9">Voit : destination</text>
+            <text x="130" y="472" text-anchor="middle" class="info" font-size="9">Ne voit pas : votre IP</text>
+
+            <!-- Arrow -->
+            <polygon points="130,485 125,479 135,479" fill="#888" />
+
+            <!-- DATA + DESTINATION -->
+            <circle cx="130" cy="502" r="8" fill="#3498db" />
+            <text x="155" y="506" text-anchor="start" class="info" font-size="9">→ Destination</text>
+
+        </svg>
+
+        <div class="tor-circuit-legend">
+            <span><span class="dot dg"></span>Guard</span>
+            <span><span class="dot dm"></span>Middle</span>
+            <span><span class="dot de"></span>Exit</span>
+            <span><span class="dot dd"></span>Données</span>
+        </div>
+    </div>

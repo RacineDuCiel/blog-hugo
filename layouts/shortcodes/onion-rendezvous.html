@@ -1,0 +1,342 @@
+{{/*
+===========================================================================
+Shortcode: Onion Rendezvous Protocol (v3 - Mobile optimized)
+---------------------------------------------------------------------------
+Usage: {{< onion-rendezvous>}}
+    ===========================================================================
+    */}}
+
+    <style>
+        .onion-rv {
+            background: var(--bg-secondary, #f8f9fa);
+            border: 1px solid var(--border, #e0e0e0);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        html.dark .onion-rv {
+            background: #1a1a2e;
+            border-color: #333;
+        }
+
+        .onion-rv-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .onion-rv-nav button {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border, #ccc);
+            background: var(--bg, #fff);
+            color: var(--text, #333);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        html.dark .onion-rv-nav button {
+            background: #16213e;
+            border-color: #444;
+            color: #eee;
+        }
+
+        .onion-rv-nav button:hover,
+        .onion-rv-nav button:active {
+            background: #e0e0e0;
+        }
+
+        html.dark .onion-rv-nav button:hover,
+        html.dark .onion-rv-nav button:active {
+            background: #2d3436;
+        }
+
+        .onion-rv-nav button.active {
+            background: #6c5ce7;
+            border-color: #6c5ce7;
+            color: #fff;
+        }
+
+        .onion-rv-nav .step-label {
+            font-size: 0.75rem;
+            color: #666;
+            width: 100%;
+            text-align: center;
+            margin-top: 0.3rem;
+        }
+
+        html.dark .onion-rv-nav .step-label {
+            color: #999;
+        }
+
+        .onion-rv svg {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        .onion-rv .actor {
+            transition: opacity 0.3s ease;
+        }
+
+        .onion-rv .actor.dim {
+            opacity: 0.15;
+        }
+
+        .onion-rv .actor-box {
+            rx: 8;
+            ry: 8;
+        }
+
+        .onion-rv .actor-label {
+            font-family: system-ui, sans-serif;
+            font-weight: 700;
+            fill: #fff;
+        }
+
+        .onion-rv .flow-path {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .onion-rv .flow-path.visible {
+            opacity: 1;
+        }
+
+        .onion-rv-desc {
+            background: var(--bg, #fff);
+            border: 1px solid var(--border, #ddd);
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        html.dark .onion-rv-desc {
+            background: #16213e;
+            border-color: #333;
+            color: #ddd;
+        }
+
+        .onion-rv-desc .step-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #6c5ce7;
+        }
+
+        html.dark .onion-rv-desc .step-title {
+            color: #a29bfe;
+        }
+
+        .onion-rv-desc ul {
+            margin: 0.5rem 0 0 0;
+            padding-left: 1.2rem;
+        }
+
+        .onion-rv-desc li {
+            margin: 0.3rem 0;
+        }
+
+        .onion-rv-desc strong {
+            color: var(--text, #333);
+        }
+
+        html.dark .onion-rv-desc strong {
+            color: #fff;
+        }
+    </style>
+
+    <div class="onion-rv">
+        <div class="onion-rv-nav">
+            <button data-step="1" class="active">1</button>
+            <button data-step="2">2</button>
+            <button data-step="3">3</button>
+            <button data-step="4">4</button>
+            <button data-step="5">5</button>
+            <button data-step="6">6</button>
+            <div class="step-label" id="rv-step-label">Publication</div>
+        </div>
+
+        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arr-p" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#9b59b6" />
+                </marker>
+                <marker id="arr-o" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#e67e22" />
+                </marker>
+                <marker id="arr-g" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#27ae60" />
+                </marker>
+                <marker id="arr-b" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#3498db" />
+                </marker>
+            </defs>
+
+            <!-- Actors with larger boxes and fonts -->
+
+            <!-- Service (left) -->
+            <g class="actor" data-actor="service">
+                <rect class="actor-box" x="10" y="75" width="60" height="50" fill="#e74c3c" />
+                <text class="actor-label" x="40" y="103" text-anchor="middle" font-size="12">Service</text>
+            </g>
+
+            <!-- HSDir (top) -->
+            <g class="actor" data-actor="hsdir">
+                <rect class="actor-box" x="110" y="10" width="60" height="40" fill="#9b59b6" />
+                <text class="actor-label" x="140" y="35" text-anchor="middle" font-size="12">HSDir</text>
+            </g>
+
+            <!-- Intro Point (bottom) -->
+            <g class="actor" data-actor="ip">
+                <rect class="actor-box" x="100" y="150" width="80" height="40" fill="#e67e22" />
+                <text class="actor-label" x="140" y="175" text-anchor="middle" font-size="11">Intro Point</text>
+            </g>
+
+            <!-- Rendezvous (center) -->
+            <g class="actor" data-actor="rp">
+                <rect class="actor-box" x="110" y="75" width="60" height="50" fill="#27ae60" />
+                <text class="actor-label" x="140" y="98" text-anchor="middle" font-size="10">Rendez-</text>
+                <text class="actor-label" x="140" y="112" text-anchor="middle" font-size="10">vous</text>
+            </g>
+
+            <!-- Client (right) -->
+            <g class="actor" data-actor="client">
+                <rect class="actor-box" x="210" y="75" width="60" height="50" fill="#3498db" />
+                <text class="actor-label" x="240" y="103" text-anchor="middle" font-size="12">Client</text>
+            </g>
+
+            <!-- Flow arrows -->
+
+            <!-- Step 1: Service -> HSDir -->
+            <path class="flow-path" data-flow="1" d="M 55 75 Q 80 40 110 30" stroke="#9b59b6"
+                marker-end="url(#arr-p)" />
+
+            <!-- Step 1: Service -> IP -->
+            <path class="flow-path" data-flow="1" d="M 55 125 Q 70 160 100 170" stroke="#e67e22"
+                marker-end="url(#arr-o)" />
+
+            <!-- Step 2: Client -> HSDir -->
+            <path class="flow-path" data-flow="2" d="M 225 75 Q 200 40 170 30" stroke="#9b59b6"
+                marker-end="url(#arr-p)" />
+
+            <!-- Step 3: Client -> RP -->
+            <path class="flow-path" data-flow="3" d="M 210 100 L 170 100" stroke="#27ae60" marker-end="url(#arr-g)" />
+
+            <!-- Step 4: Client -> IP -->
+            <path class="flow-path" data-flow="4" d="M 230 125 Q 200 160 180 170" stroke="#e67e22"
+                marker-end="url(#arr-o)" />
+
+            <!-- Step 4: IP -> Service -->
+            <path class="flow-path" data-flow="4" d="M 100 165 Q 60 150 50 125" stroke="#e67e22"
+                marker-end="url(#arr-o)" />
+
+            <!-- Step 5: Service -> RP -->
+            <path class="flow-path" data-flow="5" d="M 70 100 L 110 100" stroke="#27ae60" marker-end="url(#arr-g)" />
+
+            <!-- Step 6: Tunnel both ways -->
+            <path class="flow-path" data-flow="6" d="M 70 92 L 110 92" stroke="#3498db" marker-end="url(#arr-b)" />
+            <path class="flow-path" data-flow="6" d="M 170 108 L 210 108" stroke="#3498db" marker-end="url(#arr-b)" />
+        </svg>
+
+        <div class="onion-rv-desc" id="rv-desc"></div>
+    </div>
+
+    <script>
+        (function () {
+            const stepNames = {
+                1: "Publication",
+                2: "Découverte",
+                3: "Rendez-vous",
+                4: "Introduction",
+                5: "Jonction",
+                6: "Tunnel"
+            };
+
+            const descriptions = {
+                1: `<div class="step-title">1. Publication</div>
+            <p>Le <strong>Service</strong> prépare son accès :</p>
+            <ul>
+                <li>Publie un <strong>descripteur</strong> sur le HSDir (DHT)</li>
+                <li>Établit des circuits vers ses <strong>Introduction Points</strong></li>
+            </ul>`,
+                2: `<div class="step-title">2. Découverte</div>
+            <p>Le <strong>Client</strong> cherche le service :</p>
+            <ul>
+                <li>Interroge le <strong>HSDir</strong> avec l'adresse .onion</li>
+                <li>Récupère le descripteur (liste des IP)</li>
+            </ul>`,
+                3: `<div class="step-title">3. Rendez-vous</div>
+            <p>Le <strong>Client</strong> prépare un point neutre :</p>
+            <ul>
+                <li>Choisit un relais comme <strong>Rendez-vous Point</strong></li>
+                <li>Lui envoie un <strong>cookie secret</strong></li>
+            </ul>`,
+                4: `<div class="step-title">4. Introduction</div>
+            <p>Le <strong>Client</strong> contacte le Service :</p>
+            <ul>
+                <li>Envoie <strong>INTRODUCE</strong> via l'Intro Point</li>
+                <li>Contient : adresse du RP + cookie + handshake DH</li>
+            </ul>`,
+                5: `<div class="step-title">5. Jonction</div>
+            <p>Le <strong>Service</strong> rejoint le RP :</p>
+            <ul>
+                <li>Construit un circuit vers le Rendez-vous</li>
+                <li>Envoie <strong>RENDEZVOUS</strong> avec le cookie</li>
+            </ul>`,
+                6: `<div class="step-title">6. Tunnel établi</div>
+            <p>Communication <strong>anonyme de bout en bout</strong> :</p>
+            <ul>
+                <li>Le RP connecte les deux circuits</li>
+                <li>Aucune IP révélée de chaque côté</li>
+            </ul>`
+            };
+
+            const actorsByStep = {
+                1: ['service', 'hsdir', 'ip'],
+                2: ['client', 'hsdir'],
+                3: ['client', 'rp'],
+                4: ['client', 'ip', 'service'],
+                5: ['service', 'rp'],
+                6: ['service', 'client', 'rp']
+            };
+
+            const container = document.querySelector('.onion-rv');
+            const buttons = container.querySelectorAll('.onion-rv-nav button');
+            const stepLabel = document.getElementById('rv-step-label');
+            const desc = document.getElementById('rv-desc');
+            const actors = container.querySelectorAll('.actor');
+            const flows = container.querySelectorAll('.flow-path');
+
+            function setStep(step) {
+                buttons.forEach(b => b.classList.toggle('active', b.dataset.step == step));
+                stepLabel.textContent = stepNames[step];
+                desc.innerHTML = descriptions[step];
+
+                const active = actorsByStep[step];
+                actors.forEach(a => a.classList.toggle('dim', !active.includes(a.dataset.actor)));
+                flows.forEach(f => f.classList.toggle('visible', f.dataset.flow == step));
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => setStep(parseInt(btn.dataset.step)));
+            });
+
+            setStep(1);
+        })();
+    </script>
