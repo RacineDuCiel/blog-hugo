@@ -22,7 +22,7 @@ BEST PRACTICES appliquées:
 
             {{ if (ne .Params.showDate false) }}
             <span class="post-item-meta post-item-date">
-                {{ partial "helpers/format-date" (dict "date" .Lastmod "context" . "showDate" true) }}
+                {{ partial "helpers/format-date" (dict "date" .Date "context" . "showDate" true) }}
             </span>
             {{ end }}
         </article>
