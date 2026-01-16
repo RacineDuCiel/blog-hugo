@@ -13,6 +13,7 @@ defaultContentLanguage = "fr-fr"
 [taxonomies]
   category = "categories"
   tag = "tags"
+  type = "types"
 
 [markup.goldmark.renderer]
   unsafe = true
@@ -72,20 +73,25 @@ defaultContentLanguage = "fr-fr"
     [Languages.fr-fr.params.seo]
       images = ["og-image.jpg"]
 
-  [[Languages.fr-fr.menu.main]]
+   [[Languages.fr-fr.menu.main]]
     pageRef = "/"
     name = "Accueil"
     url = "/"
     weight = 10
   [[Languages.fr-fr.menu.main]]
     pageRef = "posts"
-    name = "Tous les articles"
+    name = "Articles"
     url = "/posts/"
     weight = 20
   [[Languages.fr-fr.menu.main]]
+    pageRef = "partages"
+    name = "Partages"
+    url = "/partages/"
+    weight = 30
+  [[Languages.fr-fr.menu.main]]
     name = "Catégories"
     url = "/categories/"
-    weight = 30
+    weight = 32
   [[Languages.fr-fr.menu.main]]
     pageRef = "about"
     name = "À propos"

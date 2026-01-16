@@ -10,26 +10,19 @@ BEST PRACTICES appliquées:
         ===========================================================================
         */}}
         <article class="post-item">
-            {{/*
-            ACCESSIBILITÉ: <h2> au lieu de <h4>
-                    - Dans une page liste, les articles sont des sections principales
-                    - Le titre de la page est <h1>, les articles sont <h2>
-                            */}}
-                            <h2 class="post-item-title">
-                                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-                            </h2>
+            <h2 class="post-item-title">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </h2>
 
-                            {{/* Indicateur d'article favori (étoile) */}}
-                            {{ if .Params.isStarred }}
-                            <div class="post-item-right">
-                                {{ partial "icons/star.html" . }}
-                            </div>
-                            {{ end }}
+            {{ if .Params.isStarred }}
+            <div class="post-item-right">
+                {{ partial "icons/star.html" . }}
+            </div>
+            {{ end }}
 
-                            {{/* Date de dernière modification - utilise le partial centralisé */}}
-                            {{ if (ne .Params.showDate false) }}
-                            <span class="post-item-meta">
-                                {{ partial "helpers/format-date" (dict "date" .Lastmod "context" . "showDate" true) }}
-                            </span>
-                            {{ end }}
+            {{ if (ne .Params.showDate false) }}
+            <span class="post-item-meta">
+                {{ partial "helpers/format-date" (dict "date" .Lastmod "context" . "showDate" true) }}
+            </span>
+            {{ end }}
         </article>

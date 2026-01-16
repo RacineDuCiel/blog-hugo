@@ -1,0 +1,24 @@
+.post-type-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.5rem;
+    background-color: var(--color-accent-2);
+    color: var(--color-text-2);
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.home-section {
+    margin-bottom: 3rem;
+}
+
+.home-section-partages {
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.home-section-partages .posts-item-note {
+    color: var(--color-accent-1);
+}

@@ -18,3 +18,8 @@ Extension du
     {{ $shortcodesStyle := resources.Get "sass/shortcodes.scss" | toCSS | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $shortcodesStyle.RelPermalink }}" integrity="{{ $shortcodesStyle.Data.Integrity }}"
         crossorigin="anonymous">
+
+    {{/* Styles pour les partages */}}
+    {{ $partagesStyle := resources.Get "sass/partages.scss" | toCSS | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $partagesStyle.RelPermalink }}" integrity="{{ $partagesStyle.Data.Integrity }}"
+        crossorigin="anonymous">

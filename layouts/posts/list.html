@@ -1,0 +1,51 @@
+{{- define "main" -}}
+<div class="wrapper list-page">
+    <header class="header">
+        <h1 class="header-title center">{{ .Title }}</h1>
+    </header>
+    <main class="page-content" aria-label="Content">
+        {{ $visiblePages := where .Pages ".Params.unlisted" "!=" true }}
+        {{ $articles := where $visiblePages "Params.type" "!=" "partage" }}
+        {{ $isCategoriesTerm := and (eq .Kind "term") (and .Data (eq .Data.Plural "categories")) }}
+        {{ $scratch := newScratch }}
+        {{ $scratch.Set "pinnedList" (slice) }}
+
+        {{ if $isCategoriesTerm }}
+        {{ $categoryName := lower .Title }}
+        {{ range $articles }}
+        {{ $page := . }}
+        {{ $pinTargets := $page.Params.pinCategories }}
+        {{ if and $page.Params.pinned $pinTargets }}
+        {{ range $pinTargets }}
+        {{ if eq (lower .) $categoryName }}
+        {{ $scratch.Add "pinnedList" (slice $page) }}
+        {{ $scratch.Set (printf "pinned-%s" $page.Permalink) true }}
+        {{ break }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+        {{ $pinnedPages := $scratch.Get "pinnedList" }}
+        {{ if gt (len $pinnedPages) 0 }}
+        <section class="pinned-posts">
+            <h2 class="post-year">⚲</h2>
+            {{ range sort $pinnedPages "Date" "desc" }}
+            {{ partial "postCard" . }}
+            {{ end }}
+        </section>
+        {{ end }}
+
+        {{ range $articles.GroupByDate "2006" }}
+        {{ $year := .Key }}
+        <h2 class="post-year">{{ $year }}</h2>
+        {{ range .Pages }}
+        {{ $isPinned := and $isCategoriesTerm ($scratch.Get (printf "pinned-%s" .Permalink)) }}
+        {{ if not $isPinned }}
+        {{ partial "postCard" . }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+    </main>
+</div>
+{{- end -}}
