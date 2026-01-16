@@ -1,19 +1,11 @@
 {{ define "main" }}
-{{/* 
-    ===========================================================================
-    BEST PRACTICE: Hugo Pipes pour les assets
-    ---------------------------------------------------------------------------
-    - CSS chargé en premier pour éviter le FOUC (Flash of Unstyled Content)
-    - JS minifié et fingerprinted pour un cache optimal (cache-busting automatique)
-    - SRI (Subresource Integrity) pour la sécurité (vérifie l'intégrité du fichier)
-    =========================================================================== 
+{{/*
+BEST PRACTICE: Hugo Pipes pour les assets
+- CSS chargé en premier pour éviter le FOUC
+- JS minifié et fingerprinted pour un cache optimal
+- SRI pour la sécurité
 */}}
 
-{{/* CSS — Chargé en premier */}}
-{{ $searchStyle := resources.Get "sass/search.scss" | toCSS | minify | fingerprint }}
-<link rel="stylesheet" href="{{ $searchStyle.RelPermalink }}" integrity="{{ $searchStyle.Data.Integrity }}" crossorigin="anonymous">
-
-{{/* HTML — Conteneur de recherche avec role="search" pour l'accessibilité */}}
 <div class="search-container" role="search">
     <div class="search-box">
         <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche">

@@ -1,0 +1,153 @@
+.calc-container {
+    background: var(--bg-secondary, #f5f5f5);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    max-width: 480px;
+}
+
+html.dark .calc-container {
+    background: #1a1a2e;
+    border-color: #333;
+}
+
+.calc-container h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.calc-section {
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border, #eee);
+}
+
+html.dark .calc-section {
+    border-color: #333;
+}
+
+.calc-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.calc-container label {
+    display: block;
+    margin-top: 0.6rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.calc-container .label-hint {
+    font-weight: 400;
+    color: #666;
+    font-size: 0.75rem;
+    display: block;
+}
+
+html.dark .calc-container .label-hint {
+    color: #999;
+}
+
+.calc-row {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.calc-row>div {
+    flex: 1;
+}
+
+.calc-container input,
+.calc-container select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid var(--border, #ccc);
+    border-radius: 4px;
+    background: var(--bg, #fff);
+    color: var(--text, #000);
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+html.dark .calc-container input,
+html.dark .calc-container select {
+    background: #16213e;
+    border-color: #444;
+    color: #eee;
+}
+
+.calc-container button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.7rem;
+    background: #2d3436;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.calc-container button:hover {
+    background: #636e72;
+}
+
+.calc-results {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg, #e8f5e9);
+    border-radius: 4px;
+}
+
+html.dark .calc-results {
+    background: #0f3460;
+}
+
+.calc-results table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.calc-results td {
+    padding: 0.3rem 0;
+}
+
+.calc-results td:last-child {
+    text-align: right;
+    font-weight: 600;
+}
+
+.calc-results .total {
+    border-top: 1px solid var(--border, #ccc);
+    font-size: 1.1rem;
+}
+
+html.dark .calc-results .total {
+    border-color: #555;
+}
+
+.calc-method {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: var(--bg, #f9f9f9);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+html.dark .calc-method {
+    background: #16213e;
+    color: #aaa;
+}
+
+.calc-method summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.8rem;
+}

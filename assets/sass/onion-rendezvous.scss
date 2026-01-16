@@ -1,0 +1,152 @@
+.onion-rv {
+    background: var(--bg-secondary, #f8f9fa);
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+
+html.dark .onion-rv {
+    background: #1a1a2e;
+    border-color: #333;
+}
+
+.onion-rv-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.onion-rv-nav button {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--border, #ccc);
+    background: var(--bg, #fff);
+    color: var(--text, #333);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+html.dark .onion-rv-nav button {
+    background: #16213e;
+    border-color: #444;
+    color: #eee;
+}
+
+.onion-rv-nav button:hover,
+.onion-rv-nav button:active {
+    background: #e0e0e0;
+}
+
+html.dark .onion-rv-nav button:hover,
+html.dark .onion-rv-nav button:active {
+    background: #2d3436;
+}
+
+.onion-rv-nav button.active {
+    background: #6c5ce7;
+    border-color: #6c5ce7;
+    color: #fff;
+}
+
+.onion-rv-nav .step-label {
+    font-size: 0.75rem;
+    color: #666;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.3rem;
+}
+
+html.dark .onion-rv-nav .step-label {
+    color: #999;
+}
+
+.onion-rv svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+.onion-rv .actor {
+    transition: opacity 0.3s ease;
+}
+
+.onion-rv .actor.dim {
+    opacity: 0.15;
+}
+
+.onion-rv .actor-box {
+    rx: 8;
+    ry: 8;
+}
+
+.onion-rv .actor-label {
+    font-family: system-ui, sans-serif;
+    font-weight: 700;
+    fill: #fff;
+}
+
+.onion-rv .flow-path {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.onion-rv .flow-path.visible {
+    opacity: 1;
+}
+
+.onion-rv-desc {
+    background: var(--bg, #fff);
+    border: 1px solid var(--border, #ddd);
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+html.dark .onion-rv-desc {
+    background: #16213e;
+    border-color: #333;
+    color: #ddd;
+}
+
+.onion-rv-desc .step-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: #6c5ce7;
+}
+
+html.dark .onion-rv-desc .step-title {
+    color: #a29bfe;
+}
+
+.onion-rv-desc ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.2rem;
+}
+
+.onion-rv-desc li {
+    margin: 0.3rem 0;
+}
+
+.onion-rv-desc strong {
+    color: var(--text, #333);
+}
+
+html.dark .onion-rv-desc strong {
+    color: #fff;
+}

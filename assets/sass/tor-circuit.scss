@@ -1,0 +1,77 @@
+.tor-circuit {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 8px;
+}
+
+html.dark .tor-circuit {
+    background: #1a1a2e;
+}
+
+.tor-circuit svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+}
+
+.tor-circuit text {
+    font-family: system-ui, sans-serif;
+}
+
+.tor-circuit .label {
+    fill: #fff;
+    font-weight: 600;
+}
+
+.tor-circuit .info {
+    fill: #555;
+}
+
+html.dark .tor-circuit .info {
+    fill: #aaa;
+}
+
+.tor-circuit-legend {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.7rem;
+    color: #666;
+}
+
+html.dark .tor-circuit-legend {
+    color: #999;
+}
+
+.tor-circuit-legend span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.tor-circuit-legend .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.tor-circuit-legend .dg {
+    background: #e74c3c;
+}
+
+.tor-circuit-legend .dm {
+    background: #f39c12;
+}
+
+.tor-circuit-legend .de {
+    background: #27ae60;
+}
+
+.tor-circuit-legend .dd {
+    background: #3498db;
+}

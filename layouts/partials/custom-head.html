@@ -1,25 +1,9 @@
 {{/*
-===========================================================================
 Custom Head Partial
----------------------------------------------------------------------------
-Extension du
+BEST PRACTICE: Hugo Pipes pour minification + fingerprint
+*/}}
 
-<head> avec des ressources personnalisées.
-    BEST PRACTICE: Hugo Pipes pour minification + fingerprint
-    ===========================================================================
-    */}}
-
-    {{/* Google Fonts - JetBrains Mono pour le code */}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-    {{/* Styles des shortcodes personnalisés */}}
-    {{ $shortcodesStyle := resources.Get "sass/shortcodes.scss" | toCSS | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $shortcodesStyle.RelPermalink }}" integrity="{{ $shortcodesStyle.Data.Integrity }}"
-        crossorigin="anonymous">
-
-    {{/* Styles pour les partages */}}
-    {{ $partagesStyle := resources.Get "sass/partages.scss" | toCSS | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $partagesStyle.RelPermalink }}" integrity="{{ $partagesStyle.Data.Integrity }}"
-        crossorigin="anonymous">
+{{/* Styles personnalisés consolidés */}}
+{{ $customStyle := resources.Get "sass/custom.scss" | toCSS | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $customStyle.RelPermalink }}" integrity="{{ $customStyle.Data.Integrity }}"
+    crossorigin="anonymous">

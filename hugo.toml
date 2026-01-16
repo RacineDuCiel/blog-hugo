@@ -57,7 +57,7 @@ defaultContentLanguage = "fr-fr"
     goToTop = true
     dateFormat = "02/01/06"
     rssFeedDescription = "summary"
-    additionalScripts = ["js/custom.js"]
+    additionalScripts = []
 
     [Languages.fr-fr.params.author]
       avatar = "avatar.jpg"
