@@ -21,7 +21,7 @@ BEST PRACTICES appliquées:
             {{ end }}
 
             {{ if (ne .Params.showDate false) }}
-            <span class="post-item-meta">
+            <span class="post-item-meta post-item-date">
                 {{ partial "helpers/format-date" (dict "date" .Lastmod "context" . "showDate" true) }}
             </span>
             {{ end }}

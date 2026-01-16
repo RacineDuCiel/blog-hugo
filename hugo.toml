@@ -55,7 +55,7 @@ defaultContentLanguage = "fr-fr"
     mainSections = ["posts", "réseau", "Sport"]
     toc = false
     goToTop = true
-    dateFormat = ":date_long"
+    dateFormat = "02/01/06"
     rssFeedDescription = "summary"
     additionalScripts = ["js/custom.js"]
 
