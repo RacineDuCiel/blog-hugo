@@ -1,0 +1,2 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="{{ .class }}" width="{{ .width }}" height="{{ .height }}" viewBox="0 0 14 14" stroke-width="1">
+<title>{{ .title }}</title><g><path d="M11.5 9.5a6 6 0 01-7-7 5.5 5.5 0 107 7z" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>

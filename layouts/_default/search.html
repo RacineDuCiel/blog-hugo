@@ -8,7 +8,7 @@ BEST PRACTICE: Hugo Pipes pour les assets
 
 <div class="search-container" role="search">
     <div class="search-box">
-        <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche">
+        <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche" autofocus>
     </div>
     <div id="search-results" aria-live="polite" aria-atomic="true"></div>
 </div>
@@ -16,6 +16,6 @@ BEST PRACTICE: Hugo Pipes pour les assets
 {{/* JS — Minifié + Fingerprint + SRI */}}
 {{ $fuse := resources.Get "js/fuse.js" | minify | fingerprint }}
 {{ $search := resources.Get "js/search.js" | minify | fingerprint }}
-<script src="{{ $fuse.RelPermalink }}" integrity="{{ $fuse.Data.Integrity }}" crossorigin="anonymous"></script>
-<script src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $fuse.RelPermalink }}" integrity="{{ $fuse.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}" crossorigin="anonymous"></script>
 {{ end }}

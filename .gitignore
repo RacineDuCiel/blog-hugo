@@ -13,3 +13,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Logs et scripts de debug
+*.log
+fix_index.py

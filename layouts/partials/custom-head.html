@@ -3,7 +3,12 @@ Custom Head Partial
 BEST PRACTICE: Hugo Pipes pour minification + fingerprint
 */}}
 
-{{/* Styles personnalisés consolidés */}}
+{{/* CSP Stricte : Autoriser les scripts self, inline pour le CSS, bloquer exec JS depuis URLs externes non définies
+*/}}
+<meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none';">
+
+{{/* Styles personnalisés consolidés (incluant les polices locales) */}}
 {{ $customStyle := resources.Get "sass/custom.scss" | toCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customStyle.RelPermalink }}" integrity="{{ $customStyle.Data.Integrity }}"
     crossorigin="anonymous">

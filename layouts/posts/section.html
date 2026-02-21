@@ -1,0 +1,51 @@
+{{- define "main" -}}
+<div class="wrapper list-page">
+    <header class="header">
+        <h1 class="header-title center">{{ .Title }}</h1>
+        {{ with .Description }}
+        <p class="section-description">{{ . }}</p>
+        {{ end }}
+    </header>
+    <main class="page-content" aria-label="Content">
+
+        {{ if .Parent.IsHome }}
+        {{/*
+            Root /posts/ : tous les articles de toutes les sous-sections, triés par date.
+            On utilise .RegularPagesRecursive pour inclure les articles imbriqués.
+        */}}
+        {{ $all := .RegularPagesRecursive }}
+        {{ $articles := where (where $all ".Params.unlisted" "!=" true) "Params.type" "!=" "partage" }}
+
+        {{ if eq (len $articles) 0 }}
+        <p class="center">Aucun article pour le moment.</p>
+        {{ else }}
+        {{ range $articles.GroupByDate "2006" }}
+        <h2 class="post-year">{{ .Key }}</h2>
+        {{ range .Pages }}
+        {{ partial "postCard" . }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+
+        {{ else }}
+        {{/*
+            Sous-section /posts/[catégorie]/ : articles de cette section uniquement.
+        */}}
+        {{ $pages := where (where .RegularPages ".Params.unlisted" "!=" true) "Params.type" "!=" "partage" }}
+
+        {{ if eq (len $pages) 0 }}
+        <p class="center">Aucun article pour le moment.</p>
+        {{ else }}
+        {{ range $pages.GroupByDate "2006" }}
+        <h2 class="post-year">{{ .Key }}</h2>
+        {{ range .Pages }}
+        {{ partial "postCard" . }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+
+        {{ end }}
+
+    </main>
+</div>
+{{- end -}}

@@ -2,27 +2,35 @@
 ===========================================================================
 Partial: Post Card (liste d'articles)
 ---------------------------------------------------------------------------
-BEST PRACTICES appliquées:
-- DRY: Utilise le partial helpers/format-date pour le formatage de date
-- Accessibilité: Utilise <h2> au lieu de <h4> pour une hiérarchie correcte
-        - SEO: Attribut datetime au format ISO 8601
-        - Icône star réutilisée via partial icons/star.html
-        ===========================================================================
-        */}}
-        <article class="post-item">
-            <h2 class="post-item-title">
-                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-            </h2>
+- DRY: helpers/format-date pour le formatage de date
+- Accessibilité: <h2> pour une hiérarchie correcte
+- SEO: attribut datetime au format ISO 8601
+- Icône star réutilisée via partial icons/star.html
+- Temps de lecture affiché uniquement pour les articles (pas les partages)
+===========================================================================
+*/}}
+<article class="post-item">
+    <h2 class="post-item-title">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </h2>
 
-            {{ if .Params.isStarred }}
-            <div class="post-item-right">
-                {{ partial "icons/star.html" . }}
-            </div>
-            {{ end }}
+    {{ if .Params.isStarred }}
+    <div class="post-item-right">
+        {{ partial "icons/star.html" . }}
+    </div>
+    {{ end }}
 
-            {{ if (ne .Params.showDate false) }}
-            <span class="post-item-meta post-item-date">
-                {{ partial "helpers/format-date" (dict "date" .Date "context" . "showDate" true) }}
-            </span>
-            {{ end }}
-        </article>
+    <div class="post-item-meta-row">
+        {{ if (ne .Params.showDate false) }}
+        <span class="post-item-meta post-item-date">
+            {{ partial "helpers/format-date" (dict "date" .Date "context" . "showDate" true) }}
+        </span>
+        {{ end }}
+
+        {{ if and (ne .Params.type "partage") (gt .ReadingTime 0) }}
+        <span class="post-item-meta post-item-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">
+            · {{ .ReadingTime }} min
+        </span>
+        {{ end }}
+    </div>
+</article>

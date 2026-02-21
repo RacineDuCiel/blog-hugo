@@ -8,8 +8,8 @@ showOnHome: false
 # Albums
 
 {{< grid >}}
-{{< youtube-card id="OLAK5uy_kv6Cc2Rx5Z-id0iBJGqQhaLTdVQG7IVGw" artist="Adept" title="Blood Covenant" type="playlist" thumb="1cHxMQOqlMo" >}}
-{{< youtube-card id="XfoN1hqFFns" artist="Unprocessed" title="Angel" >}}
+{{< album cover="adept-blood-covenant.jpg" artist="Adept" title="Blood Covenant" >}}
+{{< album cover="unprocessed-angel.jpg" artist="Unprocessed" title="Angel" >}}
 {{< /grid >}}
 
 ---
@@ -17,7 +17,7 @@ showOnHome: false
 # EPs
 
 {{< grid >}}
-{{< youtube-card id="T6o-8sVfhps" artist="Revnoir" title="Coma" >}}
+{{< album cover="revnoir-coma.jpg" artist="Revnoir" title="Coma" >}}
 {{< /grid >}}
 
 ---
@@ -25,13 +25,13 @@ showOnHome: false
 # Singles
 
 {{< grid >}}
-{{< youtube-card id="jMrNjN0-osw" artist="BAD OMENS" title="Left For Good" >}}
-{{< youtube-card id="EUe9UhcUtEI" artist="BAD OMENS" title="Specter" >}}
-{{< youtube-card id="684dFU3CXR0" artist="Like Moths To Flames" title="Salting The Earth" >}}
-{{< youtube-card id="5FTa4GJP5mc" artist="Paleface Swiss" title="Instrument of war" >}}
-{{< youtube-card id="zniQ_hHAsPM" artist="156/Silence" title="Our Parting Ways" >}}
-{{< youtube-card id="OjfARxxQBY8" artist="Jhonny Booth" title="Get Well Soon" >}}
-{{< youtube-card id="YGxvx3APSzA" artist="Cenobia" title="Throne Of Want" >}}
-{{< youtube-card id="UWRAw8MR98c" artist="Cenobia" title="Devour me" >}}
-{{< youtube-card id="txy7Z4wETvs" artist="LEVELS" title="Black Dove" >}}
+{{< album cover="bad-omens-left-for-good.jpg" artist="BAD OMENS" title="Left For Good" >}}
+{{< album cover="bad-omens-specter.jpg" artist="BAD OMENS" title="Specter" >}}
+{{< album cover="like-moths-to-flames-salting-the-earth.jpg" artist="Like Moths To Flames" title="Salting The Earth" >}}
+{{< album cover="paleface-swiss-instrument-of-war.jpg" artist="Paleface Swiss" title="Instrument of war" >}}
+{{< album cover="156-silence-our-parting-ways.jpg" artist="156/Silence" title="Our Parting Ways" >}}
+{{< album cover="jhonny-booth-get-well-soon.jpg" artist="Jhonny Booth" title="Get Well Soon" >}}
+{{< album cover="cenobia-throne-of-want.jpg" artist="Cenobia" title="Throne Of Want" >}}
+{{< album cover="cenobia-devour-me.jpg" artist="Cenobia" title="Devour me" >}}
+{{< album cover="levels-black-dove.jpg" artist="LEVELS" title="Black Dove" >}}
 {{< /grid >}}

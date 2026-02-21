@@ -5,6 +5,10 @@ enableGitInfo = true
 enableEmoji = true
 enableRobotsTXT = true
 
+[pagination]
+  pagerSize = 15
+  path = "page"
+
 defaultContentLanguage = "fr-fr"
 
 [frontmatter]
@@ -41,7 +45,6 @@ defaultContentLanguage = "fr-fr"
   priority = 0.5
 
 [params]
-  math = true
   browserconfig.TileColor = "#2d89ef"
 
 [Languages.fr-fr]
@@ -52,16 +55,18 @@ defaultContentLanguage = "fr-fr"
 
   [Languages.fr-fr.params]
     defaultColor = "auto"
-    mainSections = ["posts", "réseau", "Sport"]
+    mainSections = ["posts"]
     toc = false
     goToTop = true
-    dateFormat = "02/01/06"
+    dateFormat = "02/01/2006"
     rssFeedDescription = "summary"
     additionalScripts = []
+    sitename = "RacineDuCiel"
+    description = "Blog personnel sur la sécurité, la vie privée, l'IA, la musique et le sport. Par RacineDuCiel."
 
     [Languages.fr-fr.params.author]
       avatar = "avatar.jpg"
-      description = "𝕎𝕙𝕒𝕥 𝕕𝕠𝕖𝕤 𝕚𝕥 𝕞𝕖𝕒𝕟 𝕥𝕠 𝕓𝕖 𝕙𝕦𝕞𝕒𝕟"
+      description = "What does it mean to be human"
       name = "RacineDuCiel"
 
     [Languages.fr-fr.params.webmanifest]

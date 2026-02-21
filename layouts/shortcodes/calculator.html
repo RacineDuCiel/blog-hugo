@@ -73,10 +73,10 @@ Usage: {{< calculator>}}
         <input type="number" id="calc-duration" min="15" max="180" value="60" step="5">
     </div>
 
-    <button type="button" onclick="calcTDEE()">Calculer</button>
+    <button type="button">Calculer</button>
 
     <div id="calc-output"></div>
 </div>
 
 {{ $calcScript := resources.Get "js/calculator.js" | minify | fingerprint }}
-<script src="{{ $calcScript.RelPermalink }}" integrity="{{ $calcScript.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $calcScript.RelPermalink }}" integrity="{{ $calcScript.Data.Integrity }}" crossorigin="anonymous"></script>

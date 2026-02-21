@@ -2,6 +2,9 @@
 <div class="wrapper list-page">
     <header class="header">
         <h1 class="header-title center">{{ .Title }}</h1>
+        {{ with .Description }}
+        <p class="section-description">{{ . }}</p>
+        {{ end }}
     </header>
     <main class="page-content" aria-label="Content">
         {{ $pages := .Pages }}

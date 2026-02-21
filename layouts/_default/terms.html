@@ -1,0 +1,19 @@
+{{- define "main" -}}
+<div class="wrapper list-page">
+    <header class="header">
+        <h1 class="header-title center">{{ .Title }}</h1>
+    </header>
+    <main class="page-content" aria-label="Content">
+        {{ range .Data.Terms.ByCount }}
+        {{ $termPage := .Page }}
+        {{ $count := .Count }}
+        <article class="post-item">
+            <h2 class="post-item-title">
+                <a href="{{ $termPage.RelPermalink }}">{{ $termPage.Title }}</a>
+            </h2>
+            <span class="post-item-date">{{ $count }} article{{ if gt $count 1 }}s{{ end }}</span>
+        </article>
+        {{ end }}
+    </main>
+</div>
+{{- end -}}

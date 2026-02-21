@@ -2,6 +2,9 @@
 <div class="wrapper list-page">
     <header class="header">
         <h1 class="header-title center">{{ .Title }}</h1>
+        {{ with .Description }}
+        <p class="section-description">{{ . }}</p>
+        {{ end }}
     </header>
     <main class="page-content" aria-label="Content">
         {{ $visiblePages := where .Pages ".Params.unlisted" "!=" true }}
@@ -15,6 +18,13 @@
         {{ range $articles }}
         {{ $page := . }}
         {{ $pinTargets := $page.Params.pinCategories }}
+        {{ if not (reflect.IsSlice $pinTargets) }}
+        {{ if $pinTargets }}
+        {{ $pinTargets = slice $pinTargets }}
+        {{ else }}
+        {{ $pinTargets = slice }}
+        {{ end }}
+        {{ end }}
         {{ if and $page.Params.pinned $pinTargets }}
         {{ range $pinTargets }}
         {{ if eq (lower .) $categoryName }}
@@ -36,7 +46,8 @@
         </section>
         {{ end }}
 
-        {{ range $articles.GroupByDate "2006" }}
+        {{ $paginated := .Paginate $articles 15 }}
+        {{ range $paginated.Pages.GroupByDate "2006" }}
         {{ $year := .Key }}
         <h2 class="post-year">{{ $year }}</h2>
         {{ range .Pages }}
@@ -45,6 +56,31 @@
         {{ partial "postCard" . }}
         {{ end }}
         {{ end }}
+        {{ end }}
+
+        {{/* Navigation pagination */}}
+        {{ if gt $paginated.TotalPages 1 }}
+        <nav aria-label="Navigation entre les pages">
+            <ul class="pagination">
+                {{ if $paginated.HasPrev }}
+                <li><a class="page-link" href="{{ $paginated.Prev.URL }}" aria-label="Page précédente">&#8592;</a></li>
+                {{ else }}
+                <li class="disabled"><span class="page-link" aria-hidden="true">&#8592;</span></li>
+                {{ end }}
+
+                {{ range $paginated.Pagers }}
+                <li class="{{ if eq . $paginated }}active{{ end }}">
+                    <a class="page-link" href="{{ .URL }}">{{ .PageNumber }}</a>
+                </li>
+                {{ end }}
+
+                {{ if $paginated.HasNext }}
+                <li><a class="page-link" href="{{ $paginated.Next.URL }}" aria-label="Page suivante">&#8594;</a></li>
+                {{ else }}
+                <li class="disabled"><span class="page-link" aria-hidden="true">&#8594;</span></li>
+                {{ end }}
+            </ul>
+        </nav>
         {{ end }}
     </main>
 </div>

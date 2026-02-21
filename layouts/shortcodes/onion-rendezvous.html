@@ -14,7 +14,10 @@ Usage: {{< onion-rendezvous>}}
         <div class="step-label" id="rv-step-label">Publication</div>
     </div>
 
-    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg"
+         role="img" aria-labelledby="onion-rv-title onion-rv-desc">
+        <title id="onion-rv-title">Protocole de rendez-vous Tor v3</title>
+        <desc id="onion-rv-desc">Schéma interactif en 6 étapes du protocole Hidden Service Tor : Service, HSDir, Intro Point, Rendez-vous Point et Client.</desc>
         <defs>
             <marker id="arr-p" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
                 <polygon points="0 0, 6 2.5, 0 5" fill="#9b59b6" />
@@ -71,4 +74,4 @@ Usage: {{< onion-rendezvous>}}
 </div>
 
 {{ $onionScript := resources.Get "js/onion-rendezvous.js" | minify | fingerprint }}
-<script src="{{ $onionScript.RelPermalink }}" integrity="{{ $onionScript.Data.Integrity }}" crossorigin="anonymous"></script>
+<script defer src="{{ $onionScript.RelPermalink }}" integrity="{{ $onionScript.Data.Integrity }}" crossorigin="anonymous"></script>

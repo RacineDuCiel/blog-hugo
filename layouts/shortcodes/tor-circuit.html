@@ -4,7 +4,10 @@ Usage: {{< tor-circuit>}}
 */}}
 
 <div class="tor-circuit">
-    <svg viewBox="0 0 260 520" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 260 520" xmlns="http://www.w3.org/2000/svg"
+         role="img" aria-labelledby="tor-circuit-title tor-circuit-desc">
+        <title id="tor-circuit-title">Circuit Tor — chiffrement en couches</title>
+        <desc id="tor-circuit-desc">Schéma du circuit Tor à 3 nœuds : Guard (voit votre IP), Middle (simple relais) et Exit (voit la destination). Chaque couche chiffre les données différemment.</desc>
         <rect x="80" y="5" width="100" height="36" rx="8" fill="#8e44ad" />
         <text x="130" y="28" text-anchor="middle" class="label" font-size="12">Vous (Client)</text>
         <polygon points="130,48 125,42 135,42" fill="#888" />

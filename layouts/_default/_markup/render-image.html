@@ -14,16 +14,23 @@
 {{/* Image found in bundle: Resize if too large, convert to WebP */}}
 {{- $processed := $img -}}
 
-{{/* Only resize if wider than 800px */}}
 {{- if gt $img.Width 800 -}}
-{{- $processed = $img.Resize "800x webp q90" -}}
+{{- $src400 := $img.Resize "400x webp q90" -}}
+{{- $src800 := $img.Resize "800x webp q90" -}}
+<picture>
+    <source srcset="{{ $src400.RelPermalink }} 400w, {{ $src800.RelPermalink }} 800w"
+        sizes="(max-width: 800px) 100vw, 800px" type="image/webp">
+    <img src="{{ $src800.RelPermalink }}" alt="{{ $alt }}" width="{{ $src800.Width }}" height="{{ $src800.Height }}" {{
+        with $title }} title="{{ . }}" {{ end }} loading="lazy">
+</picture>
 {{- else -}}
-{{/* Just convert to WebP */}}
 {{- $processed = $img.Resize (printf "%dx%d webp q90" $img.Width $img.Height) -}}
+<picture>
+    <source srcset="{{ $processed.RelPermalink }}" type="image/webp">
+    <img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" width="{{ $processed.Width }}"
+        height="{{ $processed.Height }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+</picture>
 {{- end -}}
-
-<img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" width="{{ $processed.Width }}"
-    height="{{ $processed.Height }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
 {{- else -}}
 {{/* Image not found in bundle (maybe in static?): Fallback */}}
 <img src="{{ $src | safeURL }}" alt="{{ $alt }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">

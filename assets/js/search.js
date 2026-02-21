@@ -17,7 +17,7 @@
     const CONFIG = {
         DEBOUNCE_DELAY: 200,      // ms avant de lancer la recherche
         MAX_RESULTS: 10,          // Nombre max de résultats affichés
-        SNIPPET_LENGTH: 80,       // Longueur du résumé
+        SNIPPET_LENGTH: 120,       // Longueur du résumé
         FUSE_OPTIONS: {
             keys: [
                 { name: 'title', weight: 0.5 },
@@ -29,7 +29,8 @@
             threshold: 0.1,
             minMatchCharLength: 1,
             ignoreLocation: true,
-            useExtendedSearch: true
+            useExtendedSearch: true,
+            includeMatches: true  // Active la mise en évidence des termes
         }
     };
 
@@ -76,24 +77,70 @@
     }
 
     /**
+     * Surligne les termes correspondants dans un texte en utilisant les match indices de Fuse.js
+     * @param {string} text - Texte à traiter
+     * @param {Array} indices - Tableau d'indices [[start, end], ...]
+     * @returns {DocumentFragment}
+     */
+    function highlightMatches(text, indices) {
+        const frag = document.createDocumentFragment();
+        if (!indices || indices.length === 0) {
+            frag.appendChild(document.createTextNode(text));
+            return frag;
+        }
+        let lastIndex = 0;
+        // Tri des indices pour être sûr qu'ils sont dans l'ordre
+        const sorted = [...indices].sort((a, b) => a[0] - b[0]);
+        sorted.forEach(([start, end]) => {
+            // Texte avant le match
+            if (start > lastIndex) {
+                frag.appendChild(document.createTextNode(text.slice(lastIndex, start)));
+            }
+            // Texte mis en évidence
+            const mark = document.createElement('mark');
+            mark.textContent = text.slice(start, end + 1);
+            frag.appendChild(mark);
+            lastIndex = end + 1;
+        });
+        // Texte après le dernier match
+        if (lastIndex < text.length) {
+            frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+        return frag;
+    }
+
+    /**
      * Crée un élément de résultat de manière sécurisée (sans innerHTML)
-     * @param {Object} item - Objet résultat de la recherche
+     * @param {Object} result - Objet résultat Fuse.js (avec .item et .matches)
      * @returns {HTMLElement}
      */
-    function createResultElement(item) {
+    function createResultElement(result) {
+        const item = result.item;
+        const matches = result.matches || [];
+
+        // Récupère les indices de match par clé de champ
+        const matchMap = {};
+        matches.forEach(m => {
+            matchMap[m.key] = m.indices;
+        });
+
         // Article container
         const article = document.createElement('div');
         article.className = 'search-result-item';
 
-        // Titre avec lien
+        // Titre avec lien + highlight
         const h3 = document.createElement('h3');
         const link = document.createElement('a');
         link.href = item.permalink;
-        link.textContent = item.title; // textContent = sécurisé contre XSS
+        if (matchMap['title']) {
+            link.appendChild(highlightMatches(item.title, matchMap['title']));
+        } else {
+            link.textContent = item.title;
+        }
         h3.appendChild(link);
         article.appendChild(h3);
 
-        // Snippet (résumé)
+        // Snippet (résumé) + highlight
         const content = item.summary || item.contents || '';
         const plainText = stripHtml(content);
         const snippet = plainText.length > CONFIG.SNIPPET_LENGTH
@@ -101,7 +148,14 @@
             : plainText;
 
         const p = document.createElement('p');
-        p.textContent = snippet;
+        if (matchMap['summary'] || matchMap['contents']) {
+            const indices = matchMap['summary'] || matchMap['contents'];
+            // Filtrer les indices qui sont dans la longueur du snippet
+            const filtered = indices.filter(([s]) => s < CONFIG.SNIPPET_LENGTH);
+            p.appendChild(highlightMatches(snippet, filtered));
+        } else {
+            p.textContent = snippet;
+        }
         article.appendChild(p);
 
         // Date
@@ -159,7 +213,7 @@
             const fragment = document.createDocumentFragment();
 
             results.slice(0, CONFIG.MAX_RESULTS).forEach(result => {
-                const element = createResultElement(result.item);
+                const element = createResultElement(result);
                 fragment.appendChild(element);
             });
 
@@ -200,6 +254,7 @@
      * Initialise les event listeners
      */
     function initEventListeners() {
+        if (!searchInput) return;
         // Debounce sur l'input pour éviter trop de recherches
         const debouncedSearch = debounce((e) => {
             performSearch(e.target.value);

@@ -22,7 +22,7 @@ Recommandations personnelles d'albums et EPs s'apparentant, pour la plupart, au 
 
 # Hautement recommandés
 {{< grid >}}
-{{< album artist="Slipknot" title="Slipknot" cover="Slipknot.jpg" >}}
+{{< album artist="Slipknot" title="Slipknot" cover="slipknot.jpg" >}}
 {{< album artist="Like Moths To Flames" title="No eternity in gold" cover="NEIG.jpg" >}}
 {{< album artist="Bad Omens" title="The Death of Peace of Mind" cover="TDOPOM.jpg" >}}
 {{< album artist="Invent Animate" title="Heavener" cover="Heavener.jpg" >}}

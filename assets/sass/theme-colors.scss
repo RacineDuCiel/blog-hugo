@@ -1,0 +1,128 @@
+// ══════════════════════════════════════════════════════════════════════════════
+// PALETTE — Accent Gris ardoise
+//
+// Light : --accent #4B5563   --accent-hover #374151
+// Dark  : --accent #9CA3AF   --accent-hover #D1D5DB
+// ══════════════════════════════════════════════════════════════════════════════
+
+:root {
+    --accent        : #4B5563;
+    --accent-hover  : #374151;
+    --accent-ring   : rgba(75, 85, 99, 0.35);
+    --accent-subtle : rgba(75, 85, 99, 0.08);
+}
+
+html.dark {
+    --accent        : #9CA3AF;
+    --accent-hover  : #D1D5DB;
+    --accent-ring   : rgba(156, 163, 175, 0.35);
+    --accent-subtle : rgba(156, 163, 175, 0.08);
+}
+
+// Support thème système sans JS (cohérent avec _dark.scss du thème)
+@media (prefers-color-scheme: dark) {
+    html:not(.light) {
+        --accent        : #9CA3AF;
+        --accent-hover  : #D1D5DB;
+        --accent-ring   : rgba(156, 163, 175, 0.35);
+        --accent-subtle : rgba(156, 163, 175, 0.08);
+    }
+}
+
+// ── 1. Navigation : lien actif → accent ───────────────────────────────────
+.menu-link.active {
+    color: var(--accent) !important;
+    opacity: 1;
+}
+
+// ── 2. Post item title : hover → accent ───────────────────────────────────
+.post-item-title a:hover {
+    color: var(--accent) !important;
+}
+
+// ── 3. Post-nav : hover → accent ──────────────────────────────────────────
+.post-nav-item:hover .post-title,
+.post-nav-item:focus .post-title {
+    color: var(--accent) !important;
+}
+
+// ── 4. Blockquote border → accent ─────────────────────────────────────────
+blockquote {
+    border-color: var(--accent);
+}
+
+// ── 5. Liens article → amber + underline ──────────────────────────────────
+// WCAG 2.1 SC 1.4.1 : le soulignement garantit la distinction sans couleur seule
+.page-content a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+
+    &:hover {
+        color: var(--accent-hover);
+        text-decoration-thickness: 2px;
+    }
+
+    // External link arrow (conservé du thème)
+    &[target="_blank"]::after {
+        color: var(--accent);
+    }
+}
+
+html.dark .page-content a {
+    color: var(--accent);
+    &:hover { color: var(--accent-hover); }
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light) .page-content a {
+        color: var(--accent);
+        &:hover { color: var(--accent-hover); }
+    }
+}
+
+// ── 6. Anchor heading hover → accent ──────────────────────────────────────
+.page-content h1:hover .anchor-head,
+.page-content h2:hover .anchor-head,
+.page-content h3:hover .anchor-head,
+.page-content h4:hover .anchor-head,
+.page-content h5:hover .anchor-head,
+.page-content h6:hover .anchor-head {
+    color: var(--accent);
+}
+
+// ── 7. Sélection de texte → amber subtil ──────────────────────────────────
+::selection {
+    background: var(--accent-subtle);
+    color: inherit;
+}
+
+// ── 8. Icône étoile → accent (remplace orange) ────────────────────────────
+.icon-star {
+    color: var(--accent);
+}
+
+// ── 9. Footer RSS hover → accent ──────────────────────────────────────────
+.footer-rss:hover {
+    color: var(--accent);
+}
+
+// ── 10. Focus ring → accent ───────────────────────────────────────────────
+a:focus {
+    outline-color: var(--accent-ring);
+}
+
+.page-content a:focus {
+    outline-color: var(--accent-ring);
+}
+
+// ── 11. Post-card : hover subtil ──────────────────────────────────────────
+.post-item {
+    transition: background 150ms ease;
+    border-radius: 4px;
+
+    &:hover {
+        background: var(--accent-subtle);
+    }
+}
