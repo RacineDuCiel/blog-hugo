@@ -1,52 +1,78 @@
 {{ define "main" }}
-<div class="wrapper post">
-    <main class="page-content" aria-label="Content">
-        <article>
-            <header class="header">
-                <h1 class="header-title">{{ .Title }}</h1>
-                {{ $configDateFormat := .Site.Params.dateFormat | default ":date_medium" }}
-                {{ if and (.Date) (ne .Params.showDate false) }}
-                {{ $pubDate := .Date }}
-                {{ $modDate := .Lastmod }}
-                {{ $pubISO := dateFormat "2006-01-02T15:04:05-07:00" $pubDate }}
-                {{ $modISO := dateFormat "2006-01-02T15:04:05-07:00" $modDate }}
-                {{ $datesAreDifferent := ne (dateFormat "2006-01-02" $pubDate) (dateFormat "2006-01-02" $modDate) }}
-                <div class="post-meta">
-                    <time datetime="{{ $pubISO }}" itemprop="datePublished">{{ $pubDate | time.Format $configDateFormat
-                        }}</time>
-                    {{ if $datesAreDifferent }}
-                    <span class="post-meta-sep">·</span>
-                    <span class="post-meta-updated">mis à jour le <time datetime="{{ $modISO }}"
-                            itemprop="dateModified">{{ $modDate | time.Format $configDateFormat }}</time></span>
-                    {{ end }}
-                    {{ if gt .ReadingTime 0 }}
-                    <span class="post-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">· {{ .ReadingTime
-                        }} min de lecture</span>
-                    {{ end }}
-                </div>
-                <hr class="post-divider">
-                {{ end }}
-            </header>
-            {{ partial "toc.html" .}}
-            <div class="page-content">
-                {{ .Content }}
-            </div>
-        </article>
+{{/* La TOC latérale est affichée uniquement si Hugo a généré des entrées de navigation.
+     Hugo retourne une template.HTML vide "" quand il n'y a pas de titres, ou
+     "<nav id=\"TableOfContents\"></nav>" quand les titres ne sont pas H2/H3.
+     On utilise le filtre `replaceRE` pour extraire les <li> et tester leur présence. */}}
+{{ $tocContent := .TableOfContents }}
+{{ $tocItems := $tocContent | replaceRE `(?s).*?(<li>).*` "$1" }}
+{{ $showSidebar := eq $tocItems "<li>" }}
 
-        {{ $related := .Site.RegularPages.Related . | first 3 }}
-        {{ with $related }}
-        <section class="related-posts">
-            <h2 class="related-posts-title">{{ T "post.related_posts" | default "Pour aller plus loin" }}</h2>
-            {{ range . }}
-            {{ partial "postCard" . }}
+<div class="wrapper post{{ if $showSidebar }} has-toc-sidebar{{ end }}">
+    <div class="article-layout">
+        <main class="page-content" aria-label="Content">
+            <article>
+                <header class="header">
+                    <h1 class="header-title">{{ .Title }}</h1>
+                    {{ $configDateFormat := .Site.Params.dateFormat | default ":date_medium" }}
+                    {{ if and (.Date) (ne .Params.showDate false) }}
+                    {{ $pubDate := .Date }}
+                    {{ $modDate := .Lastmod }}
+                    {{ $pubISO := dateFormat "2006-01-02T15:04:05-07:00" $pubDate }}
+                    {{ $modISO := dateFormat "2006-01-02T15:04:05-07:00" $modDate }}
+                    {{ $datesAreDifferent := ne (dateFormat "2006-01-02" $pubDate) (dateFormat "2006-01-02" $modDate) }}
+                    <div class="post-meta">
+                        <time datetime="{{ $pubISO }}" itemprop="datePublished">{{ $pubDate | time.Format $configDateFormat }}</time>
+                        {{ if $datesAreDifferent }}
+                        <span class="post-meta-sep">·</span>
+                        <span class="post-meta-updated">mis à jour le <time datetime="{{ $modISO }}"
+                                itemprop="dateModified">{{ $modDate | time.Format $configDateFormat }}</time></span>
+                        {{ end }}
+                        {{ if gt .ReadingTime 0 }}
+                        <span class="post-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">· {{ .ReadingTime }} min de lecture</span>
+                        {{ end }}
+                    </div>
+                    <hr class="post-divider">
+                    {{ end }}
+                </header>
+
+                {{/* TOC inline (mobile / tablette) — masquée sur desktop via CSS */}}
+                {{ partial "toc.html" . }}
+
+                <div class="page-content">
+                    {{ .Content }}
+                </div>
+            </article>
+
+            {{ $related := .Site.RegularPages.Related . | first 3 }}
+            {{ with $related }}
+            <section class="related-posts">
+                <h2 class="related-posts-title">{{ T "post.related_posts" | default "Pour aller plus loin" }}</h2>
+                {{ range . }}
+                {{ partial "postCard" . }}
+                {{ end }}
+            </section>
             {{ end }}
-        </section>
+        </main>
+
+        {{/* TOC latérale sticky (desktop uniquement) */}}
+        {{ if $showSidebar }}
+        <aside class="toc-sidebar" aria-label="Table des matières">
+            <p class="toc-sidebar-title">Table des matières</p>
+            {{ $tocContent | safeHTML }}
+        </aside>
         {{ end }}
-    </main>
+    </div>
 </div>
 
 {{/* Script barre de progression de lecture */}}
 {{ $progress := resources.Get "js/reading-progress.js" | minify | fingerprint }}
 <script defer src="{{ $progress.RelPermalink }}" integrity="{{ $progress.Data.Integrity }}"
     crossorigin="anonymous"></script>
+
+{{/* Script TOC spy — suivi de position dans la sidebar */}}
+{{ if $showSidebar }}
+{{ $tocSpy := resources.Get "js/toc-spy.js" | minify | fingerprint }}
+<script defer src="{{ $tocSpy.RelPermalink }}" integrity="{{ $tocSpy.Data.Integrity }}"
+    crossorigin="anonymous"></script>
+{{ end }}
 {{ end }}

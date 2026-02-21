@@ -26,6 +26,19 @@ body:not(.notransition) *::after {
     pointer-events: none;
 }
 
+// Mode sombre : couleur plus lumineuse + légèrement plus épaisse pour la lisibilité
+html.dark #reading-progress {
+    background: #E5E7EB;
+    height: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light) #reading-progress {
+        background: #E5E7EB;
+        height: 4px;
+    }
+}
+
 // ── (6) Table des matières (TOC) — rendu plus visible ─────────────────────────
 details.toc {
     border-left: 3px solid var(--accent);
@@ -71,6 +84,136 @@ details.toc {
         font-size: 0.9rem;
         margin-bottom: 0.3rem;
         line-height: 1.5;
+    }
+}
+
+// ── Layout article : grille deux colonnes (article + TOC latérale) ─────────────
+// Activé uniquement sur les pages avec sidebar (.has-toc-sidebar)
+
+.wrapper.post.has-toc-sidebar {
+    // Élargir le wrapper pour accueillir la sidebar
+    max-width: 1160px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.article-layout {
+    display: block; // fallback mobile-first
+}
+
+// Desktop : layout deux colonnes à partir de 1100px
+@media (min-width: 1100px) {
+    .wrapper.post.has-toc-sidebar .article-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 240px;
+        gap: 3.5rem;
+        align-items: start;
+    }
+
+    // Sur desktop avec sidebar : masquer la TOC inline (details.toc)
+    .has-toc-sidebar details.toc {
+        display: none;
+    }
+}
+
+// Mobile/tablette : TOC inline visible, sidebar masquée
+@media (max-width: 1099px) {
+    .toc-sidebar {
+        display: none;
+    }
+
+    // S'assurer que la TOC inline est visible
+    .has-toc-sidebar details.toc {
+        display: block;
+    }
+}
+
+// ── TOC latérale sticky ────────────────────────────────────────────────────────
+.toc-sidebar {
+    position: sticky;
+    top: 80px;            // sous la navbar
+    align-self: start;    // ne s'étire pas sur toute la hauteur de la grille
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+
+    // Barre de scroll discrète
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-ring) transparent;
+
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--accent-ring);
+        border-radius: 2px;
+    }
+}
+
+.toc-sidebar-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-2, #888);
+    margin: 0 0 0.75rem 0;
+    padding: 0;
+}
+
+// Liens de la TOC latérale
+.toc-sidebar nav#TableOfContents {
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    // Indentation des h3 (ul imbriqués)
+    ul ul {
+        padding-left: 0.9rem;
+    }
+
+    li {
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        display: block;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        padding: 0.22rem 0.5rem 0.22rem 0.6rem;
+        margin-bottom: 0.1rem;
+        color: var(--color-text-2, #888);
+        text-decoration: none;
+        border-left: 2px solid transparent;
+        border-radius: 0 3px 3px 0;
+        transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+            color: var(--accent);
+            border-left-color: var(--accent-ring);
+        }
+
+        // Lien actif (injecté par toc-spy.js)
+        &.toc-active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+            background: var(--accent-subtle);
+            font-weight: 600;
+        }
+    }
+
+    // h3 : taille légèrement plus petite
+    ul ul a {
+        font-size: 0.78rem;
+        color: var(--color-text-2, #aaa);
+
+        &.toc-active {
+            color: var(--accent);
+        }
     }
 }
 
