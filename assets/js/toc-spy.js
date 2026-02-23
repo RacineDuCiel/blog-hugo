@@ -1,16 +1,18 @@
 /**
- * TOC Spy — Suivi de position dans la table des matières latérale
+ * TOC Spy — Suivi de position dans la TOC (desktop sidebar + mobile drawer)
+ * + gestion du FAB mobile (bouton flottant + bottom sheet)
  *
- * Observe les titres h2/h3 de .page-content via IntersectionObserver.
- * Quand un titre est visible, le lien correspondant dans .toc-sidebar
- * reçoit la classe .toc-active.
+ * Compatibilité scroll : écoute sur window ET document car Safari/Chrome avec
+ * overflow-x:hidden redirigent parfois le scroll sur body/html, rendant les
+ * événements sur window silencieux. Le flag `ticking` (rAF) évite les doubles
+ * appels.
  *
- * Fonctionne correctement dans les deux sens de scroll (haut/bas).
+ * Logique active : le titre actif est le dernier dont
+ * getBoundingClientRect().top <= THRESHOLD (seuil sous la navbar).
  */
 (function () {
     'use strict';
 
-    // Attendre que le DOM soit prêt
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -18,82 +20,180 @@
     }
 
     function init() {
-        const sidebar = document.querySelector('.toc-sidebar');
-        if (!sidebar) return;
-
-        const tocNav = sidebar.querySelector('nav#TableOfContents');
-        if (!tocNav) return;
-
-        // Récupérer tous les liens de la TOC
-        const tocLinks = Array.from(tocNav.querySelectorAll('a[href^="#"]'));
-        if (tocLinks.length === 0) return;
-
-        // Récupérer les titres correspondants dans l'article
+        // L'article : contient les titres h2/h3 avec des IDs
         const article = document.querySelector('.page-content');
         if (!article) return;
 
         const headings = Array.from(article.querySelectorAll('h2[id], h3[id]'));
         if (headings.length === 0) return;
 
-        // Index courant — le titre le plus haut visible dans le viewport
-        let activeId = null;
+        // ── Éléments desktop : sidebar sticky ─────────────────────────────────
+        const tocInner  = document.querySelector('.toc-inner');
+        const sideLinks = tocInner
+            ? Array.from(tocInner.querySelectorAll('a[href^="#"]'))
+            : [];
 
-        // Marquer un lien comme actif
+        // ── Éléments mobile : FAB + Drawer ────────────────────────────────────
+        const fab         = document.getElementById('toc-fab');
+        const fabLabel    = fab ? fab.querySelector('.toc-fab-label') : null;
+        const overlay     = document.getElementById('toc-overlay');
+        const drawer      = document.getElementById('toc-drawer');
+        const drawerClose = document.getElementById('toc-drawer-close');
+        const drawerNav   = drawer ? drawer.querySelector('.toc-drawer-nav') : null;
+        const drawerLinks = drawerNav
+            ? Array.from(drawerNav.querySelectorAll('a[href^="#"]'))
+            : [];
+
+        // Seuil en px sous le haut du viewport (compense la navbar ~60px + marge)
+        const THRESHOLD = 80;
+
+        let activeId   = null;
+        let drawerOpen = false;
+        let ticking    = false; // rAF throttle
+
+        // ── Spy : détection du titre actif ────────────────────────────────────
+        function getActiveHeading() {
+            var active = headings[0];
+            for (var i = 0; i < headings.length; i++) {
+                if (headings[i].getBoundingClientRect().top <= THRESHOLD) {
+                    active = headings[i];
+                } else {
+                    break;
+                }
+            }
+            return active;
+        }
+
         function setActive(id) {
             if (activeId === id) return;
             activeId = id;
 
-            tocLinks.forEach(link => {
-                const isActive = link.getAttribute('href') === '#' + id;
+            // Sidebar desktop
+            applyActive(sideLinks, id, tocInner);
+
+            // Drawer mobile
+            applyActive(drawerLinks, id, null);
+
+            // Label du FAB : titre de la section courante (tronqué)
+            if (fabLabel) {
+                var heading = id
+                    ? article.querySelector('#' + cssEscape(id))
+                    : null;
+                if (heading) {
+                    var text = heading.textContent.trim();
+                    fabLabel.textContent = text.length > 30
+                        ? text.slice(0, 29) + '\u2026'
+                        : text;
+                } else {
+                    fabLabel.textContent = 'Plan';
+                }
+            }
+        }
+
+        function applyActive(links, id, scrollContainer) {
+            links.forEach(function (link) {
+                var isActive = link.getAttribute('href') === '#' + id;
                 link.classList.toggle('toc-active', isActive);
+
+                // Auto-scroll du conteneur de TOC uniquement (pas de la page)
+                if (isActive && scrollContainer) {
+                    var lt = link.offsetTop;
+                    var lb = lt + link.offsetHeight;
+                    var ct = scrollContainer.scrollTop;
+                    var cb = ct + scrollContainer.clientHeight;
+                    if (lt < ct) {
+                        scrollContainer.scrollTop = lt - 8;
+                    } else if (lb > cb) {
+                        scrollContainer.scrollTop = lb - scrollContainer.clientHeight + 8;
+                    }
+                }
             });
         }
 
-        // Observer : rootMargin calibré pour activer le titre
-        // dès qu'il passe sous la navbar (~80px du haut)
-        const observer = new IntersectionObserver(
-            function (entries) {
-                // Construire un snapshot de visibilité pour tous les titres
-                entries.forEach(entry => {
-                    entry.target._tocVisible = entry.isIntersecting;
-                });
+        // Polyfill léger pour CSS.escape
+        function cssEscape(id) {
+            if (window.CSS && CSS.escape) return CSS.escape(id);
+            return id.replace(/([^\w-])/g, '\\$1');
+        }
 
-                // Trouver le premier titre visible en partant du haut
-                const firstVisible = headings.find(h => h._tocVisible);
-                if (firstVisible) {
-                    setActive(firstVisible.id);
-                    return;
-                }
+        // ── FAB : apparaît après 200 px de scroll ─────────────────────────────
+        function updateFab() {
+            if (!fab) return;
+            var scrollY = window.scrollY || document.documentElement.scrollTop;
+            fab.classList.toggle('toc-fab-visible', scrollY > 200);
+        }
 
-                // Aucun titre visible : on est entre deux titres ou en bas.
-                // Activer le dernier titre au-dessus du viewport.
-                const scrollY = window.scrollY;
-                let lastAbove = null;
-                headings.forEach(h => {
-                    if (h.getBoundingClientRect().top + scrollY < scrollY + window.innerHeight * 0.5) {
-                        lastAbove = h;
-                    }
-                });
-                if (lastAbove) {
-                    setActive(lastAbove.id);
-                }
-            },
-            {
-                // Zone d'observation : ignorer les 80px du haut (navbar)
-                // et déclencher sur les 40% supérieurs du viewport
-                rootMargin: '-80px 0px -60% 0px',
-                threshold: 0
+        // ── Drawer : ouverture / fermeture ────────────────────────────────────
+        function openDrawer() {
+            if (!drawer) return;
+            drawerOpen = true;
+            drawer.classList.add('toc-open');
+            drawer.setAttribute('aria-hidden', 'false');
+            if (overlay) overlay.classList.add('toc-open');
+            if (fab) fab.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+            // Focus sur le bouton fermer pour l'accessibilité clavier
+            if (drawerClose) drawerClose.focus();
+        }
+
+        function closeDrawer() {
+            if (!drawer) return;
+            drawerOpen = false;
+            drawer.classList.remove('toc-open');
+            drawer.setAttribute('aria-hidden', 'true');
+            if (overlay) overlay.classList.remove('toc-open');
+            if (fab) {
+                fab.setAttribute('aria-expanded', 'false');
+                fab.focus(); // restituer le focus au bouton qui a ouvert
             }
-        );
+            document.body.style.overflow = '';
+        }
 
-        headings.forEach(h => {
-            h._tocVisible = false;
-            observer.observe(h);
+        // ── Événements FAB / Drawer ───────────────────────────────────────────
+        if (fab) {
+            fab.addEventListener('click', function () {
+                drawerOpen ? closeDrawer() : openDrawer();
+            });
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', closeDrawer);
+        }
+
+        if (drawerClose) {
+            drawerClose.addEventListener('click', closeDrawer);
+        }
+
+        // Clic sur un lien dans le drawer : fermer la drawer et laisser le
+        // navigateur scroller vers la cible (délai court pour ne pas bloquer)
+        drawerLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                setTimeout(closeDrawer, 60);
+            });
         });
 
-        // Activer le premier titre au chargement si on est en haut de page
-        if (headings.length > 0 && window.scrollY < 100) {
-            setActive(headings[0].id);
+        // Fermer avec Échap
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && drawerOpen) closeDrawer();
+        });
+
+        // ── Listener scroll (throttlé via rAF) ────────────────────────────────
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function () {
+                setActive(getActiveHeading().id);
+                updateFab();
+                ticking = false;
+            });
         }
+
+        // Écouter sur window ET document pour compatibilité maximale
+        window.addEventListener('scroll', onScroll, { passive: true });
+        document.addEventListener('scroll', onScroll, { passive: true });
+
+        // État initial
+        setActive(getActiveHeading().id);
+        updateFab();
     }
 })();

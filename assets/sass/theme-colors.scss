@@ -10,6 +10,11 @@
     --accent-hover  : #374151;
     --accent-ring   : rgba(75, 85, 99, 0.35);
     --accent-subtle : rgba(75, 85, 99, 0.08);
+    // Couleurs sémantiques — light mode
+    --color-bg      : #fff;
+    --color-text-1  : #434648;
+    --color-text-2  : #6b7886;
+    --color-border  : #ececec;
 }
 
 html.dark {
@@ -17,6 +22,11 @@ html.dark {
     --accent-hover  : #D1D5DB;
     --accent-ring   : rgba(156, 163, 175, 0.35);
     --accent-subtle : rgba(156, 163, 175, 0.08);
+    // Couleurs sémantiques — dark mode
+    --color-bg      : #131418;
+    --color-text-1  : #babdc4;
+    --color-text-2  : #767f87;
+    --color-border  : #1b1d25;
 }
 
 // Support thème système sans JS (cohérent avec _dark.scss du thème)
@@ -26,6 +36,10 @@ html.dark {
         --accent-hover  : #D1D5DB;
         --accent-ring   : rgba(156, 163, 175, 0.35);
         --accent-subtle : rgba(156, 163, 175, 0.08);
+        --color-bg      : #131418;
+        --color-text-1  : #babdc4;
+        --color-text-2  : #767f87;
+        --color-border  : #1b1d25;
     }
 }
 
