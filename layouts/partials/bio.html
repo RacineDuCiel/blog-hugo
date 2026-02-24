@@ -1,0 +1,70 @@
+{{ $avatar_img := .Site.Params.author.avatar }}
+{{ $avatar_img_alt := .Site.Params.author.name }}
+{{ $image := resources.Get $avatar_img }}
+
+<div class="hero-bio">
+
+  {{/* ── AVATAR ──────────────────────────────────────────────────── */}}
+  <div class="hb-avatar-zone">
+    {{ with $image }}
+      {{ $sm := .Fill "250x250 center webp" }}
+      {{ $lg := .Fill "500x500 center webp" }}
+      <div class="hb-glow-wrap">
+        <div class="hb-frame">
+          <img class="hb-ghost hb-ghost--r" src="{{ $sm.RelPermalink }}" aria-hidden="true" alt="">
+          <img class="hb-ghost hb-ghost--b" src="{{ $sm.RelPermalink }}" aria-hidden="true" alt="">
+          <img class="hb-main"
+               src="{{ $sm.RelPermalink }}"
+               srcset="{{ $lg.RelPermalink }} 2x"
+               alt="{{ $avatar_img_alt }}"
+               width="{{ $sm.Width }}"
+               height="{{ $sm.Height }}">
+          <div class="hb-scanlines" aria-hidden="true"></div>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+
+  {{/* ── QUOTE ───────────────────────────────────────────────────── */}}
+  <div class="hb-content">
+    <h2 class="hb-quote" aria-label="{{ .Site.Params.author.description }}">
+      <span class="hb-q-term">&gt;&nbsp;WHAT DOES IT MEAN TO BE</span>
+      <span class="hb-q-word" data-text="HUMAN">HUMAN</span>
+    </h2>
+  </div>
+
+
+</div>
+
+<script>
+(function () {
+  var CHARS = '▓▒░█▄▀╬╪╫╦╣╔╝#@$%!?/<>[]{|}\\';
+  var el    = document.querySelector('.hb-q-word');
+  if (!el) return;
+  var src  = el.dataset.text;
+  var busy = false;
+
+  function doGlitch() {
+    if (busy) return;
+    busy = true;
+    var step = 0, total = 14;
+    var id = setInterval(function () {
+      var ratio = Math.max(0, 0.85 - step * 0.055);
+      el.textContent = src.split('').map(function (c) {
+        return Math.random() < ratio
+          ? CHARS[Math.floor(Math.random() * CHARS.length)]
+          : c;
+      }).join('');
+      if (++step >= total) {
+        clearInterval(id);
+        el.textContent = src;
+        busy = false;
+      }
+    }, 38);
+  }
+
+  setTimeout(function () { setInterval(doGlitch, 4500); }, 2000);
+  var zone = document.querySelector('.hb-quote');
+  if (zone) zone.addEventListener('mouseenter', doGlitch);
+}());
+</script>

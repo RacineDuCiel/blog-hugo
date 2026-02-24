@@ -1,6 +1,6 @@
 {{ define "main" }}
-<div class="wrapper">
-    {{ partial "bio" . }}
+{{ partial "bio" . }}
+<div class="wrapper wrapper-home">
     <main aria-label="Content">
         {{ $showOnHomePages := where .Site.RegularPages "Params.showOnHome" true }}
         {{ $articles := where $showOnHomePages "Params.type" "!=" "partage" }}
