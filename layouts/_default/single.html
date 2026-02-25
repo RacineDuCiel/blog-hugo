@@ -49,6 +49,11 @@
                 {{ partial "toc.html" . }}
 
                 <div class="page-content">
+                    {{ if eq .Params.pageClass "fiche-revision" }}
+                    <aside class="disclaimer-revision" role="note">
+                        <strong>Fiche de révision personnelle</strong> — Ce document est un support de mémorisation rédigé à titre personnel, sans affiliation avec CompTIA. Il peut contenir des inexactitudes ou ne pas refléter la version la plus récente des examens : vérifiez toujours les informations auprès des sources officielles. CompTIA SecurityX™ et CASP+™ sont des marques déposées de CompTIA, Inc.
+                    </aside>
+                    {{ end }}
                     {{ .Content }}
                 </div>
             </article>

@@ -5,6 +5,7 @@ date: 2025-11-18
 showOnHome: false
 pinned: true
 pinCategories: ["Musique"]
+pageClass: "music-recs"
 ---
 
 Recommandations personnelles d'albums et EPs s'apparentant, pour la plupart, au metalcore.

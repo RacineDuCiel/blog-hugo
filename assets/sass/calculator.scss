@@ -1,153 +1,516 @@
-.calc-container {
-    background: var(--bg-secondary, #f5f5f5);
-    border: 1px solid var(--border, #ddd);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    max-width: 480px;
+// ── TDEE Calculator v3 ─────────────────────────────────────────────────────
+
+// Couleurs macro + accent-subtle (seules valeurs hardcodées)
+:root {
+  --accent-subtle:  rgba(217, 119, 6, 0.10);
+  --macro-protein:  #3b82f6;
+  --macro-fat:      #f59e0b;
+  --macro-carbs:    #10b981;
 }
 
-html.dark .calc-container {
-    background: #1a1a2e;
-    border-color: #333;
+html.dark {
+  --accent-subtle:  rgba(251, 191, 36, 0.10);
+  --macro-protein:  #60a5fa;
+  --macro-fat:      #fbbf24;
+  --macro-carbs:    #34d399;
 }
 
-.calc-container h4 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --accent-subtle:  rgba(251, 191, 36, 0.10);
+    --macro-protein:  #60a5fa;
+    --macro-fat:      #fbbf24;
+    --macro-carbs:    #34d399;
+  }
 }
 
-.calc-section {
-    margin-bottom: 1.2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border, #eee);
+// ── Conteneur principal ────────────────────────────────────────────────────
+
+.tdee-calc {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 560px;
+  font-size: 0.95rem;
 }
 
-html.dark .calc-section {
-    border-color: #333;
-}
+// ── Sections ──────────────────────────────────────────────────────────────
 
-.calc-section:last-of-type {
+.tdee-section {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-of-type {
     border-bottom: none;
     margin-bottom: 0;
+    padding-bottom: 0;
+  }
 }
 
-.calc-container label {
+.tdee-section-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+
+.tdee-hint {
+  font-weight: 400;
+  color: var(--color-text-2);
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+}
+
+// ── Toggle Homme / Femme ──────────────────────────────────────────────────
+
+.tdee-toggle {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.tdee-toggle-btn {
+  padding: 0.4rem 1.2rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-2);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+
+  &.is-active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  &:not(.is-active):hover {
+    background: var(--color-border);
+    color: var(--color-text-1);
+  }
+}
+
+// ── Inputs numériques (poids / taille / âge) ───────────────────────────────
+
+.tdee-inputs-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tdee-input-group {
+  flex: 1;
+
+  & > label {
     display: block;
-    margin-top: 0.6rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    font-size: 0.85rem;
+    color: var(--color-text-2);
+    margin-bottom: 0.25rem;
+  }
 }
 
-.calc-container .label-hint {
-    font-weight: 400;
-    color: #666;
-    font-size: 0.75rem;
-    display: block;
-}
+.tdee-input-with-unit {
+  position: relative;
 
-html.dark .calc-container .label-hint {
-    color: #999;
-}
-
-.calc-row {
-    display: flex;
-    gap: 0.8rem;
-}
-
-.calc-row>div {
-    flex: 1;
-}
-
-.calc-container input,
-.calc-container select {
+  & > input {
     width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.25rem;
-    border: 1px solid var(--border, #ccc);
-    border-radius: 4px;
-    background: var(--bg, #fff);
-    color: var(--text, #000);
+    padding: 0.45rem 2.2rem 0.45rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg);
+    color: var(--color-text-1);
     font-size: 0.95rem;
     box-sizing: border-box;
-}
-
-html.dark .calc-container input,
-html.dark .calc-container select {
-    background: #16213e;
-    border-color: #444;
-    color: #eee;
-}
-
-.calc-container button {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.7rem;
-    background: #2d3436;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.calc-container button:hover {
-    background: #636e72;
-}
-
-.calc-results {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: var(--bg, #e8f5e9);
-    border-radius: 4px;
-}
-
-html.dark .calc-results {
-    background: #0f3460;
-}
-
-.calc-results table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-
-.calc-results td {
-    padding: 0.3rem 0;
-}
-
-.calc-results td:last-child {
     text-align: right;
+
+    &:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+  }
+}
+
+.tdee-unit {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  color: var(--color-text-2);
+  pointer-events: none;
+}
+
+// ── Champ générique ────────────────────────────────────────────────────────
+
+.tdee-field {
+  margin-top: 0.85rem;
+
+  & > label {
+    display: block;
+    font-size: 0.85rem;
     font-weight: 600;
+    color: var(--color-text-1);
+    margin-bottom: 0.4rem;
+  }
 }
 
-.calc-results .total {
-    border-top: 1px solid var(--border, #ccc);
-    font-size: 1.1rem;
+// ── Boutons segment (radio-style) ─────────────────────────────────────────
+
+.tdee-segs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
 
-html.dark .calc-results .total {
-    border-color: #555;
+.tdee-seg-btn {
+  flex: 1;
+  min-width: 2.5rem;
+  padding: 0.4rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-2);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+  &.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  &:not(.is-active):hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 }
 
-.calc-method {
-    margin-top: 1rem;
-    padding: 0.8rem;
-    background: var(--bg, #f9f9f9);
-    border-radius: 4px;
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: #555;
+// ── Slider range ──────────────────────────────────────────────────────────
+
+.tdee-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-html.dark .calc-method {
-    background: #16213e;
-    color: #aaa;
+.tdee-range {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+  outline: none;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    transition: transform 0.1s;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
 }
 
-.calc-method summary {
+.tdee-range-output {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-1);
+  min-width: 4rem;
+  text-align: right;
+}
+
+// ── Hint intensité ────────────────────────────────────────────────────────
+
+.tdee-intensity-hint {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--color-text-2);
+  font-style: italic;
+}
+
+// ── Bloc résultats ────────────────────────────────────────────────────────
+
+#tdee-results {
+  margin-top: 1.25rem;
+}
+
+.tdee-results-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tdee-error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  padding: 0.75rem;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  background: #fef2f2;
+  margin: 0;
+}
+
+html.dark .tdee-error {
+  color: #f87171;
+  background: #450a0a;
+  border-color: #991b1b;
+}
+
+// ── Hero TDEE ─────────────────────────────────────────────────────────────
+
+.tdee-hero {
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.tdee-hero-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.tdee-hero-value {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+  margin: 0.1rem 0;
+}
+
+.tdee-hero-unit {
+  font-size: 0.8rem;
+  color: var(--color-text-2);
+}
+
+// ── Sous-titres de section résultats ──────────────────────────────────────
+
+.tdee-sub-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-2);
+  margin: 0 0 0.6rem;
+}
+
+// ── Barres de décomposition ───────────────────────────────────────────────
+
+.tdee-bar-row {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 5.5rem 2.2rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.tdee-bar-label {
+  font-weight: 600;
+  color: var(--color-text-1);
+  white-space: nowrap;
+}
+
+.tdee-bar-track {
+  background: var(--color-border);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+}
+
+@keyframes tdee-bar-grow {
+  from { width: 0; }
+}
+
+.tdee-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  width: var(--tdee-bar-w, 0%);
+  animation: tdee-bar-grow 0.4s ease-out;
+}
+
+.tdee-bar-kcal {
+  text-align: right;
+  color: var(--color-text-1);
+  font-weight: 500;
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.tdee-bar-pct {
+  text-align: right;
+  color: var(--color-text-2);
+  font-size: 0.75rem;
+}
+
+// ── Cartes objectif ───────────────────────────────────────────────────────
+
+.tdee-goal-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.tdee-goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.4rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  gap: 0.15rem;
+  transition: border-color 0.15s, background 0.15s;
+
+  &.is-active {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  &:not(.is-active):hover {
+    border-color: var(--accent);
+  }
+}
+
+.tdee-goal-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tdee-goal-kcal {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-text-1);
+  line-height: 1.2;
+}
+
+.tdee-goal-card.is-active .tdee-goal-kcal {
+  color: var(--accent);
+}
+
+.tdee-goal-delta {
+  font-size: 0.72rem;
+  color: var(--color-text-2);
+}
+
+.tdee-goal-desc {
+  font-size: 0.66rem;
+  color: var(--color-text-2);
+  font-style: italic;
+}
+
+// ── Barres macros ─────────────────────────────────────────────────────────
+
+.tdee-macro-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 3rem 2.2rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.tdee-macro-label {
+  font-weight: 600;
+  color: var(--color-text-1);
+  white-space: nowrap;
+}
+
+.tdee-macro-g {
+  text-align: right;
+  color: var(--color-text-1);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+// ── Méthode de calcul ─────────────────────────────────────────────────────
+
+.tdee-method {
+  font-size: 0.78rem;
+  color: var(--color-text-2);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.6;
+
+  & > summary {
     cursor: pointer;
     font-weight: 600;
     font-size: 0.8rem;
+    color: var(--color-text-1);
+  }
+
+  & > p {
+    margin: 0.5rem 0 0;
+  }
+}
+
+// ── Responsive 560px ──────────────────────────────────────────────────────
+
+@media (max-width: 560px) {
+  .tdee-calc {
+    padding: 1rem;
+  }
+
+  .tdee-hero-value {
+    font-size: 2.4rem;
+  }
+
+  .tdee-inputs-row {
+    gap: 0.5rem;
+  }
+
+  .tdee-bar-row {
+    grid-template-columns: 3rem 1fr 4.5rem 1.8rem;
+    font-size: 0.78rem;
+  }
+
+  .tdee-macro-row {
+    grid-template-columns: 4.5rem 1fr 2.5rem 1.8rem;
+    font-size: 0.78rem;
+  }
+
+  .tdee-goal-kcal {
+    font-size: 1rem;
+  }
+
+  .tdee-goal-desc {
+    display: none;
+  }
 }

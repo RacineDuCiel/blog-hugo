@@ -1,81 +1,106 @@
 {{/*
-Shortcode: TDEE Calculator (Enhanced v2)
-Usage: {{< calculator>}}
+Shortcode: TDEE Calculator (v3) — calcul temps réel, objectifs, macros, localStorage
+Usage: {{< calculator >}}
 */}}
 
-<div class="calc-container">
-    <div class="calc-section">
-        <h4>Données personnelles</h4>
-        <div class="calc-row">
-            <div>
-                <label for="calc-sex">Sexe</label>
-                <select id="calc-sex">
-                    <option value="m">Homme</option>
-                    <option value="f">Femme</option>
-                </select>
-            </div>
-            <div>
-                <label for="calc-age">Âge</label>
-                <input type="number" id="calc-age" min="15" max="100" value="30">
-            </div>
+<div class="tdee-calc" id="tdee-calc">
+
+  {{/* ── Section 1 : Données personnelles ─────────────────────────── */}}
+  <section class="tdee-section">
+    <h4 class="tdee-section-title">Données personnelles</h4>
+
+    <div class="tdee-toggle" role="group" aria-label="Sexe biologique">
+      <button type="button" class="tdee-toggle-btn is-active" data-field="sex" data-val="m">Homme</button>
+      <button type="button" class="tdee-toggle-btn"           data-field="sex" data-val="f">Femme</button>
+    </div>
+
+    <div class="tdee-inputs-row">
+      <div class="tdee-input-group">
+        <label for="tdee-weight">Poids</label>
+        <div class="tdee-input-with-unit">
+          <input type="number" id="tdee-weight" min="30" max="250" value="75" step="1">
+          <span class="tdee-unit">kg</span>
         </div>
-        <div class="calc-row">
-            <div>
-                <label for="calc-weight">Poids (kg)</label>
-                <input type="number" id="calc-weight" min="30" max="250" value="75">
-            </div>
-            <div>
-                <label for="calc-height">Taille (cm)</label>
-                <input type="number" id="calc-height" min="100" max="250" value="175">
-            </div>
+      </div>
+      <div class="tdee-input-group">
+        <label for="tdee-height">Taille</label>
+        <div class="tdee-input-with-unit">
+          <input type="number" id="tdee-height" min="100" max="250" value="175" step="1">
+          <span class="tdee-unit">cm</span>
         </div>
+      </div>
+      <div class="tdee-input-group">
+        <label for="tdee-age">Âge</label>
+        <div class="tdee-input-with-unit">
+          <input type="number" id="tdee-age" min="15" max="100" value="30" step="1">
+          <span class="tdee-unit">ans</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{/* ── Section 2 : NEAT ──────────────────────────────────────────── */}}
+  <section class="tdee-section">
+    <h4 class="tdee-section-title">NEAT — Activité non planifiée</h4>
+
+    <div class="tdee-field">
+      <label for="tdee-steps">Pas quotidiens <span class="tdee-hint">Moyenne sur 7 jours</span></label>
+      <div class="tdee-slider-row">
+        <input type="range" id="tdee-steps" class="tdee-range" min="0" max="25000" value="8000" step="500">
+        <output class="tdee-range-output" for="tdee-steps">8&nbsp;000</output>
+      </div>
     </div>
 
-    <div class="calc-section">
-        <h4>NEAT – Activité non planifiée</h4>
-        <label for="calc-steps">Pas quotidiens
-            <span class="label-hint">Moyenne sur 7 jours (montre, téléphone)</span>
-        </label>
-        <input type="number" id="calc-steps" min="0" max="50000" value="8000" step="500">
+    <div class="tdee-field">
+      <label>Temps debout actif <span class="tdee-hint">Cuisine, ménage, bricolage…</span></label>
+      <div class="tdee-segs" role="group" aria-label="Temps debout">
+        <button type="button" class="tdee-seg-btn"           data-field="standing" data-val="0">&lt;&nbsp;1h</button>
+        <button type="button" class="tdee-seg-btn is-active" data-field="standing" data-val="1">1–2h</button>
+        <button type="button" class="tdee-seg-btn"           data-field="standing" data-val="2">2–4h</button>
+        <button type="button" class="tdee-seg-btn"           data-field="standing" data-val="3">&gt;&nbsp;4h</button>
+      </div>
+    </div>
+  </section>
 
-        <label for="calc-standing">Temps debout actif (hors marche)
-            <span class="label-hint">Cuisine, ménage, bricolage, travail debout...</span>
-        </label>
-        <select id="calc-standing">
-            <option value="0">< 1h/jour</option>
-            <option value="1" selected>1-2h/jour</option>
-            <option value="2">2-4h/jour</option>
-            <option value="3">> 4h/jour</option>
-        </select>
+  {{/* ── Section 3 : EAT ──────────────────────────────────────────── */}}
+  <section class="tdee-section">
+    <h4 class="tdee-section-title">EAT — Entraînement structuré</h4>
+
+    <div class="tdee-field">
+      <label>Sessions par semaine <span class="tdee-hint">Sessions ≥ 30 min</span></label>
+      <div class="tdee-segs" role="group" aria-label="Sessions par semaine">
+        <button type="button" class="tdee-seg-btn"           data-field="training" data-val="0">0</button>
+        <button type="button" class="tdee-seg-btn"           data-field="training" data-val="1">1–2</button>
+        <button type="button" class="tdee-seg-btn is-active" data-field="training" data-val="2">3–4</button>
+        <button type="button" class="tdee-seg-btn"           data-field="training" data-val="3">5–6</button>
+        <button type="button" class="tdee-seg-btn"           data-field="training" data-val="4">7+</button>
+      </div>
     </div>
 
-    <div class="calc-section">
-        <h4>EAT – Entraînement structuré</h4>
-        <label for="calc-training">Sessions par semaine
-            <span class="label-hint">Sessions ≥ 30 min</span>
-        </label>
-        <select id="calc-training">
-            <option value="0">0 – Aucun</option>
-            <option value="1">1-2 sessions</option>
-            <option value="2" selected>3-4 sessions</option>
-            <option value="3">5-6 sessions</option>
-            <option value="4">7+ sessions</option>
-        </select>
+    <div class="tdee-eat-details" id="tdee-eat-details">
+      <div class="tdee-field">
+        <label>Intensité moyenne</label>
+        <div class="tdee-segs" role="group" aria-label="Intensité d'entraînement">
+          <button type="button" class="tdee-seg-btn"           data-field="intensity" data-val="3.5">Légère</button>
+          <button type="button" class="tdee-seg-btn is-active" data-field="intensity" data-val="5.5">Modérée</button>
+          <button type="button" class="tdee-seg-btn"           data-field="intensity" data-val="8">Intense</button>
+        </div>
+        <div class="tdee-intensity-hint" id="tdee-intensity-hint">Musculation, course légère, vélo</div>
+      </div>
 
-        <label for="calc-intensity">Intensité moyenne</label>
-        <select id="calc-intensity">
-            <option value="3.5">Légère (yoga, marche rapide)</option>
-            <option value="5.5" selected>Modérée (musculation, course)</option>
-            <option value="8">Intense (HIIT, CrossFit, sprint)</option>
-        </select>
-
-        <label for="calc-duration">Durée moyenne par session (min)</label>
-        <input type="number" id="calc-duration" min="15" max="180" value="60" step="5">
+      <div class="tdee-field">
+        <label for="tdee-duration">Durée par session <span class="tdee-hint">minutes</span></label>
+        <div class="tdee-slider-row">
+          <input type="range" id="tdee-duration" class="tdee-range" min="15" max="180" value="60" step="5">
+          <output class="tdee-range-output" for="tdee-duration">60 min</output>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <button type="button">Calculer</button>
+  {{/* ── Section 4 : Résultats (injecté par JS) ────────────────────── */}}
+  <div id="tdee-results" aria-live="polite"></div>
 
-    <div id="calc-output"></div>
 </div>
 
 {{ $calcScript := resources.Get "js/calculator.js" | minify | fingerprint }}

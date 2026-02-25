@@ -1,0 +1,227 @@
+// ══════════════════════════════════════════════════════════════════════════════
+// ARTICLE — Style global optimisé pour lecture et mémorisation
+//
+// Override de typography.scss (chargé avant dans custom.scss) :
+// cascade order garantit la priorité sans !important.
+//
+// Appliqué à tous les articles via .page-content.
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Disclaimer fiches de révision ─────────────────────────────────────────────
+.disclaimer-revision {
+    font-family: $font-sans;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1.75rem;
+    border-left: 3px solid var(--color-text-2);
+    background: var(--accent-subtle);
+    border-radius: 0 4px 4px 0;
+    color: var(--color-text-2);
+    font-style: italic;
+
+    strong {
+        font-style: normal;
+        font-weight: 700;
+        color: var(--color-text-1);
+    }
+}
+
+.page-content {
+
+    // ── 1. Prose : sans-serif compact ─────────────────────────────────────────
+    > p,
+    > ul li,
+    > ol li,
+    > blockquote,
+    > blockquote p,
+    > dl dt,
+    > dl dd {
+        font-family: $font-sans;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    > p            { margin-bottom: 0.5rem; }
+    > ul, > ol     { margin-top: 0.25rem; margin-bottom: 0.5rem; }
+    > ul li,
+    > ol li        { margin-bottom: 0.1rem; }
+
+    // Listes imbriquées
+    > ul ul, > ul ol,
+    > ol ul, > ol ol { margin-top: 0.1rem; margin-bottom: 0; }
+
+    // ── 2. Titres : hiérarchie visuelle marquée ────────────────────────────────
+
+    // H1 — titre principal
+    > h1 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+    }
+
+    // H2 — sections principales : badge accent
+    > h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-top: 2.25rem;
+        margin-bottom: 0.5rem;
+        padding: 0.45rem 0.8rem;
+        background: var(--accent-subtle);
+        border-left: 3px solid var(--accent);
+        border-radius: 0 4px 4px 0;
+        letter-spacing: -0.01em;
+    }
+
+    // H3 — sous-sections : séparateur discret
+    > h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.3rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    // H4 — catégories secondaires : label uppercase
+    > h4 {
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-top: 1rem;
+        margin-bottom: 0.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--color-text-2);
+    }
+
+    // ── 3. Termes-clés en gras : accent couleur ────────────────────────────────
+    > p strong,
+    > ul li strong,
+    > ol li strong,
+    > blockquote strong,
+    > dl dd strong {
+        color: var(--accent);
+        font-weight: 700;
+    }
+
+    // ── 4. Séparateurs hr ──────────────────────────────────────────────────────
+    > hr {
+        margin: 0.9rem 0;
+        border: none;
+        border-top: 1px solid var(--color-border);
+        opacity: 1;
+    }
+
+    // ── 5. Blockquotes ─────────────────────────────────────────────────────────
+    > blockquote {
+        margin: 0.4rem 0 0.8rem;
+        padding: 0.45rem 0.9rem;
+        font-style: italic;
+        opacity: 0.9;
+        border-radius: 0 4px 4px 0;
+    }
+
+    // ── 6. Tables : zebra-stripe + headers structurés ──────────────────────────
+    // display:block sur > table permet overflow-x:auto (scroll horizontal mobile)
+    > table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; // scroll fluide iOS
+        width: 100%;
+    }
+
+    > table,
+    table {
+        border-collapse: collapse;
+        margin: 0.65rem 0 1rem;
+        font-family: $font-sans;
+        font-size: 0.875rem;
+        min-width: 100%; // évite que la table se ratatine sous display:block
+
+        thead tr {
+            background: var(--accent-subtle);
+        }
+
+        th {
+            padding: 0.45rem 0.75rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--color-border);
+            white-space: nowrap; // headers sur une ligne
+        }
+
+        td {
+            padding: 0.35rem 0.75rem;
+            line-height: 1.45;
+            vertical-align: top;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--accent-subtle);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+    }
+
+    // ── 7. Code inline ─────────────────────────────────────────────────────────
+    code {
+        font-size: 0.82em;
+        padding: 0.1em 0.35em;
+        border-radius: 3px;
+    }
+
+    // ── 8. Responsive mobile (≤ 767px) ─────────────────────────────────────────
+    @media (max-width: 767px) {
+
+        // Prose : taille légèrement réduite
+        > p,
+        > ul li,
+        > ol li,
+        > blockquote p,
+        > dl dt,
+        > dl dd {
+            font-size: 0.9rem;
+        }
+
+        // H2 badge : padding réduit pour les petits écrans
+        > h2 {
+            font-size: 0.95rem;
+            padding: 0.4rem 0.6rem;
+            margin-top: 1.75rem;
+        }
+
+        // H3 : légèrement réduit
+        > h3 {
+            font-size: 0.9rem;
+            margin-top: 1.25rem;
+        }
+
+        // Blockquotes : padding réduit
+        > blockquote {
+            padding: 0.4rem 0.65rem;
+        }
+
+        // Tables : police et padding compacts pour maximiser l'espace
+        > table,
+        table {
+            font-size: 0.82rem;
+
+            th {
+                padding: 0.35rem 0.5rem;
+                font-size: 0.72rem;
+            }
+
+            td {
+                padding: 0.3rem 0.5rem;
+            }
+        }
+    }
+}

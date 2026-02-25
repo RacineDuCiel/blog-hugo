@@ -101,6 +101,119 @@ html:not(.light) a#mode {
     }
 }
 
+// ── Photo auteur — B&W + glitch ───────────────────────────────────────────
+
+.author-avatar-wrap {
+    display: inline-block;
+    border-radius: 100%;
+    overflow: hidden;
+    // Anneau : gap couleur bg + bord accent
+    box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 5px var(--accent);
+}
+
+.author-avatar {
+    display: block;
+    filter: grayscale(1) contrast(1.3) brightness(0.85);
+    animation: avatar-glitch 7s 4s infinite;
+}
+
+@keyframes avatar-glitch {
+    0%, 90%, 100% {
+        transform: none;
+        clip-path: none;
+        filter: grayscale(1) contrast(1.3) brightness(0.85);
+    }
+    91% {
+        transform: translate(6px, 0);
+        clip-path: polygon(0 22%, 100% 22%, 100% 58%, 0 58%);
+        filter: grayscale(1) contrast(1.65) brightness(0.7);
+    }
+    92% {
+        transform: translate(-6px, 0);
+        clip-path: polygon(0 55%, 100% 55%, 100% 84%, 0 84%);
+        filter: grayscale(1) contrast(1.3) brightness(0.85);
+    }
+    93% {
+        transform: translate(3px, 0);
+        clip-path: polygon(0 8%, 100% 8%, 100% 36%, 0 36%);
+        filter: grayscale(1) contrast(1.45) brightness(0.78);
+    }
+    94% {
+        transform: none;
+        clip-path: none;
+        filter: grayscale(1) contrast(1.3) brightness(0.85);
+    }
+}
+
+// ── Bio — effet glitch métal ───────────────────────────────────────────────
+
+.bio-glitch {
+    position: relative;
+    display: inline-block;
+    animation: bio-glitch-shake 6s 2s infinite;
+
+    &::before,
+    &::after {
+        content: attr(data-text);
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--color-bg);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &::before {
+        color: var(--accent);
+        animation: bio-glitch-top 6s 2s infinite;
+    }
+
+    &::after {
+        color: var(--color-text-2);
+        animation: bio-glitch-bot 6s 2.4s infinite;
+    }
+}
+
+// Légère secousse avant le split — sert d'amorce visuelle
+@keyframes bio-glitch-shake {
+    0%, 88%, 100% { transform: none; }
+    89%            { transform: translate(2px, 0); }
+    90%            { transform: translate(-1px, 0); }
+    91%, 95%       { transform: none; }
+}
+
+// Moitié haute — part dans un sens
+@keyframes bio-glitch-top {
+    0%, 90%, 100% { opacity: 0; transform: none; }
+    91% {
+        opacity: 1;
+        transform: translate(-7px, 0);
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    }
+    93% {
+        opacity: 1;
+        transform: translate(7px, 0);
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    }
+    95% { opacity: 0; transform: none; }
+}
+
+// Moitié basse — part dans l'autre sens
+@keyframes bio-glitch-bot {
+    0%, 90%, 100% { opacity: 0; transform: none; }
+    91% {
+        opacity: 1;
+        transform: translate(7px, 0);
+        clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+    }
+    93% {
+        opacity: 1;
+        transform: translate(-7px, 0);
+        clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+    }
+    95% { opacity: 0; transform: none; }
+}
+
 // ── Lien RSS dans le footer ────────────────────────────────────────────────
 .footer-rss {
     display: inline-flex;

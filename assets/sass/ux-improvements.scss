@@ -25,6 +25,19 @@ body:not(.notransition) details.toc summary::before {
     transition: transform 0.2s ease !important;
 }
 
+// ── Exceptions : photo wall aesthetic (body.music-recs) ──────────────────────
+// La règle * !important ci-dessus écrase filter/transform/box-shadow.
+// Ces surcharges les rétablissent pour les transitions hover.
+body:not(.notransition) .music-recs .album-card {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+body:not(.notransition) .music-recs .album-cover {
+    transition: box-shadow 0.4s ease !important;
+}
+body:not(.notransition) .music-recs .album-cover-img {
+    transition: filter 0.5s ease !important;
+}
+
 // ── (5) Barre de progression de lecture ───────────────────────────────────────
 #reading-progress {
     position: fixed;
