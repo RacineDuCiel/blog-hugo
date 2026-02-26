@@ -1,257 +1,112 @@
 // ══════════════════════════════════════════════════════════════════════════════
 // RECOMMANDATIONS MUSIQUE — body.music-recs
-// Mur de photos de presse underground. N&B au repos, néon acid-green au survol.
-// Chaos : rotations physiques. Cyber : un seul accent, au bon moment.
-// Différent de la homepage : aucune scanline, aucun glitch, aucun Metal Mania.
 // ══════════════════════════════════════════════════════════════════════════════
-
-// ── Forçage dark — html ET body pour éviter toute fuite en thème clair ────────
-html:has(body.music-recs) {
-  background: #050505;
-}
-
-body.music-recs {
-  --color-bg      : #050505;
-  --color-text-1  : #d8d5cf;
-  --color-text-2  : #383533;
-  --color-border  : #111;
-  --accent        : #9CA3AF;
-  --accent-hover  : #D1D5DB;
-  --accent-ring   : rgba(156, 163, 175, 0.35);
-  --accent-subtle : rgba(156, 163, 175, 0.06);
-
-  background: #050505;
-}
-
-// Conteneurs — transparents
-body.music-recs .wrapper,
-body.music-recs main.page-content,
-body.music-recs article,
-body.music-recs div.page-content {
-  background: transparent;
-}
 
 // Barre de lecture — hors-sujet sur cette page
 body.music-recs #reading-progress {
   display: none;
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
-.music-recs .header {
-  padding-bottom: 1.5rem;
-}
-
+// ── Titre de page ────────────────────────────────────────────────────────────
 .music-recs .header-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.72rem, 1.8vw, 0.92rem);
-  font-weight: 400;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-text-1);
+  line-height: 1;
 }
 
 .music-recs .post-meta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.63rem;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem;
   color: var(--color-text-2);
 }
 
-.music-recs .post-divider {
-  border-color: var(--color-border);
-}
-
-// ── Intro ─────────────────────────────────────────────────────────────────────
+// ── Intro ────────────────────────────────────────────────────────────────────
 .music-recs div.page-content > p:first-child {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.67rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
   font-style: normal;
-  color: rgba(255, 255, 255, 0.18);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  color: var(--color-text-2);
   border-left: none;
   padding-left: 0;
-  margin-bottom: 0;
-  line-height: 2.4;
 }
 
-// ── Titres de sections ────────────────────────────────────────────────────────
-// Numéro en outline géant (présence structurelle, quasi-invisible)
-// + label en monospace blanc, très discret
-.music-recs div.page-content {
-  counter-reset: music-rank;
-}
-
+// ── Titres de sections ───────────────────────────────────────────────────────
 .music-recs div.page-content h1 {
-  counter-increment: music-rank;
-  position: relative;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.52rem, 1.1vw, 0.65rem);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.26);
-  letter-spacing: 0.42em;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--color-text-2);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 8rem 0 5rem;
-  padding-top: 0;
+  margin: 4rem 0 1.75rem;
+  padding: 0 0 0.75rem 0;
   border-top: none;
-  overflow: visible;
+  border-bottom: 1px solid var(--color-border);
   animation: none;
   text-shadow: none;
+  overflow: visible;
 
   &:first-of-type {
-    margin-top: 3rem;
-  }
-
-  // Numéro watermark en outline — neutre, pas de couleur d'accent
-  &::before {
-    content: counter(music-rank, decimal-leading-zero);
-    position: absolute;
-    left: -0.04em;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: clamp(5rem, 18vw, 13rem);
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.038);
-    letter-spacing: -0.06em;
-    line-height: 1;
-    pointer-events: none;
-    z-index: 0;
-    animation: none;
-    text-shadow: none;
-  }
-
-  // Séparateur horizontal
-  &::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.05);
-    margin-top: 1.2rem;
+    margin-top: 2rem;
   }
 }
 
-// ── Grilles ───────────────────────────────────────────────────────────────────
-// overflow: visible — les rotations débordent volontairement de la cellule
-.music-recs div.page-content,
+// ── Grids ────────────────────────────────────────────────────────────────────
 .music-recs .shortcode-grid {
   overflow: visible;
 }
 
-// 01 — Chefs-d'œuvre : 2 premières en double largeur
-.music-recs div.page-content > div:nth-of-type(1) {
-  grid-template-columns: repeat(auto-fill, #{min}(150px, 100%));
-  gap: 4.5rem 2rem;
-
-  @media (min-width: 480px) {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5rem 2.5rem;
-
-    .album-card:nth-child(-n+2) {
-      grid-column: span 2;
-    }
-  }
+.music-recs div.page-content > div {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 2.25rem 1.5rem;
 }
 
-// 02 — Hautement recommandés
-.music-recs div.page-content > div:nth-of-type(2) {
-  grid-template-columns: repeat(auto-fill, #{min}(140px, 100%));
-  gap: 4rem 2rem;
-
-  @media (min-width: 480px) {
-    grid-template-columns: repeat(auto-fill, #{min}(155px, 100%));
-  }
-}
-
-// 03 — Dignes d'intérêt
-.music-recs div.page-content > div:nth-of-type(3) {
-  grid-template-columns: repeat(auto-fill, #{min}(105px, 100%));
-  gap: 3.5rem 1.5rem;
-
-  @media (min-width: 480px) {
-    grid-template-columns: repeat(auto-fill, #{min}(118px, 100%));
-  }
-}
-
-// ── Cards ─────────────────────────────────────────────────────────────────────
+// ── Cards ────────────────────────────────────────────────────────────────────
 .music-recs .album-card {
-  position: relative;
-  z-index: 1;
-  border-radius: 0;     // annule shortcodes.scss (12px)
+  border-radius: 0;
   border: none;
   background: transparent;
-  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px) !important;
+    opacity: 0.9;
+  }
 }
 
-// Rotations agressives — cycle de 11 + décalage vertical aléatoire
-.music-recs .album-card:nth-child(11n+1)  { transform: rotate(-7.5deg)  translateY(4px);  }
-.music-recs .album-card:nth-child(11n+2)  { transform: rotate(9.2deg)   translateY(-5px); }
-.music-recs .album-card:nth-child(11n+3)  { transform: rotate(-11.8deg) translateY(3px);  }
-.music-recs .album-card:nth-child(11n+4)  { transform: rotate(6.3deg)   translateY(7px);  }
-.music-recs .album-card:nth-child(11n+5)  { transform: rotate(-8.4deg)  translateY(-3px); }
-.music-recs .album-card:nth-child(11n+6)  { transform: rotate(13.1deg)  translateY(5px);  }
-.music-recs .album-card:nth-child(11n+7)  { transform: rotate(-5.7deg)  translateY(-6px); }
-.music-recs .album-card:nth-child(11n+8)  { transform: rotate(10.6deg)  translateY(2px);  }
-.music-recs .album-card:nth-child(11n+9)  { transform: rotate(-12.3deg) translateY(6px);  }
-.music-recs .album-card:nth-child(11n+10) { transform: rotate(7.9deg)   translateY(-4px); }
-.music-recs .album-card:nth-child(11n)    { transform: rotate(-9.1deg)  translateY(1px);  }
-
-// Hover : la photo se soulève — annule le hover de shortcodes.scss
-.music-recs .album-card:hover {
-  transform: rotate(0deg) translateY(-16px) scale(1.09) !important;
-  z-index: 50;
-}
-
-// ── Couvertures ───────────────────────────────────────────────────────────────
+// ── Covers ───────────────────────────────────────────────────────────────────
 .music-recs .album-cover {
-  border-radius: 0;     // annule shortcodes.scss (10px)
-  overflow: hidden;
-  position: relative;
-  aspect-ratio: 1 / 1;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75), 0 2px 6px rgba(0, 0, 0, 0.5);
+  border-radius: 1px;
+  border: none;
+  box-shadow: none;
 }
 
-// N&B fort contraste — photo xeroxée
 .music-recs .album-cover-img {
-  border-radius: 0;     // annule shortcodes.scss (10px)
+  border-radius: 1px;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.5) brightness(0.72);
 }
 
-// Hover — néon acid-green sur le bord (seul élément cyber de la page)
-.music-recs .album-card:hover .album-cover {
-  box-shadow:
-    0 0 0 2px rgba(57, 255, 20, 0.9),
-    0 0 18px rgba(57, 255, 20, 0.35),
-    0 0 55px rgba(57, 255, 20, 0.12),
-    0 28px 70px rgba(0, 0, 0, 0.85);
-}
-
-// Hover image — couleur révélée + annule le transform de shortcodes.scss
 .music-recs .album-card:hover .album-cover-img {
-  filter: grayscale(0) contrast(1.05) brightness(1);
   transform: none;
 }
 
-// ── Texte album ───────────────────────────────────────────────────────────────
+// ── Texte album ──────────────────────────────────────────────────────────────
 .music-recs .album-info {
-  margin-top: 0.65rem;
+  margin-top: 0.55rem;
 }
 
-// Annule le line-clamp et le font-size de shortcodes.scss
 .music-recs .album-info h3 {
-  display: block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-text-1);
   -webkit-line-clamp: unset;
   line-clamp: unset;
   overflow: visible;
@@ -259,14 +114,12 @@ body.music-recs #reading-progress {
 }
 
 .music-recs .album-info p {
-  display: block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.67rem;
   font-weight: 400;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-2);
   -webkit-line-clamp: unset;
   line-clamp: unset;
   overflow: visible;
-  margin: 0.2rem 0 0;
+  margin: 0.1rem 0 0;
 }
