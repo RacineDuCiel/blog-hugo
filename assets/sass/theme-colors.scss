@@ -133,10 +133,12 @@ a:focus {
 
 // ── 11. Post-card : hover subtil ──────────────────────────────────────────
 .post-item {
-    transition: background 150ms ease;
-    border-radius: 4px;
+    transition: border-color 150ms ease, padding-left 150ms ease;
+    border-left: 2px solid transparent;
+    border-radius: 0;
 
     &:hover {
-        background: var(--accent-subtle);
+        border-left-color: var(--accent);
+        padding-left: 0.5rem;
     }
 }

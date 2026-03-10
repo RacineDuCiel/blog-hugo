@@ -3,37 +3,31 @@
 {{ $image := resources.Get $avatar_img }}
 
 <div class="hero-bio">
+  <div class="hb-inner">
 
-  {{/* ── AVATAR ──────────────────────────────────────────────────── */}}
-  <div class="hb-avatar-zone">
+  {{/* ── AVATAR (panneau gauche) ─────────────────────────────── */}}
+  <div class="hb-panel hb-panel--avatar">
     {{ with $image }}
-      {{ $sm := .Fill "250x250 center webp" }}
-      {{ $lg := .Fill "500x500 center webp" }}
-      <div class="hb-glow-wrap">
-        <div class="hb-frame">
-          <img class="hb-ghost hb-ghost--r" src="{{ $sm.RelPermalink }}" aria-hidden="true" alt="">
-          <img class="hb-ghost hb-ghost--b" src="{{ $sm.RelPermalink }}" aria-hidden="true" alt="">
-          <img class="hb-main"
-               src="{{ $sm.RelPermalink }}"
-               srcset="{{ $lg.RelPermalink }} 2x"
-               alt="{{ $avatar_img_alt }}"
-               width="{{ $sm.Width }}"
-               height="{{ $sm.Height }}">
-          <div class="hb-scanlines" aria-hidden="true"></div>
-        </div>
-      </div>
+      {{ $tall := .Fill "500x500 center webp" }}
+      {{ $tall2x := .Fill "1000x1000 center webp" }}
+      <img class="hb-main"
+           src="{{ $tall.RelPermalink }}"
+           srcset="{{ $tall2x.RelPermalink }} 2x"
+           alt="{{ $avatar_img_alt }}"
+           width="{{ $tall.Width }}"
+           height="{{ $tall.Height }}">
     {{ end }}
   </div>
 
-  {{/* ── QUOTE ───────────────────────────────────────────────────── */}}
-  <div class="hb-content">
+  {{/* ── TEXTE (panneau droit) ───────────────────────────────── */}}
+  <div class="hb-panel hb-panel--text">
     <h2 class="hb-quote" aria-label="{{ .Site.Params.author.description }}">
       <span class="hb-q-term">&gt;&nbsp;WHAT DOES IT MEAN TO BE</span>
       <span class="hb-q-word" data-text="HUMAN">HUMAN</span>
     </h2>
   </div>
 
-
+  </div>
 </div>
 
 <script>

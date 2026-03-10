@@ -75,3 +75,11 @@
 @import "hero-bio";
 @import "musique-recs";
 @import "fiche-revision";
+
+// ── Specific Page Overrides ────────────────────────────────────────────────
+.posts-list-page {
+  .post-item-title a {
+    text-decoration: none;
+    border-bottom: none;
+  }
+}
