@@ -6,40 +6,64 @@
 // ══════════════════════════════════════════════════════════════════════════════
 
 :root {
-    --accent        : #4B5563;
-    --accent-hover  : #374151;
-    --accent-ring   : rgba(75, 85, 99, 0.35);
-    --accent-subtle : rgba(75, 85, 99, 0.08);
+    --accent        : #5F6670;
+    --accent-hover  : #1D1D1F;
+    --accent-ring   : rgba(95, 102, 112, 0.28);
+    --accent-subtle : rgba(95, 102, 112, 0.075);
     // Couleurs sémantiques — light mode
-    --color-bg      : #fff;
-    --color-text-1  : #434648;
-    --color-text-2  : #6b7886;
-    --color-border  : #ececec;
+    --color-bg      : #F7F8FA;
+    --color-surface : #FFFFFF;
+    --color-surface-2: #F1F2F4;
+    --color-text-1  : #1D1D1F;
+    --color-text-2  : #6D737C;
+    --color-text-3  : #90959D;
+    --color-border  : rgba(29, 29, 31, 0.105);
+    --color-border-strong: rgba(29, 29, 31, 0.18);
+    --shadow-soft   : 0 18px 50px rgba(29, 29, 31, 0.045);
+    --bg-color      : var(--color-surface);
+    --text-color    : var(--color-text-1);
+    --link-color    : var(--accent);
 }
 
 html.dark {
-    --accent        : #9CA3AF;
-    --accent-hover  : #D1D5DB;
-    --accent-ring   : rgba(156, 163, 175, 0.35);
-    --accent-subtle : rgba(156, 163, 175, 0.08);
+    --accent        : #E6E8EC;
+    --accent-hover  : #FFFFFF;
+    --accent-ring   : rgba(230, 232, 236, 0.26);
+    --accent-subtle : rgba(230, 232, 236, 0.075);
     // Couleurs sémantiques — dark mode
-    --color-bg      : #131418;
-    --color-text-1  : #babdc4;
-    --color-text-2  : #767f87;
-    --color-border  : #1b1d25;
+    --color-bg      : #101115;
+    --color-surface : #15171C;
+    --color-surface-2: #1B1D23;
+    --color-text-1  : #E4E7EC;
+    --color-text-2  : #A2A8B2;
+    --color-text-3  : #747B87;
+    --color-border  : rgba(228, 231, 236, 0.085);
+    --color-border-strong: rgba(228, 231, 236, 0.145);
+    --shadow-soft   : 0 18px 60px rgba(0, 0, 0, 0.18);
+    --bg-color      : var(--color-surface);
+    --text-color    : var(--color-text-1);
+    --link-color    : var(--accent);
 }
 
 // Support thème système sans JS (cohérent avec _dark.scss du thème)
 @media (prefers-color-scheme: dark) {
     html:not(.light) {
-        --accent        : #9CA3AF;
-        --accent-hover  : #D1D5DB;
-        --accent-ring   : rgba(156, 163, 175, 0.35);
-        --accent-subtle : rgba(156, 163, 175, 0.08);
-        --color-bg      : #131418;
-        --color-text-1  : #babdc4;
-        --color-text-2  : #767f87;
-        --color-border  : #1b1d25;
+        --accent        : #E6E8EC;
+        --accent-hover  : #FFFFFF;
+        --accent-ring   : rgba(230, 232, 236, 0.26);
+        --accent-subtle : rgba(230, 232, 236, 0.075);
+        --color-bg      : #101115;
+        --color-surface : #15171C;
+        --color-surface-2: #1B1D23;
+        --color-text-1  : #E4E7EC;
+        --color-text-2  : #A2A8B2;
+        --color-text-3  : #747B87;
+        --color-border  : rgba(228, 231, 236, 0.085);
+        --color-border-strong: rgba(228, 231, 236, 0.145);
+        --shadow-soft   : 0 18px 60px rgba(0, 0, 0, 0.18);
+        --bg-color      : var(--color-surface);
+        --text-color    : var(--color-text-1);
+        --link-color    : var(--accent);
     }
 }
 

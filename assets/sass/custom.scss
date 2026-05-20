@@ -54,14 +54,6 @@
   src: url('/fonts/source-serif-4-latin-400-italic.woff2') format('woff2');
 }
 
-@font-face {
-  font-family: 'Metal Mania';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/metal-mania-latin-400-normal.woff2') format('woff2');
-}
-
 @import "search";
 @import "shortcodes";
 @import "tor-circuit";
@@ -82,3 +74,5 @@
     border-bottom: none;
   }
 }
+
+@import "premium-theme";

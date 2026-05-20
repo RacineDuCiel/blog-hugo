@@ -1,72 +1,79 @@
 .search-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    margin-top: 50px;
+    max-width: 760px;
+    margin: clamp(5rem, 12vh, 7rem) auto 0;
+    padding: 0 1.5rem;
 }
 
 .search-box {
-    margin-bottom: 30px;
+    margin-bottom: 2rem;
 }
 
 #search-input {
     width: 100%;
-    padding: 15px;
-    font-size: 1.2rem;
-    border: 2px solid #eee;
+    box-sizing: border-box;
+    padding: 1rem 1.05rem;
+    border: 1px solid var(--color-border, rgba(29, 29, 31, 0.12));
     border-radius: 8px;
-    background: var(--bg-color);
-    color: var(--text-color);
+    background: var(--color-surface, #fff);
+    color: var(--color-text-1, #1d1d1f);
+    box-shadow: var(--shadow-soft, none);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+#search-input::placeholder {
+    color: var(--color-text-3, #90959d);
 }
 
 #search-input:focus {
+    border-color: var(--color-border-strong, rgba(29, 29, 31, 0.18));
+    box-shadow: 0 0 0 4px var(--accent-subtle, rgba(95, 102, 112, 0.08));
     outline: none;
-    border-color: var(--link-color);
 }
 
 .search-result-item {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    margin: 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border, rgba(29, 29, 31, 0.12));
 }
 
 .search-result-item h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.1rem;
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    line-height: 1.35;
 }
 
 .search-result-item h3 a {
+    color: var(--color-text-1, #1d1d1f);
     text-decoration: none;
-    color: var(--link-color);
+}
+
+.search-result-item h3 a:hover {
+    color: var(--accent-hover, #1d1d1f);
 }
 
 .search-result-item p {
     margin: 0;
-    color: var(--text-color);
-    opacity: 0.8;
+    color: var(--color-text-2, #6d737c);
     font-size: 0.9rem;
+    line-height: 1.6;
 }
 
 .search-result-item small {
     display: block;
-    margin-top: 5px;
-    color: #888;
-    font-size: 0.8rem;
+    margin-top: 0.35rem;
+    color: var(--color-text-3, #90959d);
+    font-size: 0.78rem;
 }
 
 @media (max-width: 768px) {
-    div.search-container {
-        padding: 10px !important;
+    .search-container {
+        margin-top: 5rem;
+        padding: 0 1rem;
     }
 
-    div.search-box input#search-input {
-        padding: 10px !important;
-        font-size: 16px !important;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    div.search-box {
-        margin-bottom: 15px;
+    #search-input {
+        padding: 0.85rem 0.9rem;
+        font-size: 16px;
     }
 }

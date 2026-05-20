@@ -9,7 +9,7 @@
 }
 
 html.dark {
-  --accent-subtle:  rgba(251, 191, 36, 0.10);
+  --accent-subtle:  rgba(230, 232, 236, 0.10);
   --macro-protein:  #60a5fa;
   --macro-fat:      #fbbf24;
   --macro-carbs:    #34d399;
@@ -17,7 +17,7 @@ html.dark {
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --accent-subtle:  rgba(251, 191, 36, 0.10);
+    --accent-subtle:  rgba(230, 232, 236, 0.10);
     --macro-protein:  #60a5fa;
     --macro-fat:      #fbbf24;
     --macro-carbs:    #34d399;

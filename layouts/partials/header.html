@@ -50,10 +50,10 @@
                         {{ $selected := false }}
                         {{ if eq $pageLang .Lang}}
                         <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{
-                            .LanguageCode | upper }}
+                            .Locale | upper }}
                         </option>
                         {{ else }}
-                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .LanguageCode |
+                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .Locale |
                             upper }}</option>
                         {{ end }}
                         {{ end }}

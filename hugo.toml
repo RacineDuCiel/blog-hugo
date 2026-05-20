@@ -47,8 +47,8 @@ defaultContentLanguage = "fr-fr"
   browserconfig.TileColor = "#2d89ef"
 
 [Languages.fr-fr]
-  languageName = "French"
-  languageCode = "fr-fr"
+  label = "French"
+  locale = "fr-fr"
   contentDir = "content/"
   weight = 1
 
