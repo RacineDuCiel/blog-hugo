@@ -1,380 +1,394 @@
 (function () {
   'use strict';
 
-  // ── État par défaut ────────────────────────────────────────────────────────
   var defaultState = {
-    sex:       'm',
-    age:       30,
-    weight:    75,
-    height:    175,
-    steps:     8000,
-    standing:  1,     // index → [0.5, 1.5, 3.0, 5.0] h
-    training:  2,     // index → [0, 1.5, 3.5, 5.5, 7] sessions/sem
-    intensity: 5.5,   // METs
-    duration:  60,    // min
-    goal:      'maintain'
+    sex: 'm',
+    age: 30,
+    weight: 75,
+    height: 175,
+    steps: 8000,
+    standing: 1,
+    training: 2,
+    intensity: 5.5,
+    duration: 60,
+    intake: '',
+    startWeight: '',
+    endWeight: '',
+    days: 21
   };
 
   var state = Object.assign({}, defaultState);
 
-  // ── Tables de conversion ───────────────────────────────────────────────────
-  var STANDING_HOURS    = [0.5, 1.5, 3.0, 5.0];
+  var STANDING_HOURS = [0.5, 1.5, 3.0, 5.0];
   var SESSIONS_PER_WEEK = [0, 1.5, 3.5, 5.5, 7];
 
   var INTENSITY_HINTS = {
-    '3.5': 'Yoga, stretching, marche rapide',
+    '3.5': 'Yoga, mobilité, marche rapide',
     '5.5': 'Musculation, course légère, vélo',
-    '8':   'HIIT, CrossFit, sprint, sports intensifs'
+    '8': 'HIIT, sports intenses, intervalles'
   };
 
-  var GOAL_LABELS = {
-    lose:     { title: 'Perte de poids',  delta: '−500 kcal', desc: 'Déficit progressif' },
-    maintain: { title: 'Maintien',        delta: '±0 kcal',   desc: 'Équilibre énergétique' },
-    gain:     { title: 'Prise de masse',  delta: '+200 kcal', desc: 'Surplus contrôlé' }
-  };
+  var LS_KEY = 'tdee-estimator-v4';
+  var LEGACY_KEY = 'tdee-calc-v3';
 
-  var MACRO_LABELS = { protein: 'Protéines', fat: 'Lipides', carbs: 'Glucides' };
-  var MACRO_COLORS = {
-    protein: 'var(--macro-protein)',
-    fat:     'var(--macro-fat)',
-    carbs:   'var(--macro-carbs)'
-  };
+  function numberOrNull(value) {
+    if (value === '' || value === null || value === undefined) return null;
+    var n = parseFloat(value);
+    return Number.isFinite(n) ? n : null;
+  }
 
-  // ── Calcul ─────────────────────────────────────────────────────────────────
-  function compute(s) {
-    // Validation plages
+  function roundTo(value, step) {
+    return Math.round(value / step) * step;
+  }
+
+  function formatNumber(value, decimals) {
+    return value.toLocaleString('fr-FR', {
+      maximumFractionDigits: decimals || 0,
+      minimumFractionDigits: 0
+    });
+  }
+
+  function formatKcal(value) {
+    return formatNumber(Math.round(value), 0) + '&nbsp;kcal';
+  }
+
+  function pct(value, total) {
+    return total > 0 ? Math.max(0, Math.round((value / total) * 100)) : 0;
+  }
+
+  function computeEstimate(s) {
     if (
       !s.weight || s.weight < 30 || s.weight > 250 ||
       !s.height || s.height < 100 || s.height > 250 ||
-      !s.age    || s.age    < 15  || s.age    > 100
+      !s.age || s.age < 15 || s.age > 100
     ) {
       return null;
     }
 
-    // BMR — Mifflin-St Jeor (1990)
     var bmr = 10 * s.weight + 6.25 * s.height - 5 * s.age + (s.sex === 'm' ? 5 : -161);
 
-    // NEAT — pas : constante nette 0,029 kcal/pas × (poids/70)
-    // Dérivé de (3,5 − 1,0) METs nets / 100 pas/min × 3,5 × 70 / 200
-    // (Compendium of Physical Activities, Ainsworth et al. 2011)
-    var stepsKcal  = s.steps * 0.029 * (s.weight / 70);
+    // Net walking estimate, scaled by body mass.
+    var stepsKcal = s.steps * 0.029 * (s.weight / 70);
 
-    // NEAT — debout : METs nets = (1,5 − 1,0) = 0,5 pour éviter double comptage avec BMR
+    // Net standing estimate, avoiding double counting resting expenditure.
     var standHours = STANDING_HOURS[s.standing] || 0;
-    var standKcal  = standHours * 60 * (0.5 * 3.5 * s.weight) / 200;
-    var neat       = stepsKcal + standKcal;
+    var standKcal = standHours * 60 * (0.5 * 3.5 * s.weight) / 200;
+    var neat = stepsKcal + standKcal;
 
-    // EAT — METs nets = (intensity − 1,0) pour éviter double comptage avec BMR
-    var sessWeek   = SESSIONS_PER_WEEK[s.training] || 0;
-    var eatWeekly  = sessWeek * s.duration * ((s.intensity - 1.0) * 3.5 * s.weight) / 200;
-    var eat        = eatWeekly / 7;
+    // Net exercise METs averaged across the week.
+    var sessions = SESSIONS_PER_WEEK[s.training] || 0;
+    var eatWeekly = sessions * s.duration * ((s.intensity - 1.0) * 3.5 * s.weight) / 200;
+    var eat = eatWeekly / 7;
 
-    // TDEE — TEF ≈ 10 % de l'apport total (Westerterp, Nutr Metab 2004)
-    // Résolution : TDEE = BMR + TEF + NEAT + EAT  et  TEF = 0,10 × TDEE
-    // → TDEE = (BMR + NEAT + EAT) / 0,90
-    var tdee = Math.round((bmr + neat + eat) / 0.90);
-    var tef  = Math.round(tdee * 0.10);
-
-    var goals = {
-      lose:     tdee - 500,
-      maintain: tdee,
-      gain:     tdee + 200
-    };
-
-    // Macros par objectif
-    var macrosByGoal = {};
-    ['lose', 'maintain', 'gain'].forEach(function (g) {
-      var kcal          = goals[g];
-      var proteinFactor = g === 'lose' ? 2.2 : g === 'gain' ? 2.0 : 1.8;
-      var protein       = Math.round(s.weight * proteinFactor);
-      var fat           = Math.round((kcal * 0.27) / 9);
-      var carbs         = Math.round((kcal - protein * 4 - fat * 9) / 4);
-      macrosByGoal[g]   = { protein: protein, fat: Math.max(fat, 0), carbs: Math.max(carbs, 0) };
-    });
+    // TEF as a practical average. Algebra avoids adding TEF twice.
+    var tdeeRaw = (bmr + neat + eat) / 0.90;
+    var tef = tdeeRaw * 0.10;
 
     return {
-      bmr:          Math.round(bmr),
-      tef:          Math.round(tef),
-      neat:         Math.round(neat),
-      eat:          Math.round(eat),
-      tdee:         tdee,
-      goals:        goals,
-      macrosByGoal: macrosByGoal
+      bmr: Math.round(bmr),
+      tef: Math.round(tef),
+      neat: Math.round(neat),
+      eat: Math.round(eat),
+      tdeeRaw: tdeeRaw,
+      tdee: roundTo(tdeeRaw, 50),
+      low: roundTo(tdeeRaw * 0.90, 50),
+      high: roundTo(tdeeRaw * 1.10, 50)
     };
   }
 
-  // ── Rendu résultats ────────────────────────────────────────────────────────
-  function pct(val, total) {
-    return total > 0 ? Math.round((val / total) * 100) : 0;
+  function computeCalibration(s) {
+    var intake = numberOrNull(s.intake);
+    var startWeight = numberOrNull(s.startWeight);
+    var endWeight = numberOrNull(s.endWeight);
+    var days = numberOrNull(s.days);
+
+    if (intake === null && startWeight === null && endWeight === null) {
+      return { status: 'empty' };
+    }
+
+    if (
+      intake === null || intake < 800 || intake > 7000 ||
+      startWeight === null || startWeight < 30 || startWeight > 250 ||
+      endWeight === null || endWeight < 30 || endWeight > 250 ||
+      days === null || days < 7 || days > 60
+    ) {
+      return { status: 'invalid' };
+    }
+
+    var deltaKg = endWeight - startWeight;
+    var dailyEnergyChange = (deltaKg * 7700) / days;
+    var observed = roundTo(intake - dailyEnergyChange, 50);
+    var absDelta = Math.abs(deltaKg);
+
+    var confidence = 'Confiance moyenne';
+    var note = 'Interprétation indicative : les variations d’eau, de glycogène et de suivi alimentaire peuvent encore peser.';
+
+    if (days < 14) {
+      confidence = 'Confiance faible';
+      note = 'La durée est courte. Utilise plutôt 14 à 28 jours pour réduire le bruit.';
+    } else if (absDelta < 0.2) {
+      confidence = 'Signal faible';
+      note = 'Le poids a peu bougé. C’est compatible avec un maintien, mais le bruit peut dominer le calcul.';
+    } else if (days >= 21 && absDelta >= 0.3) {
+      confidence = 'Confiance correcte';
+      note = 'Cette estimation observée devient plus utile que la formule, si les apports et l’activité ont été stables.';
+    }
+
+    return {
+      status: 'ready',
+      intake: intake,
+      deltaKg: deltaKg,
+      days: days,
+      observed: observed,
+      confidence: confidence,
+      note: note
+    };
   }
 
-  function barRowHTML(label, kcal, total, extraStyle) {
-    var p   = pct(kcal, total);
-    var col = extraStyle ? 'style="' + extraStyle + '"' : '';
+  function barRowHTML(label, kcal, total) {
+    var p = pct(kcal, total);
     return '<div class="tdee-bar-row">' +
       '<span class="tdee-bar-label">' + label + '</span>' +
-      '<div class="tdee-bar-track"><div class="tdee-bar-fill" style="--tdee-bar-w:' + p + '%' + (extraStyle ? ';' + extraStyle : '') + '"></div></div>' +
-      '<span class="tdee-bar-kcal">' + kcal.toLocaleString('fr-FR') + '&nbsp;kcal</span>' +
+      '<div class="tdee-bar-track"><div class="tdee-bar-fill" style="--tdee-bar-w:' + p + '%"></div></div>' +
+      '<span class="tdee-bar-kcal">' + formatKcal(kcal) + '</span>' +
       '<span class="tdee-bar-pct">' + p + '%</span>' +
       '</div>';
   }
 
-  function macroRowHTML(key, grams, kcalFromMacro, totalKcal) {
-    var p = pct(kcalFromMacro, totalKcal);
-    return '<div class="tdee-macro-row">' +
-      '<span class="tdee-macro-label">' + MACRO_LABELS[key] + '</span>' +
-      '<div class="tdee-bar-track"><div class="tdee-bar-fill" style="--tdee-bar-w:' + p + '%;background:' + MACRO_COLORS[key] + '"></div></div>' +
-      '<span class="tdee-macro-g">' + grams + '&nbsp;g</span>' +
-      '<span class="tdee-bar-pct">' + p + '%</span>' +
-      '</div>';
+  function renderCalibration(calibration) {
+    if (calibration.status === 'empty') {
+      return '<section class="tdee-calibration-result tdee-calibration-result--muted">' +
+        '<h5 class="tdee-sub-title">Calibration observée</h5>' +
+        '<p>Ajoute tes moyennes sur 14 à 28 jours pour comparer la formule à ton maintien réel.</p>' +
+        '</section>';
+    }
+
+    if (calibration.status === 'invalid') {
+      return '<section class="tdee-calibration-result tdee-calibration-result--warning">' +
+        '<h5 class="tdee-sub-title">Calibration observée</h5>' +
+        '<p>Valeurs incomplètes ou hors plage. Vérifie l’apport moyen, les deux poids moyens et la durée.</p>' +
+        '</section>';
+    }
+
+    var trend = calibration.deltaKg > 0 ? '+' : '';
+    return '<section class="tdee-calibration-result">' +
+      '<div>' +
+        '<h5 class="tdee-sub-title">Maintien observé</h5>' +
+        '<div class="tdee-observed-value">' + formatKcal(calibration.observed) + '<span>/ jour</span></div>' +
+      '</div>' +
+      '<p><strong>' + calibration.confidence + '</strong> : variation de poids ' +
+        trend + formatNumber(calibration.deltaKg, 1) + '&nbsp;kg sur ' + calibration.days +
+        '&nbsp;jours, avec ' + formatKcal(calibration.intake) + ' d’apport moyen.</p>' +
+      '<p class="tdee-result-note">' + calibration.note + '</p>' +
+      '</section>';
   }
 
-  function renderResults(r) {
+  function renderResults(estimate, calibration) {
     var container = document.getElementById('tdee-results');
     if (!container) return;
 
-    if (!r) {
+    if (!estimate) {
       container.innerHTML =
-        '<p class="tdee-error" role="alert">Valeurs hors plage — vérifiez poids (30–250 kg), taille (100–250 cm) et âge (15–100 ans).</p>';
+        '<p class="tdee-error" role="alert">Valeurs hors plage : vérifie poids (30-250 kg), taille (100-250 cm) et âge (15-100 ans).</p>';
       return;
     }
 
-    // ── Décomposition ──────────────────────────────────────────────────────
     var barsHTML =
-      barRowHTML('BMR',  r.bmr,  r.tdee) +
-      barRowHTML('TEF',  r.tef,  r.tdee) +
-      barRowHTML('NEAT', r.neat, r.tdee) +
-      barRowHTML('EAT',  r.eat,  r.tdee);
+      barRowHTML('BMR', estimate.bmr, estimate.tdeeRaw) +
+      barRowHTML('TEF', estimate.tef, estimate.tdeeRaw) +
+      barRowHTML('NEAT', estimate.neat, estimate.tdeeRaw) +
+      barRowHTML('EAT', estimate.eat, estimate.tdeeRaw);
 
-    // ── Cartes objectifs ───────────────────────────────────────────────────
-    var cardsHTML = ['lose', 'maintain', 'gain'].map(function (g) {
-      var info     = GOAL_LABELS[g];
-      var isActive = state.goal === g ? ' is-active' : '';
-      return '<button type="button" class="tdee-goal-card' + isActive + '" data-goal="' + g + '">' +
-        '<span class="tdee-goal-title">' + info.title + '</span>' +
-        '<span class="tdee-goal-kcal">' + r.goals[g].toLocaleString('fr-FR') + '&nbsp;kcal</span>' +
-        '<span class="tdee-goal-delta">' + info.delta + '</span>' +
-        '<span class="tdee-goal-desc">' + info.desc + '</span>' +
-        '</button>';
-    }).join('');
-
-    // ── Macros pour l'objectif actif ───────────────────────────────────────
-    var macros     = r.macrosByGoal[state.goal];
-    var activeKcal = r.goals[state.goal];
-    var macrosHTML =
-      macroRowHTML('protein', macros.protein, macros.protein * 4, activeKcal) +
-      macroRowHTML('fat',     macros.fat,     macros.fat * 9,     activeKcal) +
-      macroRowHTML('carbs',   macros.carbs,   macros.carbs * 4,   activeKcal);
-
-    var goalTitle = GOAL_LABELS[state.goal].title;
-
-    // ── Assemblage ─────────────────────────────────────────────────────────
     container.innerHTML =
       '<div class="tdee-results-inner">' +
-
-        '<div class="tdee-hero">' +
-          '<div class="tdee-hero-label">TDEE estimé</div>' +
-          '<div class="tdee-hero-value">' + r.tdee.toLocaleString('fr-FR') + '</div>' +
+        '<section class="tdee-hero" aria-label="Résultat estimé">' +
+          '<p class="tdee-hero-label">TDEE estimé</p>' +
+          '<div class="tdee-hero-value">' + formatNumber(estimate.tdee, 0) + '</div>' +
           '<div class="tdee-hero-unit">kcal / jour</div>' +
-        '</div>' +
+          '<p class="tdee-hero-range">Fourchette utile : ' + formatKcal(estimate.low) + ' à ' + formatKcal(estimate.high) + '</p>' +
+        '</section>' +
 
-        '<div class="tdee-breakdown">' +
-          '<h5 class="tdee-sub-title">Décomposition</h5>' +
+        '<section class="tdee-breakdown">' +
+          '<h5 class="tdee-sub-title">Décomposition estimée</h5>' +
           barsHTML +
-        '</div>' +
+        '</section>' +
 
-        '<div class="tdee-goals">' +
-          '<h5 class="tdee-sub-title">Choisir un objectif</h5>' +
-          '<div class="tdee-goal-cards">' + cardsHTML + '</div>' +
-        '</div>' +
-
-        '<div class="tdee-macros">' +
-          '<h5 class="tdee-sub-title">Macros — ' + goalTitle + '</h5>' +
-          macrosHTML +
-        '</div>' +
+        renderCalibration(calibration) +
 
         '<details class="tdee-method">' +
-          '<summary>Méthode de calcul</summary>' +
-          '<p><strong>BMR</strong> : Mifflin-St Jeor (1990) — formule la plus précise pour la population générale (±10 % dans ~80 % des cas).<br>' +
-          '<strong>TEF</strong> : 10 % de l\'apport calorique total — résolu algébriquement : TDEE = (BMR + NEAT + EAT) / 0,90 (Westerterp, <em>Nutr Metab</em> 2004).<br>' +
-          '<strong>NEAT (pas)</strong> : 0,029 kcal/pas × (poids/70) — constante nette dérivée de (3,5 − 1,0) METs / 100 pas/min, évitant le double comptage avec le BMR (Compendium of Physical Activities, Ainsworth et al. 2011).<br>' +
-          '<strong>NEAT (debout)</strong> : (1,5 − 1,0) METs nets × 3,5 × poids × durée / 200 — seule la dépense au-delà du repos est comptée.<br>' +
-          '<strong>EAT</strong> : Sessions × durée × (METs − 1,0) × 3,5 × poids / 200 / 7 — METs nets pour éviter le double comptage avec le BMR.<br>' +
-          '<strong>Protéines</strong> : 2,2 g/kg (déficit), 1,8 g/kg (maintien), 2,0 g/kg (prise de masse) — d\'après Helms et al. <em>IJSNEM</em> 2014 et Morton et al. <em>Br J Sports Med</em> 2018.<br>' +
-          '<em>Estimation indicative basée sur des formules validées — non un résultat de mesure directe (calorimétrie indirecte).</em></p>' +
+          '<summary>Méthode et limites</summary>' +
+          '<p><strong>BMR</strong> : équation de Mifflin-St Jeor. <strong>NEAT</strong> : approximation nette des pas et du temps debout. <strong>EAT</strong> : estimation par METs nets, moyennée sur la semaine. <strong>TEF</strong> : moyenne pratique de 10&nbsp;% du total.</p>' +
+          '<p>La fourchette +/-10&nbsp;% reflète l’incertitude individuelle normale. La calibration observée devient prioritaire si les apports, le poids moyen et l’activité ont été suivis proprement.</p>' +
         '</details>' +
-
       '</div>';
-
-    // Listeners sur les cartes objectif (réattachés après chaque injection)
-    container.querySelectorAll('.tdee-goal-card').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        state.goal = this.dataset.goal;
-        update();
-      });
-    });
   }
 
-  // ── Persistance localStorage ───────────────────────────────────────────────
-  var LS_KEY = 'tdee-calc-v3';
+  function update() {
+    renderResults(computeEstimate(state), computeCalibration(state));
+    save();
+  }
 
   function save() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+    } catch (e) {}
   }
 
   function load() {
     try {
-      var raw = localStorage.getItem(LS_KEY);
-      if (raw) {
-        var saved = JSON.parse(raw);
-        Object.keys(defaultState).forEach(function (k) {
-          if (saved[k] !== undefined) state[k] = saved[k];
-        });
-      }
+      var raw = localStorage.getItem(LS_KEY) || localStorage.getItem(LEGACY_KEY);
+      if (!raw) return;
+      var saved = JSON.parse(raw);
+      Object.keys(defaultState).forEach(function (key) {
+        if (saved[key] !== undefined) state[key] = saved[key];
+      });
     } catch (e) {}
   }
 
-  // ── Mise à jour centrale ───────────────────────────────────────────────────
-  function update() {
-    renderResults(compute(state));
-    save();
-  }
-
-  // ── Synchronisation HTML → state ──────────────────────────────────────────
   function rangeOutput(id, text) {
     var out = document.querySelector('output[for="' + id + '"]');
     if (out) out.textContent = text;
   }
 
+  function setPressed(button, active) {
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
   function toggleEatDetails() {
     var el = document.getElementById('tdee-eat-details');
-    if (el) el.style.display = state.training === 0 ? 'none' : '';
+    if (el) el.hidden = state.training === 0;
   }
 
   function applyStateToInputs() {
-    // Sexe
-    document.querySelectorAll('[data-field="sex"]').forEach(function (b) {
-      b.classList.toggle('is-active', b.dataset.val === state.sex);
+    document.querySelectorAll('[data-field="sex"]').forEach(function (button) {
+      setPressed(button, button.dataset.val === state.sex);
     });
 
-    // Champs numériques
-    var nums = { 'tdee-weight': state.weight, 'tdee-height': state.height, 'tdee-age': state.age };
-    Object.keys(nums).forEach(function (id) {
+    document.querySelectorAll('[data-field="standing"]').forEach(function (button) {
+      setPressed(button, parseInt(button.dataset.val, 10) === state.standing);
+    });
+
+    document.querySelectorAll('[data-field="training"]').forEach(function (button) {
+      setPressed(button, parseInt(button.dataset.val, 10) === state.training);
+    });
+
+    document.querySelectorAll('[data-field="intensity"]').forEach(function (button) {
+      setPressed(button, parseFloat(button.dataset.val) === state.intensity);
+    });
+
+    var ids = {
+      'tdee-weight': state.weight,
+      'tdee-height': state.height,
+      'tdee-age': state.age,
+      'tdee-intake': state.intake,
+      'tdee-start-weight': state.startWeight,
+      'tdee-end-weight': state.endWeight,
+      'tdee-days': state.days
+    };
+
+    Object.keys(ids).forEach(function (id) {
       var el = document.getElementById(id);
-      if (el) el.value = nums[id];
+      if (el) el.value = ids[id];
     });
 
-    // Slider pas
     var stepsEl = document.getElementById('tdee-steps');
     if (stepsEl) {
       stepsEl.value = state.steps;
-      rangeOutput('tdee-steps', state.steps.toLocaleString('fr-FR'));
+      rangeOutput('tdee-steps', formatNumber(state.steps, 0));
     }
 
-    // Debout
-    document.querySelectorAll('[data-field="standing"]').forEach(function (b) {
-      b.classList.toggle('is-active', parseInt(b.dataset.val) === state.standing);
-    });
-
-    // Sessions
-    document.querySelectorAll('[data-field="training"]').forEach(function (b) {
-      b.classList.toggle('is-active', parseInt(b.dataset.val) === state.training);
-    });
-
-    // Intensité
-    document.querySelectorAll('[data-field="intensity"]').forEach(function (b) {
-      b.classList.toggle('is-active', parseFloat(b.dataset.val) === state.intensity);
-    });
     var hintEl = document.getElementById('tdee-intensity-hint');
     if (hintEl) hintEl.textContent = INTENSITY_HINTS[String(state.intensity)] || '';
 
-    // Slider durée
-    var durEl = document.getElementById('tdee-duration');
-    if (durEl) {
-      durEl.value = state.duration;
+    var durationEl = document.getElementById('tdee-duration');
+    if (durationEl) {
+      durationEl.value = state.duration;
       rangeOutput('tdee-duration', state.duration + ' min');
     }
 
     toggleEatDetails();
   }
 
-  // ── Listeners ─────────────────────────────────────────────────────────────
   function attachListeners() {
     var calc = document.getElementById('tdee-calc');
     if (!calc) return;
 
-    // Délégation : toggles & segments
-    calc.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-field]');
-      if (!btn || btn.id === 'tdee-calc') return;
-      var field = btn.dataset.field;
-      var val   = btn.dataset.val;
+    calc.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-field]');
+      if (!button) return;
 
-      var group = btn.closest('[role="group"]');
+      var field = button.dataset.field;
+      var value = button.dataset.val;
+      var group = button.closest('[role="group"]');
+
       if (group) {
-        group.querySelectorAll('[data-field="' + field + '"]').forEach(function (b) {
-          b.classList.remove('is-active');
+        group.querySelectorAll('[data-field="' + field + '"]').forEach(function (item) {
+          setPressed(item, item === button);
         });
       }
-      btn.classList.add('is-active');
 
       if (field === 'sex') {
-        state.sex = val;
+        state.sex = value;
       } else if (field === 'standing') {
-        state.standing = parseInt(val);
+        state.standing = parseInt(value, 10);
       } else if (field === 'training') {
-        state.training = parseInt(val);
+        state.training = parseInt(value, 10);
         toggleEatDetails();
       } else if (field === 'intensity') {
-        state.intensity = parseFloat(val);
+        state.intensity = parseFloat(value);
         var hintEl = document.getElementById('tdee-intensity-hint');
-        if (hintEl) hintEl.textContent = INTENSITY_HINTS[val] || '';
+        if (hintEl) hintEl.textContent = INTENSITY_HINTS[value] || '';
       }
 
       update();
     });
 
-    // Champs numériques
-    ['tdee-weight', 'tdee-height', 'tdee-age'].forEach(function (id) {
+    var numericFields = {
+      'tdee-weight': 'weight',
+      'tdee-height': 'height',
+      'tdee-age': 'age',
+      'tdee-intake': 'intake',
+      'tdee-start-weight': 'startWeight',
+      'tdee-end-weight': 'endWeight',
+      'tdee-days': 'days'
+    };
+
+    Object.keys(numericFields).forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
       el.addEventListener('input', function () {
-        var v = parseFloat(this.value);
-        if (id === 'tdee-weight')      state.weight = v;
-        else if (id === 'tdee-height') state.height = v;
-        else if (id === 'tdee-age')    state.age    = v;
+        var key = numericFields[id];
+        state[key] = this.value === '' ? '' : parseFloat(this.value);
         update();
       });
     });
 
-    // Slider pas
     var stepsEl = document.getElementById('tdee-steps');
     if (stepsEl) {
       stepsEl.addEventListener('input', function () {
-        state.steps = parseInt(this.value);
-        rangeOutput('tdee-steps', state.steps.toLocaleString('fr-FR'));
+        state.steps = parseInt(this.value, 10);
+        rangeOutput('tdee-steps', formatNumber(state.steps, 0));
         update();
       });
     }
 
-    // Slider durée
-    var durEl = document.getElementById('tdee-duration');
-    if (durEl) {
-      durEl.addEventListener('input', function () {
-        state.duration = parseInt(this.value);
+    var durationEl = document.getElementById('tdee-duration');
+    if (durationEl) {
+      durationEl.addEventListener('input', function () {
+        state.duration = parseInt(this.value, 10);
         rangeOutput('tdee-duration', state.duration + ' min');
         update();
       });
     }
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────────
   function init() {
     if (!document.getElementById('tdee-calc')) return;
     load();
     applyStateToInputs();
-    update();
     attachListeners();
+    update();
   }
 
   if (document.readyState === 'loading') {
@@ -382,5 +396,4 @@
   } else {
     init();
   }
-
 })();

@@ -1,516 +1,613 @@
-// ── TDEE Calculator v3 ─────────────────────────────────────────────────────
+// TDEE article diagrams and estimator.
 
-// Couleurs macro + accent-subtle (seules valeurs hardcodées)
-:root {
-  --accent-subtle:  rgba(217, 119, 6, 0.10);
-  --macro-protein:  #3b82f6;
-  --macro-fat:      #f59e0b;
-  --macro-carbs:    #10b981;
-}
+.tdee-figure {
+  margin: 2.4rem 0;
+  padding: 1.15rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-1);
+  box-shadow: var(--shadow-soft);
 
-html.dark {
-  --accent-subtle:  rgba(230, 232, 236, 0.10);
-  --macro-protein:  #60a5fa;
-  --macro-fat:      #fbbf24;
-  --macro-carbs:    #34d399;
-}
+  header {
+    max-width: 42rem;
+    margin: 0 auto 1rem;
+    text-align: center;
 
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --accent-subtle:  rgba(230, 232, 236, 0.10);
-    --macro-protein:  #60a5fa;
-    --macro-fat:      #fbbf24;
-    --macro-carbs:    #34d399;
+    h3 {
+      margin: 0.2rem 0 0.35rem;
+      font-size: 1.18rem;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-2);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
   }
 }
 
-// ── Conteneur principal ────────────────────────────────────────────────────
+.tdee-figure__eyebrow {
+  color: var(--color-text-3) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700;
+  line-height: 1.2 !important;
+  text-transform: uppercase;
+}
+
+.tdee-stack {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-border);
+}
+
+.tdee-stack__row {
+  display: grid;
+  grid-template-columns: 6rem 8rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  min-height: 4rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface);
+
+  strong {
+    color: var(--color-text-1);
+    font-size: 1rem;
+  }
+
+  span {
+    color: var(--color-text-2);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  small {
+    color: var(--color-text-3);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+}
+
+.tdee-stack__row--bmr {
+  min-height: 7.5rem;
+  background: linear-gradient(180deg, var(--color-surface), var(--color-surface-2));
+}
+
+.tdee-stack__row--neat {
+  min-height: 5.7rem;
+}
+
+.tdee-cycle {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-border);
+  list-style: none;
+
+  li {
+    position: relative;
+    min-height: 7.2rem;
+    margin: 0;
+    padding: 1rem;
+    background: var(--color-surface);
+
+    &::before {
+      content: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -0.42rem;
+      width: 0.8rem;
+      height: 0.8rem;
+      border-top: 1px solid var(--color-border-strong);
+      border-right: 1px solid var(--color-border-strong);
+      background: var(--color-surface);
+      transform: translateY(-50%) rotate(45deg);
+      z-index: 1;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--color-text-1);
+    font-size: 0.96rem;
+  }
+
+  span {
+    display: block;
+    color: var(--color-text-2);
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+}
 
 .tdee-calc {
-  background: var(--color-bg);
+  max-width: 660px;
+  margin: 2rem 0 2.4rem;
+  padding: 1.2rem;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  max-width: 560px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  color: var(--color-text-1);
   font-size: 0.95rem;
 }
 
-// ── Sections ──────────────────────────────────────────────────────────────
+.tdee-calc__header {
+  margin-bottom: 1.15rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+
+  h3 {
+    margin: 0.1rem 0 0.35rem;
+    color: var(--color-text-1);
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-2);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+}
+
+.tdee-calc__eyebrow {
+  margin: 0;
+  color: var(--color-text-3) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700;
+  line-height: 1.2 !important;
+  text-transform: uppercase;
+}
 
 .tdee-section {
-  padding-bottom: 1.25rem;
-  margin-bottom: 1.25rem;
+  padding: 1.05rem 0;
   border-bottom: 1px solid var(--color-border);
 
   &:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+    border-bottom: 0;
+    padding-bottom: 0.3rem;
   }
 }
 
 .tdee-section-title {
-  margin: 0 0 1rem;
-  font-size: 1rem;
-  font-weight: 700;
+  margin: 0 0 0.9rem;
   color: var(--color-text-1);
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.tdee-section-note,
+.tdee-hint,
+.tdee-intensity-hint {
+  color: var(--color-text-2);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.tdee-section-note {
+  margin: -0.45rem 0 0.9rem;
 }
 
 .tdee-hint {
   font-weight: 400;
-  color: var(--color-text-2);
-  font-size: 0.8rem;
-  margin-left: 0.25rem;
 }
 
-// ── Toggle Homme / Femme ──────────────────────────────────────────────────
+.tdee-toggle,
+.tdee-segs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
 
 .tdee-toggle {
-  display: inline-flex;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  overflow: hidden;
   margin-bottom: 1rem;
 }
 
-.tdee-toggle-btn {
-  padding: 0.4rem 1.2rem;
-  border: none;
+.tdee-toggle-btn,
+.tdee-seg-btn {
+  min-height: 2.1rem;
+  padding: 0.42rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   background: transparent;
   color: var(--color-text-2);
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: background 0.15s, color 0.15s;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 550;
+  line-height: 1.2;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 
-  &.is-active {
-    background: var(--accent);
-    color: #fff;
+  &:hover,
+  &:focus-visible {
+    border-color: var(--color-border-strong);
+    color: var(--color-text-1);
+    outline: none;
   }
 
-  &:not(.is-active):hover {
-    background: var(--color-border);
-    color: var(--color-text-1);
+  &.is-active {
+    border-color: var(--color-text-1);
+    background: var(--color-text-1);
+    color: var(--color-bg);
   }
 }
 
-// ── Inputs numériques (poids / taille / âge) ───────────────────────────────
+.tdee-seg-btn {
+  flex: 1 1 4.5rem;
+}
 
 .tdee-inputs-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
-.tdee-input-group {
-  flex: 1;
+.tdee-inputs-row--calibration {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 
-  & > label {
+.tdee-input-group {
+  min-width: 0;
+
+  > label {
     display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
+    margin-bottom: 0.28rem;
     color: var(--color-text-2);
-    margin-bottom: 0.25rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 }
 
 .tdee-input-with-unit {
   position: relative;
 
-  & > input {
+  > input {
     width: 100%;
-    padding: 0.45rem 2.2rem 0.45rem 0.5rem;
+    min-height: 2.35rem;
+    box-sizing: border-box;
+    padding: 0.48rem 2.35rem 0.48rem 0.65rem;
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--color-bg);
     color: var(--color-text-1);
-    font-size: 0.95rem;
-    box-sizing: border-box;
+    font: inherit;
+    font-size: 0.92rem;
     text-align: right;
 
+    &::placeholder {
+      color: var(--color-text-3);
+    }
+
     &:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
-      border-color: var(--accent);
+      border-color: var(--color-border-strong);
+      box-shadow: 0 0 0 4px var(--accent-subtle);
+      outline: none;
     }
   }
 }
 
 .tdee-unit {
   position: absolute;
-  right: 0.5rem;
   top: 50%;
+  right: 0.58rem;
   transform: translateY(-50%);
-  font-size: 0.72rem;
-  color: var(--color-text-2);
+  color: var(--color-text-3);
+  font-size: 0.7rem;
   pointer-events: none;
 }
 
-// ── Champ générique ────────────────────────────────────────────────────────
-
 .tdee-field {
-  margin-top: 0.85rem;
+  margin-top: 0.9rem;
 
-  & > label {
+  > label {
     display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
+    margin-bottom: 0.42rem;
     color: var(--color-text-1);
-    margin-bottom: 0.4rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.4;
   }
 }
-
-// ── Boutons segment (radio-style) ─────────────────────────────────────────
-
-.tdee-segs {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.tdee-seg-btn {
-  flex: 1;
-  min-width: 2.5rem;
-  padding: 0.4rem 0.4rem;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--color-text-2);
-  font-size: 0.82rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  white-space: nowrap;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-
-  &.is-active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
-
-  &:not(.is-active):hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-}
-
-// ── Slider range ──────────────────────────────────────────────────────────
 
 .tdee-slider-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 4.6rem;
   align-items: center;
   gap: 0.75rem;
 }
 
 .tdee-range {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
+  width: 100%;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 999px;
   background: var(--color-border);
-  outline: none;
   cursor: pointer;
+  appearance: none;
 
   &::-webkit-slider-thumb {
-    -webkit-appearance: none;
     width: 18px;
     height: 18px;
+    border: 1px solid var(--color-border-strong);
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--color-text-1);
     cursor: pointer;
-    transition: transform 0.1s;
-
-    &:hover {
-      transform: scale(1.15);
-    }
+    appearance: none;
   }
 
   &::-moz-range-thumb {
     width: 18px;
     height: 18px;
+    border: 1px solid var(--color-border-strong);
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--color-text-1);
     cursor: pointer;
-    border: none;
   }
 }
 
 .tdee-range-output {
-  font-size: 0.85rem;
-  font-weight: 600;
   color: var(--color-text-1);
-  min-width: 4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
   text-align: right;
 }
 
-// ── Hint intensité ────────────────────────────────────────────────────────
-
-.tdee-intensity-hint {
-  margin-top: 0.3rem;
-  font-size: 0.75rem;
-  color: var(--color-text-2);
-  font-style: italic;
+.tdee-eat-details[hidden] {
+  display: none;
 }
 
-// ── Bloc résultats ────────────────────────────────────────────────────────
-
 #tdee-results {
-  margin-top: 1.25rem;
+  margin-top: 1.2rem;
 }
 
 .tdee-results-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .tdee-error {
-  color: #dc2626;
-  font-size: 0.9rem;
-  padding: 0.75rem;
-  border: 1px solid #fca5a5;
-  border-radius: 6px;
-  background: #fef2f2;
   margin: 0;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(185, 28, 28, 0.26);
+  border-radius: 8px;
+  background: rgba(185, 28, 28, 0.06);
+  color: #b91c1c;
+  font-size: 0.88rem;
+  line-height: 1.55;
 }
 
 html.dark .tdee-error {
-  color: #f87171;
-  background: #450a0a;
-  border-color: #991b1b;
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.22);
 }
 
-// ── Hero TDEE ─────────────────────────────────────────────────────────────
+.tdee-hero,
+.tdee-calibration-result,
+.tdee-breakdown,
+.tdee-method {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+}
 
 .tdee-hero {
-  background: var(--accent-subtle);
-  border: 1px solid var(--accent);
-  border-radius: 10px;
-  padding: 1.5rem 1rem;
+  padding: 1.1rem;
   text-align: center;
 }
 
 .tdee-hero-label {
-  font-size: 0.7rem;
+  margin: 0;
+  color: var(--color-text-3);
+  font-size: 0.72rem;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
 }
 
 .tdee-hero-value {
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1.1;
-  margin: 0.1rem 0;
+  margin: 0.15rem 0;
+  color: var(--color-text-1);
+  font-size: 2.55rem;
+  font-weight: 720;
+  line-height: 1;
 }
 
-.tdee-hero-unit {
-  font-size: 0.8rem;
+.tdee-hero-unit,
+.tdee-hero-range,
+.tdee-result-note {
+  margin: 0;
   color: var(--color-text-2);
+  font-size: 0.86rem;
+  line-height: 1.55;
 }
 
-// ── Sous-titres de section résultats ──────────────────────────────────────
+.tdee-breakdown {
+  padding: 0.95rem;
+}
 
 .tdee-sub-title {
-  font-size: 0.78rem;
+  margin: 0 0 0.7rem;
+  color: var(--color-text-3);
+  font-size: 0.74rem;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--color-text-2);
-  margin: 0 0 0.6rem;
 }
-
-// ── Barres de décomposition ───────────────────────────────────────────────
 
 .tdee-bar-row {
   display: grid;
-  grid-template-columns: 3.5rem 1fr 5.5rem 2.2rem;
+  grid-template-columns: 3.5rem minmax(0, 1fr) 5.5rem 2.2rem;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.45rem;
+  gap: 0.55rem;
+  margin-bottom: 0.55rem;
   font-size: 0.82rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
-.tdee-bar-label {
-  font-weight: 600;
+.tdee-bar-label,
+.tdee-bar-kcal {
   color: var(--color-text-1);
-  white-space: nowrap;
+  font-weight: 600;
 }
 
 .tdee-bar-track {
-  background: var(--color-border);
-  border-radius: 4px;
-  height: 8px;
+  height: 7px;
   overflow: hidden;
-}
-
-@keyframes tdee-bar-grow {
-  from { width: 0; }
+  border-radius: 999px;
+  background: var(--color-border);
 }
 
 .tdee-bar-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 4px;
   width: var(--tdee-bar-w, 0%);
-  animation: tdee-bar-grow 0.4s ease-out;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-text-1);
 }
 
-.tdee-bar-kcal {
-  text-align: right;
-  color: var(--color-text-1);
-  font-weight: 500;
+.tdee-bar-kcal,
+.tdee-bar-pct {
   white-space: nowrap;
-  font-size: 0.8rem;
+  text-align: right;
 }
 
 .tdee-bar-pct {
-  text-align: right;
-  color: var(--color-text-2);
-  font-size: 0.75rem;
+  color: var(--color-text-3);
+  font-size: 0.76rem;
 }
 
-// ── Cartes objectif ───────────────────────────────────────────────────────
+.tdee-calibration-result {
+  padding: 1rem;
 
-.tdee-goal-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.6rem;
-}
-
-.tdee-goal-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.75rem 0.4rem;
-  border: 1.5px solid var(--color-border);
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  text-align: center;
-  gap: 0.15rem;
-  transition: border-color 0.15s, background 0.15s;
-
-  &.is-active {
-    border-color: var(--accent);
-    background: var(--accent-subtle);
-  }
-
-  &:not(.is-active):hover {
-    border-color: var(--accent);
+  p {
+    margin: 0.55rem 0 0;
+    color: var(--color-text-2);
+    font-size: 0.86rem;
+    line-height: 1.6;
   }
 }
 
-.tdee-goal-title {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--color-text-2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.tdee-calibration-result--muted,
+.tdee-calibration-result--warning {
+  p {
+    margin-top: 0;
+  }
 }
 
-.tdee-goal-kcal {
-  font-size: 1.2rem;
-  font-weight: 800;
+.tdee-observed-value {
   color: var(--color-text-1);
-  line-height: 1.2;
+  font-size: 1.7rem;
+  font-weight: 720;
+  line-height: 1.15;
+
+  span {
+    margin-left: 0.35rem;
+    color: var(--color-text-3);
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
 }
-
-.tdee-goal-card.is-active .tdee-goal-kcal {
-  color: var(--accent);
-}
-
-.tdee-goal-delta {
-  font-size: 0.72rem;
-  color: var(--color-text-2);
-}
-
-.tdee-goal-desc {
-  font-size: 0.66rem;
-  color: var(--color-text-2);
-  font-style: italic;
-}
-
-// ── Barres macros ─────────────────────────────────────────────────────────
-
-.tdee-macro-row {
-  display: grid;
-  grid-template-columns: 5.5rem 1fr 3rem 2.2rem;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.45rem;
-  font-size: 0.82rem;
-}
-
-.tdee-macro-label {
-  font-weight: 600;
-  color: var(--color-text-1);
-  white-space: nowrap;
-}
-
-.tdee-macro-g {
-  text-align: right;
-  color: var(--color-text-1);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-// ── Méthode de calcul ─────────────────────────────────────────────────────
 
 .tdee-method {
-  font-size: 0.78rem;
+  padding: 0.7rem 0.9rem;
   color: var(--color-text-2);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  line-height: 1.6;
+  font-size: 0.82rem;
+  line-height: 1.65;
 
-  & > summary {
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.8rem;
+  > summary {
     color: var(--color-text-1);
+    cursor: pointer;
+    font-weight: 650;
   }
 
-  & > p {
-    margin: 0.5rem 0 0;
+  p {
+    margin: 0.65rem 0 0;
   }
 }
 
-// ── Responsive 560px ──────────────────────────────────────────────────────
+@media (max-width: 760px) {
+  .tdee-cycle {
+    grid-template-columns: minmax(0, 1fr);
 
-@media (max-width: 560px) {
+    li {
+      min-height: 0;
+
+      &::after {
+        top: auto;
+        right: 50%;
+        bottom: -0.42rem;
+        transform: translateX(50%) rotate(135deg);
+      }
+    }
+  }
+
+  .tdee-stack__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+    min-height: 0;
+  }
+
+  .tdee-stack__row--bmr,
+  .tdee-stack__row--neat {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .tdee-figure,
   .tdee-calc {
     padding: 1rem;
   }
 
-  .tdee-hero-value {
-    font-size: 2.4rem;
+  .tdee-inputs-row,
+  .tdee-inputs-row--calibration {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .tdee-inputs-row {
-    gap: 0.5rem;
+  .tdee-slider-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.45rem;
+  }
+
+  .tdee-range-output {
+    text-align: left;
+  }
+
+  .tdee-hero-value {
+    font-size: 2.2rem;
   }
 
   .tdee-bar-row {
-    grid-template-columns: 3rem 1fr 4.5rem 1.8rem;
-    font-size: 0.78rem;
-  }
+    grid-template-columns: 3.2rem minmax(0, 1fr);
 
-  .tdee-macro-row {
-    grid-template-columns: 4.5rem 1fr 2.5rem 1.8rem;
-    font-size: 0.78rem;
-  }
-
-  .tdee-goal-kcal {
-    font-size: 1rem;
-  }
-
-  .tdee-goal-desc {
-    display: none;
+    .tdee-bar-kcal,
+    .tdee-bar-pct {
+      text-align: left;
+    }
   }
 }
