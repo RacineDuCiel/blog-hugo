@@ -14,7 +14,7 @@
             On utilise .RegularPagesRecursive pour inclure les articles imbriqués.
         */}}
         {{ $all := .RegularPagesRecursive }}
-        {{ $articles := where (where $all ".Params.unlisted" "!=" true) "Params.type" "!=" "partage" }}
+        {{ $articles := where $all ".Params.unlisted" "!=" true }}
 
         {{ if eq (len $articles) 0 }}
         <p class="center">Aucun article pour le moment.</p>
@@ -31,7 +31,7 @@
         {{/*
             Sous-section /posts/[catégorie]/ : articles de cette section uniquement.
         */}}
-        {{ $pages := where (where .RegularPages ".Params.unlisted" "!=" true) "Params.type" "!=" "partage" }}
+        {{ $pages := where .RegularPages ".Params.unlisted" "!=" true }}
 
         {{ if eq (len $pages) 0 }}
         <p class="center">Aucun article pour le moment.</p>

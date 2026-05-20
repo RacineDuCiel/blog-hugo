@@ -5,9 +5,6 @@
 - id: "home.recent_posts"
   translation: "Articles récents"
 
-- id: "home.recent_partages"
-  translation: "Partages récents"
-
 - id: "home.see_all_posts"
   translation: "Voir tous les articles"
 
@@ -28,14 +25,3 @@
 
 - id: "errors.404_description"
   translation: "Vous avez suivi une adresse qui n'existe pas."
-
-## TYPE ##
-- id: "type.partage"
-  translation: "Partage"
-
-## PARTAGES ##
-- id: "partages.title"
-  translation: "Tous les partages"
-
-- id: "partages.empty"
-  translation: "Aucun partage pour le moment."

@@ -2,11 +2,7 @@
 {{ partial "bio" . }}
 <div class="wrapper wrapper-home">
     <main aria-label="Content">
-        {{ $showOnHomePages := where .Site.RegularPages "Params.showOnHome" true }}
-        {{ $articles := where $showOnHomePages "Params.type" "!=" "partage" }}
-        {{ $partages := where $showOnHomePages "Params.type" "==" "partage" }}
-        {{ $articlesSorted := $articles.ByDate.Reverse }}
-        {{ $partagesSorted := $partages.ByDate.Reverse }}
+        {{ $articlesSorted := (where .Site.RegularPages "Params.showOnHome" true).ByDate.Reverse }}
 
         <section class="home-section">
             <h3 class="posts-item-note" aria-label="Recent Articles">{{ T "home.recent_posts" }}</h3>
@@ -19,15 +15,6 @@
             </p>
             {{ end }}
         </section>
-
-        {{ if gt (len $partagesSorted) 0 }}
-        <section class="home-section home-section-partages">
-            <h3 class="posts-item-note" aria-label="Recent Partages">{{ T "home.recent_partages" | default "Partages recents" }}</h3>
-            {{ range first 5 $partagesSorted }}
-            {{ partial "postCard" . }}
-            {{ end }}
-        </section>
-        {{ end }}
     </main>
 </div>
 {{ end }}

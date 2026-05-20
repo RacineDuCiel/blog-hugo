@@ -3,10 +3,10 @@
 Partial: Post Card (liste d'articles)
 ---------------------------------------------------------------------------
 - DRY: helpers/format-date pour le formatage de date
-- Accessibilité: <h2> pour une hiérarchie correcte
+- Accessibilite: <h2> pour une hierarchie correcte
 - SEO: attribut datetime au format ISO 8601
-- Icône star réutilisée via partial icons/star.html
-- Temps de lecture affiché uniquement pour les articles (pas les partages)
+- Icone star reutilisee via partial icons/star.html
+- Temps de lecture affiche quand il est disponible
 ===========================================================================
 */}}
 <article class="post-item">
@@ -27,9 +27,9 @@ Partial: Post Card (liste d'articles)
         </span>
         {{ end }}
 
-        {{ if and (ne .Params.type "partage") (gt .ReadingTime 0) }}
+        {{ if gt .ReadingTime 0 }}
         <span class="post-item-meta post-item-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">
-            · {{ .ReadingTime }} min
+            &middot; {{ .ReadingTime }} min
         </span>
         {{ end }}
     </div>

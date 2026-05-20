@@ -1,64 +1,23 @@
 {{ $avatar_img := .Site.Params.author.avatar }}
-{{ $avatar_img_alt := .Site.Params.author.name }}
+{{ $avatar_img_alt := .Site.Params.author.name | default .Site.Title }}
+{{ $author_description := .Site.Params.author.description }}
 {{ $image := resources.Get $avatar_img }}
 
-<div class="hero-bio">
+<section class="hero-bio" aria-label="Presentation de {{ $avatar_img_alt }}">
   <div class="hb-inner">
-
-  {{/* ── AVATAR (panneau gauche) ─────────────────────────────── */}}
-  <div class="hb-panel hb-panel--avatar">
     {{ with $image }}
-      {{ $tall := .Fill "500x500 center webp" }}
-      {{ $tall2x := .Fill "1000x1000 center webp" }}
+      {{ $avatar := .Fill "440x440 center webp" }}
+      {{ $avatar2x := .Fill "880x880 center webp" }}
       <img class="hb-main"
-           src="{{ $tall.RelPermalink }}"
-           srcset="{{ $tall2x.RelPermalink }} 2x"
+           src="{{ $avatar.RelPermalink }}"
+           srcset="{{ $avatar2x.RelPermalink }} 2x"
            alt="{{ $avatar_img_alt }}"
-           width="{{ $tall.Width }}"
-           height="{{ $tall.Height }}">
+           width="{{ $avatar.Width }}"
+           height="{{ $avatar.Height }}">
+    {{ end }}
+
+    {{ with $author_description }}
+      <p class="hb-quote">{{ . }}</p>
     {{ end }}
   </div>
-
-  {{/* ── TEXTE (panneau droit) ───────────────────────────────── */}}
-  <div class="hb-panel hb-panel--text">
-    <h2 class="hb-quote" aria-label="{{ .Site.Params.author.description }}">
-      <span class="hb-q-term">&gt;&nbsp;WHAT DOES IT MEAN TO BE</span>
-      <span class="hb-q-word" data-text="HUMAN">HUMAN</span>
-    </h2>
-  </div>
-
-  </div>
-</div>
-
-<script>
-(function () {
-  var CHARS = '▓▒░█▄▀╬╪╫╦╣╔╝#@$%!?/<>[]{|}\\';
-  var el    = document.querySelector('.hb-q-word');
-  if (!el) return;
-  var src  = el.dataset.text;
-  var busy = false;
-
-  function doGlitch() {
-    if (busy) return;
-    busy = true;
-    var step = 0, total = 14;
-    var id = setInterval(function () {
-      var ratio = Math.max(0, 0.85 - step * 0.055);
-      el.textContent = src.split('').map(function (c) {
-        return Math.random() < ratio
-          ? CHARS[Math.floor(Math.random() * CHARS.length)]
-          : c;
-      }).join('');
-      if (++step >= total) {
-        clearInterval(id);
-        el.textContent = src;
-        busy = false;
-      }
-    }, 38);
-  }
-
-  setTimeout(function () { setInterval(doGlitch, 4500); }, 2000);
-  var zone = document.querySelector('.hb-quote');
-  if (zone) zone.addEventListener('mouseenter', doGlitch);
-}());
-</script>
+</section>

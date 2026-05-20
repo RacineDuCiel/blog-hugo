@@ -8,14 +8,13 @@
     </header>
     <main class="page-content" aria-label="Content">
         {{ $visiblePages := where .Pages ".Params.unlisted" "!=" true }}
-        {{ $articles := where $visiblePages "Params.type" "!=" "partage" }}
         {{ $isCategoriesTerm := and (eq .Kind "term") (and .Data (eq .Data.Plural "categories")) }}
         {{ $scratch := newScratch }}
         {{ $scratch.Set "pinnedList" (slice) }}
 
         {{ if $isCategoriesTerm }}
         {{ $categoryName := lower .Title }}
-        {{ range $articles }}
+        {{ range $visiblePages }}
         {{ $page := . }}
         {{ $pinTargets := $page.Params.pinCategories }}
         {{ if not (reflect.IsSlice $pinTargets) }}
@@ -46,7 +45,7 @@
         </section>
         {{ end }}
 
-        {{ $paginated := .Paginate $articles 15 }}
+        {{ $paginated := .Paginate $visiblePages 15 }}
         {{ range $paginated.Pages.GroupByDate "2006" }}
         {{ $year := .Key }}
         <h2 class="post-year">{{ $year }}</h2>

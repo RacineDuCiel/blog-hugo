@@ -7,21 +7,11 @@
         {{ end }}
     </header>
     <main class="page-content" aria-label="Content">
-        {{ $pages := .Pages }}
-        
-        {{ if eq .Section "partages" }}
-        {{ $pages = where .Site.RegularPages "Params.type" "partage" }}
-        {{ end }}
-        
-        {{ $visiblePages := where $pages ".Params.unlisted" "!=" true }}
+        {{ $visiblePages := where .Pages ".Params.unlisted" "!=" true }}
         
         {{ if eq (len $visiblePages) 0 }}
         <p class="center">
-            {{ if eq .Section "partages" }}
-            {{ T "partages.empty" | default "Aucun partage pour le moment." }}
-            {{ else }}
             {{ T "list.empty" | default "Aucun contenu pour le moment." }}
-            {{ end }}
         </p>
         {{ else }}
         {{ range $visiblePages.GroupByDate "2006" }}

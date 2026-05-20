@@ -17,7 +17,6 @@ defaultContentLanguage = "fr-fr"
 [taxonomies]
   category = "categories"
   tag = "tags"
-  type = "types"
 
 [markup.goldmark.renderer]
   unsafe = true
@@ -88,11 +87,6 @@ defaultContentLanguage = "fr-fr"
     name = "Articles"
     url = "/posts/"
     weight = 20
-  [[Languages.fr-fr.menu.main]]
-    pageRef = "partages"
-    name = "Partages"
-    url = "/partages/"
-    weight = 30
   [[Languages.fr-fr.menu.main]]
     name = "Catégories"
     url = "/categories/"
