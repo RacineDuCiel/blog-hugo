@@ -1,54 +1,86 @@
 {{/*
-Shortcode: Tor Circuit - Simple, Clear & Responsive
-Usage: {{< tor-circuit>}}
+Shortcode: Tor Circuit
+Usage: {{< tor-circuit >}}
 */}}
 
-<div class="tor-circuit">
-    <svg viewBox="0 0 260 520" xmlns="http://www.w3.org/2000/svg"
-         role="img" aria-labelledby="tor-circuit-title tor-circuit-desc">
-        <title id="tor-circuit-title">Circuit Tor — chiffrement en couches</title>
-        <desc id="tor-circuit-desc">Schéma du circuit Tor à 3 nœuds : Guard (voit votre IP), Middle (simple relais) et Exit (voit la destination). Chaque couche chiffre les données différemment.</desc>
-        <rect x="80" y="5" width="100" height="36" rx="8" fill="#8e44ad" />
-        <text x="130" y="28" text-anchor="middle" class="label" font-size="12">Vous (Client)</text>
-        <polygon points="130,48 125,42 135,42" fill="#888" />
-        <circle cx="130" cy="72" r="20" fill="#e74c3c" />
-        <circle cx="130" cy="72" r="14" fill="#f39c12" />
-        <circle cx="130" cy="72" r="9" fill="#27ae60" />
-        <circle cx="130" cy="72" r="4" fill="#3498db" />
-        <text x="130" y="105" text-anchor="middle" class="info" font-size="9">Chiffré 3×</text>
-        <polygon points="130,118 125,112 135,112" fill="#888" />
-        <rect x="80" y="125" width="100" height="36" rx="8" fill="#e74c3c" />
-        <text x="130" y="148" text-anchor="middle" class="label" font-size="12">Guard</text>
-        <text x="130" y="175" text-anchor="middle" class="info" font-size="9">Voit : votre IP</text>
-        <text x="130" y="187" text-anchor="middle" class="info" font-size="9">Ne voit pas : destination</text>
-        <polygon points="130,200 125,194 135,194" fill="#888" />
-        <circle cx="130" cy="222" r="16" fill="#f39c12" />
-        <circle cx="130" cy="222" r="10" fill="#27ae60" />
-        <circle cx="130" cy="222" r="5" fill="#3498db" />
-        <text x="130" y="250" text-anchor="middle" class="info" font-size="9">Chiffré 2×</text>
-        <polygon points="130,263 125,257 135,257" fill="#888" />
-        <rect x="80" y="270" width="100" height="36" rx="8" fill="#f39c12" />
-        <text x="130" y="293" text-anchor="middle" class="label" font-size="12">Middle</text>
-        <text x="130" y="320" text-anchor="middle" class="info" font-size="9">Voit : rien</text>
-        <text x="130" y="332" text-anchor="middle" class="info" font-size="9">(simple relais)</text>
-        <polygon points="130,345 125,339 135,339" fill="#888" />
-        <circle cx="130" cy="365" r="12" fill="#27ae60" />
-        <circle cx="130" cy="365" r="6" fill="#3498db" />
-        <text x="130" y="390" text-anchor="middle" class="info" font-size="9">Chiffré 1×</text>
-        <polygon points="130,403 125,397 135,397" fill="#888" />
-        <rect x="80" y="410" width="100" height="36" rx="8" fill="#27ae60" />
-        <text x="130" y="433" text-anchor="middle" class="label" font-size="12">Exit</text>
-        <text x="130" y="460" text-anchor="middle" class="info" font-size="9">Voit : destination</text>
-        <text x="130" y="472" text-anchor="middle" class="info" font-size="9">Ne voit pas : votre IP</text>
-        <polygon points="130,485 125,479 135,479" fill="#888" />
-        <circle cx="130" cy="502" r="8" fill="#3498db" />
-        <text x="155" y="506" text-anchor="start" class="info" font-size="9">→ Destination</text>
-    </svg>
+{{ $id := printf "tor-circuit-%d" .Ordinal }}
 
-    <div class="tor-circuit-legend">
-        <span><span class="dot dg"></span>Guard</span>
-        <span><span class="dot dm"></span>Middle</span>
-        <span><span class="dot de"></span>Exit</span>
-        <span><span class="dot dd"></span>Données</span>
+<section class="tor-circuit" aria-labelledby="{{ $id }}-title" aria-describedby="{{ $id }}-desc">
+    <header class="tor-circuit__header">
+        <p class="tor-circuit__eyebrow">Circuit Tor standard</p>
+        <h3 id="{{ $id }}-title">Séparation de la connaissance</h3>
+        <p id="{{ $id }}-desc">Chaque relais connaît seulement son voisin précédent et son voisin suivant. La destination ne voit pas votre IP ; le Guard ne voit pas la destination.</p>
+    </header>
+
+    <div class="tor-circuit__path" role="list" aria-label="Chemin logique d'un circuit Tor">
+        <article class="tor-circuit__node tor-circuit__node--client" role="listitem">
+            <span class="tor-circuit__node-kicker">Source</span>
+            <strong>Client</strong>
+            <span>Construit le circuit</span>
+        </article>
+
+        <span class="tor-circuit__arrow" aria-hidden="true"></span>
+
+        <article class="tor-circuit__node" role="listitem">
+            <span class="tor-circuit__node-kicker">Saut 1</span>
+            <strong>Guard</strong>
+            <span>Voit votre IP</span>
+        </article>
+
+        <span class="tor-circuit__arrow" aria-hidden="true"></span>
+
+        <article class="tor-circuit__node" role="listitem">
+            <span class="tor-circuit__node-kicker">Saut 2</span>
+            <strong>Middle</strong>
+            <span>Relais tampon</span>
+        </article>
+
+        <span class="tor-circuit__arrow" aria-hidden="true"></span>
+
+        <article class="tor-circuit__node" role="listitem">
+            <span class="tor-circuit__node-kicker">Saut 3</span>
+            <strong>Exit</strong>
+            <span>Voit la destination</span>
+        </article>
+
+        <span class="tor-circuit__arrow" aria-hidden="true"></span>
+
+        <article class="tor-circuit__node tor-circuit__node--dest" role="listitem">
+            <span class="tor-circuit__node-kicker">Cible</span>
+            <strong>Destination</strong>
+            <span>Voit l'Exit</span>
+        </article>
     </div>
-</div>
+
+    <div class="tor-circuit__layers" aria-label="Couches de chiffrement retirées progressivement">
+        <div class="tor-circuit__layer-stack" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <p>Le client applique une couche par relais. Le Guard retire la couche externe, le Middle la suivante, puis l'Exit la dernière couche Tor avant la connexion finale.</p>
+    </div>
+
+    <div class="tor-circuit__matrix" aria-label="Ce que chaque relais peut observer">
+        <div class="tor-circuit__matrix-row tor-circuit__matrix-row--head">
+            <span>Relais</span>
+            <span>Voit</span>
+            <span>Ne voit pas</span>
+        </div>
+        <div class="tor-circuit__matrix-row">
+            <strong>Guard</strong>
+            <span>IP client, Middle</span>
+            <span>Destination, contenu HTTPS</span>
+        </div>
+        <div class="tor-circuit__matrix-row">
+            <strong>Middle</strong>
+            <span>Guard, Exit</span>
+            <span>Client, destination</span>
+        </div>
+        <div class="tor-circuit__matrix-row">
+            <strong>Exit</strong>
+            <span>Middle, destination</span>
+            <span>IP client</span>
+        </div>
+    </div>
+</section>

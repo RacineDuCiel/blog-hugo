@@ -26,7 +26,7 @@ La gestion du projet a d'abord transité par l'**Electronic Frontier Foundation 
 
 ### 1.2 Financement et gouvernance
 
-La viabilité de Tor repose sur un financement diversifié. Historiquement, une part significative provenait d'agences fédérales américaines — notamment le Département d'État (via le Bureau de la Démocratie, des Droits de l'Homme et du Travail) et la DARPA. Cette dualité — financement étatique pour un outil qui défie la surveillance — illustre le statut de Tor comme technologie **« à double usage »** (*dual-use*) : elle sert les intérêts diplomatiques américains (promotion de la liberté d'expression dans les régimes autoritaires) autant que la confidentialité des citoyens, y compris face à la surveillance domestique.
+La viabilité de Tor repose sur un financement diversifié. Le Tor Project décrit publiquement un modèle mêlant [subventions gouvernementales, fondations privées et dons individuels](https://support.torproject.org/about-tor/introduction/who-funds-tor/), avec des rapports financiers publiés sur son [site officiel](https://www.torproject.org/about/financials.html.en). Historiquement, une part significative provenait d'agences fédérales américaines — notamment le Département d'État (via le Bureau de la Démocratie, des Droits de l'Homme et du Travail) et la DARPA. Cette dualité — financement étatique pour un outil qui défie la surveillance — illustre le statut de Tor comme technologie **« à double usage »** (*dual-use*) : elle sert les intérêts diplomatiques américains (promotion de la liberté d'expression dans les régimes autoritaires) autant que la confidentialité des citoyens, y compris face à la surveillance domestique.
 
 Depuis les années 2010, le Tor Project a diversifié ses sources : fondation Mozilla, dons individuels, programmes européens (Horizon 2020), et organisations de défense des droits numériques (OTF, Freedom of the Press Foundation). Cette diversification réduit la dépendance à un bailleur unique et renforce la légitimité du projet.
 
@@ -42,6 +42,14 @@ Avant de plonger dans la mécanique interne, il est utile de rappeler la diversi
 - **Entreprises** : veille concurrentielle sans révéler l'origine des requêtes
 
 Cette diversité est elle-même une propriété de sécurité : plus le réseau est utilisé par des profils variés, plus il est difficile de présumer qu'un utilisateur donné a un motif « suspect ».
+
+### 1.4 Ce qu'il faut comprendre avant le détail
+
+Avant les cellules, les handshakes et les services onion, trois invariants guident toute la conception de Tor :
+
+- **Séparation de la connaissance** : aucun relais ne doit voir à la fois l'identité de l'utilisateur et la destination finale.
+- **Adversaire partiel** : Tor vise surtout les observateurs locaux, les relais isolés et les points de surveillance limités. Un adversaire capable d'observer tout Internet reste hors du modèle de menace fort.
+- **Anonymat probabiliste** : Tor ne donne pas une invisibilité absolue ; il réduit la probabilité de liaison entre une personne, un circuit et une activité. Cette probabilité dépend de la taille du réseau, de la diversité des relais, du comportement utilisateur et de la durée d'observation.
 
 ---
 
@@ -63,15 +71,15 @@ Le modèle de menace de Tor repose sur plusieurs hypothèses centrales :
 
 ### 2.2 Adversaires types
 
-| Adversaire | Capacités | Tor protège ? |
+| Adversaire | Capacités | Effet de Tor |
 |---|---|---|
-| FAI / opérateur Wi-Fi | Voit les connexions sortantes | ✓ (contenu et destination masqués) |
-| Site web visité | Voit l'IP de connexion | ✓ (voit l'IP du nœud de sortie) |
-| Relais Tor isolé (malveillant) | Voit une portion du circuit | ✓ (information partielle, inexploitable seule) |
-| Adversaire contrôlant entrée ET sortie | Corrélation temporelle | ⚠ Partiellement (attaque de corrélation) |
-| Adversaire global passif (NSA-tier) | Surveillance de masse du trafic | ⚠ Protection limitée |
-| Malware sur la machine | Accès complet au système | ✗ |
-| Surveillance physique | Observation directe | ✗ |
+| FAI / opérateur Wi-Fi | Voit les connexions sortantes | **Protège** : le contenu applicatif et la destination finale sont masqués, mais l'usage de Tor peut rester visible sans bridge. |
+| Site web visité | Voit l'IP de connexion | **Protège** : le site voit l'IP du nœud de sortie, pas celle de l'utilisateur. |
+| Relais Tor isolé | Voit une portion du circuit | **Protège** : l'information reste locale au saut observé. |
+| Adversaire contrôlant entrée et sortie | Peut comparer timing et volumes | **Limite** : Tor complique l'attaque, mais ne peut pas éliminer la corrélation temporelle. |
+| Adversaire réseau global | Observe une grande partie d'Internet | **Limite fortement** : ce modèle dépasse les garanties fortes d'un réseau faible latence. |
+| Malware sur la machine | Accès au système, clavier, fichiers | **Ne protège pas** : le problème est hors couche réseau. |
+| Surveillance physique | Observation directe | **Ne protège pas** : Tor ne masque ni l'écran ni le contexte matériel. |
 
 Cette grille permet de calibrer ses attentes : Tor offre une protection forte contre la surveillance « ordinaire » (FAI, sites web, Wi-Fi public), mais ses garanties s'érodent face à des adversaires dotés de capacités d'observation réseau étendues.
 
@@ -79,7 +87,7 @@ Cette grille permet de calibrer ses attentes : Tor offre une protection forte co
 
 ## 3. Architecture fondamentale
 
-Le réseau Tor est un **réseau superposé** (*overlay network*) fonctionnant au-dessus de TCP/IP. Il encapsule le trafic applicatif dans des tunnels chiffrés multi-sauts. En 2025, le réseau compte plus de **7 000 relais** opérés par des volontaires à travers le monde, et dessert quotidiennement environ **2 à 3 millions d'utilisateurs**.
+Le réseau Tor est un **réseau superposé** (*overlay network*) fonctionnant au-dessus de TCP/IP. Il encapsule le trafic applicatif dans des tunnels chiffrés multi-sauts. Son ordre de grandeur reste celui de **plusieurs milliers de relais volontaires** et de **millions d'utilisateurs quotidiens**, mais les valeurs exactes varient constamment ; les chiffres à jour sont publiés par [Tor Metrics](https://metrics.torproject.org/).
 
 ### 3.1 Routage en oignon : principe fondamental
 
@@ -118,13 +126,13 @@ Le réseau Tor distingue plusieurs rôles fonctionnels pour ses relais. Comprend
 
 #### 3.2.1 Nœud d'entrée (Guard)
 
-Le premier saut du circuit est le plus sensible : c'est le seul relais qui connaît l'adresse IP réelle de l'utilisateur. Pour cette raison, Tor ne choisit pas les Guards au hasard parmi l'ensemble des relais, mais les sélectionne parmi des relais à **haute stabilité** :
+Le premier saut du circuit est le plus sensible : c'est le seul relais qui connaît l'adresse IP réelle de l'utilisateur. Pour cette raison, Tor ne choisit pas les Guards au hasard parmi l'ensemble des relais, mais les sélectionne parmi des relais à **haute stabilité**, pondérés par le consensus :
 
 - Uptime élevé (disponibilité continue)
-- Bande passante suffisante (> 2 MB/s)
+- Bande passante mesurée et pondérée favorablement
 - Présence dans le réseau depuis suffisamment longtemps pour avoir acquis le flag `Guard`
 
-**Guard Pinning** : pour contrer les attaques de rotation, un client Tor conserve le même Guard pendant environ **4 mois** (paramètre configurable). Le raisonnement est probabiliste : si un adversaire contrôle une fraction *f* des Guards, chaque changement de Guard expose l'utilisateur à une probabilité *f* de tomber sur un Guard malveillant. Conserver le même Guard pendant une longue durée transforme ce risque en un événement unique (soit le Guard initial est compromis, soit il ne l'est pas) plutôt qu'en une série de tirages indépendants dont la probabilité cumulée croît avec le temps.
+**Guard Pinning** : pour contrer les attaques de rotation, un client Tor conserve ses Guards sur une durée longue. La spécification indique par exemple un paramètre `GUARD_LIFETIME` de [120 jours](https://spec.torproject.org/guard-spec/appendices.html), avec un petit ensemble de Guards primaires. Le raisonnement est probabiliste : si un adversaire contrôle une fraction *f* des Guards, chaque changement de Guard expose l'utilisateur à une probabilité *f* de tomber sur un Guard malveillant. Conserver le même Guard pendant une longue durée transforme ce risque en un événement relativement stable plutôt qu'en une série de tirages indépendants dont la probabilité cumulée croît avec le temps.
 
 #### 3.2.2 Nœud médian (Middle)
 
@@ -148,12 +156,12 @@ Les ponts sont des relais **non listés dans le consensus public**. Ils servent 
 
 ### 3.3 Structure des données : cellules
 
-Toutes les données transitant par Tor sont segmentées en **cellules** (*cells*) de taille fixe : **514 octets** (512 octets de payload + 2 octets d'en-tête sur les liens). Cette taille uniforme est un choix de conception délibéré : elle empêche l'analyse de trafic basée sur la taille des paquets. Un observateur ne peut pas distinguer une cellule transportant une page HTML d'une cellule transportant une image, puisqu'elles ont toutes la même taille.
+Toutes les données transitant par Tor sont segmentées en **cellules** (*cells*). Sur les liens modernes (link protocol v4+), une cellule fixe fait **514 octets** : `CircID` sur 4 octets, `Command` sur 1 octet et `CELL_BODY_LEN` de 509 octets. Les anciens liens utilisaient un `CircID` de 2 octets et donc des cellules fixes de 512 octets. Cette taille uniforme, documentée dans les [spécifications Tor](https://spec.torproject.org/tor-spec/preliminaries.html), limite l'analyse de trafic basée sur la taille au niveau des cellules ; elle ne supprime pas pour autant les attaques fondées sur le timing, les volumes cumulés ou les rafales.
 
 On distingue deux familles de cellules :
 
 **Cellules de contrôle** — gestion du circuit :
-- `CREATE` / `CREATED` : établissement d'un nouveau saut (handshake cryptographique)
+- `CREATE2` / `CREATED2` : établissement d'un nouveau saut avec un handshake moderne
 - `DESTROY` : fermeture du circuit
 - `PADDING` : cellules vides pour brouiller l'analyse temporelle
 
@@ -203,7 +211,7 @@ Le protocole **ntor**, déployé depuis 2013, utilise la cryptographie sur courb
 **Déroulement simplifié du handshake ntor** :
 
 1. Le client génère une **paire de clés éphémères** Curve25519 : (x, X) où x est la clé privée et X = x·G la clé publique.
-2. Le client envoie une cellule `CREATE2` contenant : l'identité du relais, la clé publique permanente B du relais (obtenue via le consensus), et X.
+2. Le client envoie une cellule `CREATE2` avec `HTYPE = 0x0002` (`ntor`) et des données de handshake contenant l'identité du relais, sa clé onion publique B (obtenue via le consensus) et X.
 3. Le relais génère sa propre paire éphémère (y, Y), puis calcule le **secret partagé** à partir de deux opérations ECDH combinées : une avec la clé éphémère du client et la clé permanente du relais, et une entre les deux clés éphémères.
 4. Le relais répond avec `CREATED2` contenant Y et un **authentificateur** (MAC) prouvant qu'il possède la clé privée correspondant à B.
 5. Les deux parties dérivent indépendamment les **clés de session** (chiffrement + intégrité) via HKDF.
@@ -212,9 +220,11 @@ Le double calcul ECDH (éphémère-permanent + éphémère-éphémère) garantit
 - **Authentification** : seul le relais légitime (possédant b, la clé privée de B) peut calculer le bon secret.
 - **Confidentialité persistante** (*Forward Secrecy*) : les clés éphémères (x, y) sont supprimées après l'établissement du circuit. Même si la clé permanente b du relais est compromise ultérieurement, les sessions passées restent indéchiffrables.
 
-#### ntor-v3 (services onion v3)
+#### ntor-v3 et services onion
 
-Pour les services onion v3, une variante du protocole ntor a été introduite, permettant d'inclure des **données supplémentaires dans le handshake** (extensions de protocole). Le principe cryptographique reste identique, mais le format des messages est étendu pour supporter les besoins spécifiques du rendez-vous (voir section 6).
+La famille ntor a plusieurs variantes. `ntor` reste le handshake standard pour construire et étendre les circuits (`CREATE2` / `CREATED2`, puis `EXTEND2` / `EXTENDED2`). `ntor-v3`, défini comme `HTYPE = 0x0003` dans les [spécifications de création de circuit](https://spec.torproject.org/tor-spec/create-created-cells.html), étend ntor pour transporter des données supplémentaires authentifiées pendant le handshake.
+
+Les services onion v3 utilisent de leur côté un handshake de rendez-vous de la même famille cryptographique, souvent décrit comme **hs-ntor** : il sert à établir des clés de bout en bout entre le client et le service, avec AES-256 et SHA3-256 pour le trafic onion, sans exposer l'adresse IP de l'un à l'autre. Le point important est de ne pas confondre le handshake de circuit classique avec le handshake applicatif qui joint les deux demi-circuits onion.
 
 ### 4.2 Hiérarchie des clés
 
@@ -224,8 +234,8 @@ Chaque relais Tor maintient une hiérarchie de clés cryptographiques, chacune a
 |---|---|---|---|
 | **Master Identity Key** | Ed25519 | Identité racine du relais. Signe la Signing Key. Stockée hors-ligne chez les opérateurs sérieux. | Jamais (sauf compromission) |
 | **Signing Key** | Ed25519 | Signe les descripteurs publiés dans le consensus. | Régulière (jours/semaines) |
-| **Link Key** | RSA + TLS | Chiffre le tunnel TCP entre relais adjacents. | À chaque connexion TLS |
-| **Onion Key** | Curve25519 | Utilisée dans le handshake ntor pour négocier les clés de circuit. | Rotative (~semaines) pour garantir la *forward secrecy* |
+| **Link / TLS Keys** | TLS + certificats de liaison | Authentifient et chiffrent le canal entre deux relais adjacents. | À l'échelle de la connexion |
+| **Onion Key** | Curve25519 | Utilisée dans le handshake ntor pour négocier les clés de circuit. | Rotative ; la *forward secrecy* vient surtout des clés éphémères du handshake |
 
 La séparation entre Identity Key (permanente, hors-ligne) et Signing Key (rotative, en ligne) permet à un opérateur de révoquer une Signing Key compromise sans perdre l'identité de son relais — un mécanisme analogue à celui des certificats intermédiaires dans l'infrastructure PKI du web.
 
@@ -277,6 +287,8 @@ Les clients ne choisissent pas les relais uniformément au hasard, mais de mani�
 
 Le consensus contient des **poids de position** (Wgg, Wgm, Wee, Wem, etc.) qui ajustent la probabilité de sélection en fonction du rôle : un relais flaggé `Exit` sera favorisé en position de sortie plutôt qu'en position de Guard, afin de préserver la capacité de sortie (ressource rare) pour son usage effectif.
 
+La sélection obéit aussi à des contraintes qualitatives documentées dans le [path specification](https://spec.torproject.org/path-spec/path-selection-constraints.html) : éviter deux fois le même relais, éviter les relais déclarés dans la même famille, limiter la concentration dans un même préfixe réseau, préférer les relais `Fast` pour les circuits ordinaires, et choisir la sortie en fonction de la politique de ports du relais. Autrement dit, Tor ne tire pas seulement « trois relais au hasard » : il optimise un compromis entre performance, diversité topologique et réduction des points de corrélation.
+
 ---
 
 ## 6. Services Onion v3
@@ -317,22 +329,22 @@ La connexion à un service onion implique un « ballet » cryptographique en plu
 {{< onion-rendezvous >}}
 
 **Étape 1 — Publication du descripteur** :
-Le service onion choisit un ensemble de relais comme **Introduction Points** (IPs) et construit des circuits vers eux. Il génère un **descripteur** contenant sa clé publique et la liste de ses Introduction Points, puis le publie sur le **HSDir** — une table de hachage distribuée (DHT) formée par les relais portant le flag `HSDir`. Le descripteur est **chiffré** : seul un client connaissant l'adresse .onion peut le déchiffrer, ce qui empêche l'énumération des services.
+Le service onion choisit plusieurs relais comme **Introduction Points** et construit des circuits vers eux. Il génère ensuite un **descripteur** signé et chiffré qui contient, entre autres, les informations nécessaires pour contacter ces points d'introduction : link specifiers, clés d'authentification et clés ntor propres à chaque introduction point. Ce descripteur est publié auprès de relais portant le flag `HSDir`, choisis par un mécanisme de hachage dépendant de la période temporelle et des clés aveuglées du service. Ce n'est pas une DHT générique où l'on pourrait simplement énumérer les services : les [descripteurs onion v3](https://spec.torproject.org/rend-spec/protocol-overview.html) sont conçus pour que seuls les clients connaissant l'adresse .onion puissent dériver les bons emplacements et déchiffrer le contenu utile.
 
 **Étape 2 — Récupération par le client** :
-Le client qui connaît l'adresse .onion calcule l'emplacement du descripteur dans le HSDir, le télécharge et le déchiffre. Il obtient ainsi la clé publique du service et la liste des Introduction Points.
+Le client qui connaît l'adresse .onion dérive la clé aveuglée de la période courante, calcule les HSDir pertinents, télécharge le descripteur et le déchiffre. Il obtient ainsi les points d'introduction et les clés nécessaires pour leur envoyer une demande valide — pas une simple « liste d'IP » du service, puisque l'adresse réseau du serveur reste cachée.
 
 **Étape 3 — Établissement du point de rendez-vous** :
 Le client choisit un relais arbitraire comme **Rendezvous Point** (RP) et y établit un circuit. Il génère un **cookie de rendez-vous** (secret aléatoire de 20 octets) qu'il envoie au RP.
 
 **Étape 4 — Introduction** :
-Le client construit un message `INTRODUCE1` contenant : l'adresse du RP, le cookie de rendez-vous, et la première moitié d'un handshake Diffie-Hellman (ntor-v3). Ce message est **chiffré pour le service** (avec sa clé publique Ed25519) et envoyé via l'Introduction Point.
+Le client construit un message `INTRODUCE1` contenant notamment le point de rendez-vous, le cookie de rendez-vous, et la première partie du handshake onion-service. L'introduction point vérifie que la demande correspond à une introduction active, puis relaie un `INTRODUCE2` opaque au service ; la partie sensible est chiffrée avec la clé d'introduction publiée dans le descripteur, donc l'introduction point ne peut pas lire les détails du rendez-vous.
 
 **Étape 5 — Jonction** :
 Le service déchiffre le message d'introduction, construit un circuit vers le RP, et lui envoie le message `RENDEZVOUS1` contenant le cookie (preuve qu'il est le bon destinataire) et la seconde moitié du handshake.
 
 **Étape 6 — Tunnel établi** :
-Le RP **relie** (*splice*) les deux circuits. Le client et le service communiquent désormais via un tunnel chiffré de bout en bout, sans que le RP, les Introduction Points, ou tout autre relais intermédiaire ne puisse lire le contenu ni identifier les deux parties.
+Le RP **relie** (*splice*) les deux circuits. Le client et le service disposent alors de clés de bout en bout issues du handshake de rendez-vous ; selon la spécification, le trafic onion-service utilise AES-256 et SHA3-256 pour cette couche applicative. Le RP relaie les cellules, mais ne connaît ni l'adresse IP du client, ni celle du service, ni le contenu.
 
 Au total, une connexion à un service onion traverse **6 relais** (3 côté client + 3 côté service), ce qui explique la latence plus élevée par rapport à une connexion Tor classique.
 
@@ -340,11 +352,11 @@ Au total, une connexion à un service onion traverse **6 relais** (3 côté clie
 
 Une menace spécifique aux services onion est l'**attaque de découverte du Guard**. Un adversaire qui contrôle un relais malveillant utilisé comme Introduction Point peut tenter de remonter le circuit du service pour identifier son Guard — et par extension, localiser le serveur.
 
-Pour contrer cette menace, Tor implémente le mécanisme **Vanguards** (activé par défaut depuis Tor 0.4.7) :
+Pour contrer cette menace, Tor implémente des mécanismes **Vanguards**. Depuis Tor 0.4.7, **Vanguards-Lite** protège les circuits onion avec une deuxième couche de relais plus stables ; Arti prend aussi en charge des modes Vanguards plus complets depuis la version 1.2.2. La distinction compte : le mode « lite » améliore les cas courants, tandis que les opérateurs de services onion long terme peuvent vouloir une configuration plus stricte.
 
-- Le service utilise un ensemble restreint et stable de relais en **deuxième position** (Layer 2 Guards), en plus du Guard traditionnel en première position.
-- Ces relais Layer 2 sont conservés pendant des semaines, et les relais Layer 3 pendant des jours, réduisant la probabilité qu'un adversaire occupe simultanément plusieurs positions stratégiques.
-- Le résultat est une **cascade de Guards** qui multiplie le coût de l'attaque : l'adversaire doit contrôler des relais à plusieurs niveaux simultanément, une tâche exponentiellement plus difficile.
+- Le client ou le service utilise un ensemble restreint de relais en **deuxième position** (Layer 2), en plus du Guard traditionnel en première position.
+- Les paramètres de consensus prévoient typiquement 4 relais L2 avec une durée de vie entre 1 et 12 jours ; les modes complets ajoutent une couche L3 plus courte.
+- Le résultat est une **cascade de Guards** qui augmente le coût de l'attaque : l'adversaire doit contrôler ou observer des positions plus spécifiques, sur une fenêtre temporelle plus longue, au lieu de compter sur des tirages indépendants à chaque circuit.
 
 ### 6.5 Proof-of-Work : défense contre les attaques DoS
 
@@ -394,11 +406,11 @@ Conçu pour les environnements où même les bridges classiques sont détectés 
 
 - **Proxies éphémères** : le client ne se connecte pas à un serveur fixe mais à un **volontaire** dont l'IP change constamment. N'importe qui peut devenir proxy Snowflake en installant une extension de navigateur ou en visitant une page web dédiée.
 - **WebRTC** : le transport utilise le protocole WebRTC (utilisé pour la visioconférence), qu'un censeur ne peut bloquer sans casser les applications de communication légitimes (Google Meet, Zoom, etc.).
-- **Broker centralisé** : un serveur de coordination (le *broker*) met en relation les clients et les proxies. Le broker utilise le **domain fronting** — une technique où la requête HTTPS semble adressée à un CDN majeur (Google, Azure, Fastly) mais est en réalité routée vers le broker Tor.
+- **Broker centralisé** : un serveur de coordination (le *broker*) met en relation les clients et les proxies. L'accès au broker peut s'appuyer sur des mécanismes de rendez-vous conçus pour résister au blocage, mais le trafic utile passe ensuite par des proxies WebRTC éphémères.
 
 #### WebTunnel
 
-Transport plus récent qui encapsule le trafic Tor dans des **connexions WebSocket HTTPS** standard. Pour un observateur, le trafic ressemble à une navigation web ordinaire vers un site légitime.
+Transport plus récent qui encapsule le trafic Tor dans des **connexions HTTPS de type WebSocket**, avec l'objectif de ressembler à une navigation web ordinaire vers un site légitime. Le manuel Tor Browser le résume ainsi : WebTunnel masque la connexion Tor pour la faire apparaître comme un accès à un site via HTTPS.
 
 #### Comparaison des transports
 
@@ -444,18 +456,18 @@ Un adversaire peut déployer ses propres relais Tor pour intercepter ou manipule
 - Le flag `BadExit` permet d'exclure les relais de sortie identifiés comme malveillants.
 - La diversité des opérateurs est encouragée : le Tor Project publie des métriques sur la concentration des relais par AS, pays et opérateur.
 
-### 8.3 Cas d'étude : Boystown (2021–2024)
+### 8.3 Cas d'étude rapporté : Boystown (2021–2024)
 
-Le démantèlement de la plateforme d'abus « Boystown » par les autorités allemandes (BKA), rendu public en 2024, illustre l'efficacité potentielle des **attaques temporelles dans la pratique**.
+Le démantèlement de la plateforme d'abus « Boystown » par les autorités allemandes (BKA), rendu public en 2024, est souvent cité comme exemple d'attaque temporelle contre un usage de Tor. Les détails techniques publiquement vérifiables restent incomplets ; il faut donc le traiter comme un **cas rapporté**, pas comme une preuve que le protocole Tor aurait été « cassé ».
 
-Selon les éléments disponibles :
+Selon les éléments rapportés par la presse technique et les documents judiciaires évoqués publiquement :
 - Les autorités ont surveillé le trafic entrant et sortant de nœuds Tor opérés en Allemagne pendant plusieurs mois.
 - L'application **Ricochet** (messagerie instantanée utilisant les services onion) utilisée par le suspect n'implémentait pas de padding suffisant entre les messages.
 - La corrélation de micro-délais (timing des paquets à l'entrée du réseau vs. timing au niveau du service onion) a permis de lier un utilisateur spécifique à son activité.
 
-Le Tor Project a réagi en soulignant que cette attaque exploitait des **failles applicatives** (insuffisance du padding dans Ricochet, version ancienne de Tor) plutôt qu'une rupture fondamentale du protocole. Cependant, ce cas démontre que face à un adversaire disposant d'une vue réseau étendue (un pays avec de nombreux relais domestiques) et de suffisamment de temps, la corrélation temporelle est une menace réelle.
+L'interprétation prudente est la suivante : une application onion qui génère des motifs de trafic très reconnaissables peut faciliter la corrélation, surtout face à un adversaire capable d'observer durablement plusieurs points du réseau. Le cas illustre donc une menace réelle — timing, padding, choix applicatifs, durée d'observation — plutôt qu'une rupture cryptographique de Tor.
 
-Depuis, Ricochet a été mis à jour (Ricochet-Refresh) avec un padding amélioré, et les mécanismes Vanguards sont activés par défaut.
+Depuis, Ricochet-Refresh et les clients Tor récents ont renforcé plusieurs protections, notamment autour de Vanguards-Lite et du comportement des circuits onion. Cela ne rend pas la corrélation impossible, mais augmente le coût et réduit les opportunités triviales.
 
 ### 8.4 Exploits navigateur (NIT)
 
@@ -470,7 +482,7 @@ Les **NIT** (*Network Investigative Techniques*) sont des exploits déployés pa
 **Contre-mesures** :
 
 - **Maintenir le Tor Browser à jour** : les correctifs sont publiés rapidement après la découverte de vulnérabilités.
-- **Security Level: Safest** : désactive JavaScript, ce qui neutralise la majorité des exploits navigateur.
+- **Security Level: Safest** : selon le [manuel Tor Browser](https://support.torproject.org/tor-browser/features/security-levels/), ce niveau désactive JavaScript par défaut sur tous les sites, limite certaines polices/icônes/symboles/images et met l'audio/vidéo HTML5 en click-to-play. Cela réduit fortement la surface d'attaque, au prix d'une compatibilité web moindre.
 - **Tails OS** ou **Whonix** : systèmes d'exploitation qui routent *tout* le trafic via Tor au niveau du système, empêchant un exploit de contourner le proxy même s'il exécute du code.
 
 ### 8.5 Attaques par empreinte de site web (Website Fingerprinting)
@@ -558,7 +570,7 @@ L'anonymat fourni par Tor est **probabiliste, pas absolu**. Le protocole peut ê
 - **Ne jamais redimensionner** la fenêtre du Tor Browser. La résolution de la fenêtre est un vecteur de fingerprinting : Tor Browser démarre avec une taille standardisée pour que tous les utilisateurs aient la même empreinte.
 - **Maintenir le logiciel à jour**. Les correctifs de sécurité sont critiques (cf. exploits NIT en section 8.4).
 - **Ne pas modifier les paramètres par défaut** du Tor Browser (plugins, extensions, about:config). Chaque modification augmente la singularité de votre empreinte.
-- **Activer le niveau de sécurité « Safest »** sur les sites sensibles. Ce niveau désactive JavaScript, les polices distantes, et de nombreux vecteurs d'attaque.
+- **Activer le niveau de sécurité « Safest »** sur les sites sensibles. Ce niveau désactive JavaScript par défaut sur tous les sites, limite plusieurs fonctionnalités médias/typographiques et réduit la surface d'attaque du navigateur.
 
 **Comportement en ligne** :
 - **Ne pas se connecter à des comptes personnels** (Google, Facebook, email nominatif) via Tor. Ces comptes sont liés à votre identité réelle ; les utiliser via Tor annule l'anonymat.
@@ -630,6 +642,17 @@ Les 9 Directory Authorities constituent un point de centralisation souvent criti
 - [Tor Community](https://community.torproject.org) — Guides pour opérateurs de relais et développeurs
 - [Arti](https://gitlab.torproject.org/tpo/core/arti) — Dépôt du client Tor en Rust
 
+### Spécifications ciblées
+
+- [Tor cells and message lengths](https://spec.torproject.org/tor-spec/preliminaries.html) — tailles `CELL_LEN`, `CircID`, `CELL_BODY_LEN`
+- [Creating and extending circuits](https://spec.torproject.org/tor-spec/create-created-cells.html) — `CREATE2`, `CREATED2`, `ntor`, `ntor-v3`
+- [Path selection](https://spec.torproject.org/path-spec/path-selection-constraints.html) — contraintes de sélection, familles de relais, poids de bande passante
+- [Guard specification](https://spec.torproject.org/guard-spec/appendices.html) — paramètres de durée de vie et Guards primaires
+- [Onion service protocol overview](https://spec.torproject.org/rend-spec/protocol-overview.html) — descripteurs, clés aveuglées, introduction et rendez-vous
+- [Onion service data encryption](https://spec.torproject.org/rend-spec/encrypting-user-data.html) — chiffrement de bout en bout client-service
+- [Onion service PoW](https://spec.torproject.org/hspow-spec/v1-equix.html) — Equi-X et défense anti-DoS
+- [Tor Browser security levels](https://support.torproject.org/tor-browser/features/security-levels/) — niveaux Standard, Safer, Safest
+
 ### Publications académiques fondamentales
 
 - Syverson, Goldschlag, Reed — *Hiding Routing Information* (Workshop on Information Hiding, 1996) — L'article fondateur du routage en oignon.
@@ -637,6 +660,11 @@ Les 9 Directory Authorities constituent un point de centralisation souvent criti
 - Johnson et al. — *Users Get Routed: Traffic Correlation on Tor by Realistic Adversaries* (CCS, 2013) — Démonstration de la faisabilité de la corrélation de trafic par des adversaires réalistes (opérateurs AS).
 - Sun et al. — *RAPTOR: Routing Attacks on Privacy in Tor* (USENIX Security, 2015) — Exploitation de l'asymétrie BGP pour la corrélation.
 - Jansen, Hopper — *Shadow: Running Tor in a Box for Accurate and Efficient Experimentation* (NDSS, 2012) — Simulateur de réseau Tor pour la recherche.
+
+### Analyses de cas
+
+- [Heise — Boystown investigations: Catching criminals on the darknet with a stopwatch](https://www.heise.de/en/news/Boystown-investigations-Catching-criminals-on-the-darknet-with-a-stopwatch-9904534.html) — synthèse prudente du cas Boystown et de la corrélation temporelle rapportée.
+- [Tor Project — Announcing Vanguards Support in Arti](https://blog.torproject.org/announcing-vanguards-for-arti/) — contexte sur la défense contre les attaques de découverte du Guard.
 
 ### Outils complémentaires
 

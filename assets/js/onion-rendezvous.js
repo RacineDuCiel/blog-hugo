@@ -1,83 +1,121 @@
 (function () {
-    const stepNames = {
-        1: "Publication",
-        2: "Découverte",
-        3: "Rendez-vous",
-        4: "Introduction",
-        5: "Jonction",
-        6: "Tunnel"
+    const steps = {
+        1: {
+            title: "1. Publication du descripteur",
+            body: `<p>Le <strong>service onion</strong> prépare son point d'entrée public sans révéler son adresse réseau.</p>
+                <ul>
+                    <li>Il établit des circuits vers plusieurs <strong>Introduction Points</strong>.</li>
+                    <li>Il publie un <strong>descripteur chiffré</strong> auprès de relais HSDir déterminés par la période et ses clés aveuglées.</li>
+                </ul>`,
+            actors: ["service", "hsdir", "ip"]
+        },
+        2: {
+            title: "2. Récupération par le client",
+            body: `<p>Le <strong>client</strong> connaît l'adresse .onion et peut dériver où chercher le descripteur.</p>
+                <ul>
+                    <li>Il interroge les <strong>HSDir</strong> pertinents pour la période courante.</li>
+                    <li>Il récupère les points d'introduction et leurs clés, pas l'adresse IP du service.</li>
+                </ul>`,
+            actors: ["client", "hsdir"]
+        },
+        3: {
+            title: "3. Préparation du rendez-vous",
+            body: `<p>Le <strong>client</strong> choisit un relais neutre comme Rendezvous Point.</p>
+                <ul>
+                    <li>Il construit un circuit vers ce relais.</li>
+                    <li>Il lui remet un <strong>cookie de rendez-vous</strong> qui servira à reconnaître le bon service.</li>
+                </ul>`,
+            actors: ["client", "rp"]
+        },
+        4: {
+            title: "4. Introduction opaque",
+            body: `<p>Le <strong>client</strong> contacte un Introduction Point listé dans le descripteur.</p>
+                <ul>
+                    <li>Le message indique le RP, le cookie et la première partie du handshake onion-service.</li>
+                    <li>L'Introduction Point relaie une demande opaque au service ; il ne lit pas le contenu sensible.</li>
+                </ul>`,
+            actors: ["client", "ip", "service"]
+        },
+        5: {
+            title: "5. Jonction côté service",
+            body: `<p>Le <strong>service</strong> accepte l'introduction et rejoint le Rendezvous Point.</p>
+                <ul>
+                    <li>Il construit son propre circuit vers le RP.</li>
+                    <li>Il prouve qu'il connaît le cookie et complète le handshake.</li>
+                </ul>`,
+            actors: ["service", "rp"]
+        },
+        6: {
+            title: "6. Tunnel relayé",
+            body: `<p>Le <strong>Rendezvous Point</strong> relie les deux demi-circuits sans apprendre les extrémités réelles.</p>
+                <ul>
+                    <li>Le client et le service disposent de clés de bout en bout.</li>
+                    <li>Le RP relaie les cellules, mais ne voit ni les IP finales ni le contenu.</li>
+                </ul>`,
+            actors: ["service", "client", "rp"]
+        }
     };
 
-    const descriptions = {
-        1: `<div class="step-title">1. Publication</div>
-            <p>Le <strong>Service</strong> prépare son accès :</p>
-            <ul>
-                <li>Publie un <strong>descripteur</strong> sur le HSDir (DHT)</li>
-                <li>Établit des circuits vers ses <strong>Introduction Points</strong></li>
-            </ul>`,
-        2: `<div class="step-title">2. Découverte</div>
-            <p>Le <strong>Client</strong> cherche le service :</p>
-            <ul>
-                <li>Interroge le <strong>HSDir</strong> avec l'adresse .onion</li>
-                <li>Récupère le descripteur (liste des IP)</li>
-            </ul>`,
-        3: `<div class="step-title">3. Rendez-vous</div>
-            <p>Le <strong>Client</strong> prépare un point neutre :</p>
-            <ul>
-                <li>Choisit un relais comme <strong>Rendez-vous Point</strong></li>
-                <li>Lui envoie un <strong>cookie secret</strong></li>
-            </ul>`,
-        4: `<div class="step-title">4. Introduction</div>
-            <p>Le <strong>Client</strong> contacte le Service :</p>
-            <ul>
-                <li>Envoie <strong>INTRODUCE</strong> via l'Intro Point</li>
-                <li>Contient : adresse du RP + cookie + handshake DH</li>
-            </ul>`,
-        5: `<div class="step-title">5. Jonction</div>
-            <p>Le <strong>Service</strong> rejoint le RP :</p>
-            <ul>
-                <li>Construit un circuit vers le Rendez-vous</li>
-                <li>Envoie <strong>RENDEZVOUS</strong> avec le cookie</li>
-            </ul>`,
-        6: `<div class="step-title">6. Tunnel établi</div>
-            <p>Communication <strong>anonyme de bout en bout</strong> :</p>
-            <ul>
-                <li>Le RP connecte les deux circuits</li>
-                <li>Aucune IP révélée de chaque côté</li>
-            </ul>`
-    };
+    function setStep(container, step) {
+        const config = steps[step];
+        if (!config) return;
 
-    const actorsByStep = {
-        1: ['service', 'hsdir', 'ip'],
-        2: ['client', 'hsdir'],
-        3: ['client', 'rp'],
-        4: ['client', 'ip', 'service'],
-        5: ['service', 'rp'],
-        6: ['service', 'client', 'rp']
-    };
+        const buttons = container.querySelectorAll(".onion-rv__nav button");
+        const actors = container.querySelectorAll(".onion-rv__actor");
+        const flows = container.querySelectorAll(".onion-rv__flow");
+        const desc = container.querySelector(".onion-rv__desc");
 
-    const container = document.querySelector('.onion-rv');
-    if (!container) return;
+        buttons.forEach((button) => {
+            const isActive = button.dataset.step === String(step);
+            button.classList.toggle("active", isActive);
+            if (isActive) {
+                button.setAttribute("aria-current", "step");
+            } else {
+                button.removeAttribute("aria-current");
+            }
+            button.setAttribute("aria-pressed", String(isActive));
+        });
 
-    const buttons = container.querySelectorAll('.onion-rv-nav button');
-    const stepLabel = document.getElementById('rv-step-label');
-    const desc = document.getElementById('rv-desc');
-    const actors = container.querySelectorAll('.actor');
-    const flows = container.querySelectorAll('.flow-path');
+        actors.forEach((actor) => {
+            const isActive = config.actors.includes(actor.dataset.actor);
+            actor.classList.toggle("active", isActive);
+            actor.classList.toggle("dim", !isActive);
+        });
 
-    function setStep(step) {
-        buttons.forEach(b => b.classList.toggle('active', b.dataset.step == step));
-        stepLabel.textContent = stepNames[step];
-        desc.innerHTML = descriptions[step];
+        flows.forEach((flow) => {
+            flow.classList.toggle("visible", flow.dataset.flow === String(step));
+        });
 
-        const active = actorsByStep[step];
-        actors.forEach(a => a.classList.toggle('dim', !active.includes(a.dataset.actor)));
-        flows.forEach(f => f.classList.toggle('visible', f.dataset.flow == step));
+        desc.innerHTML = `<h4 class="onion-rv__desc-title">${config.title}</h4>${config.body}`;
     }
 
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => setStep(parseInt(btn.dataset.step)));
-    });
+    document.querySelectorAll(".onion-rv").forEach((container) => {
+        const buttons = Array.from(container.querySelectorAll(".onion-rv__nav button"));
+        if (!buttons.length) return;
 
-    setStep(1);
+        buttons.forEach((button, index) => {
+            button.setAttribute("aria-pressed", button.classList.contains("active") ? "true" : "false");
+
+            button.addEventListener("click", () => {
+                setStep(container, Number(button.dataset.step));
+            });
+
+            button.addEventListener("keydown", (event) => {
+                if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+
+                event.preventDefault();
+                let nextIndex = index;
+
+                if (event.key === "ArrowRight") nextIndex = (index + 1) % buttons.length;
+                if (event.key === "ArrowLeft") nextIndex = (index - 1 + buttons.length) % buttons.length;
+                if (event.key === "Home") nextIndex = 0;
+                if (event.key === "End") nextIndex = buttons.length - 1;
+
+                buttons[nextIndex].focus();
+                setStep(container, Number(buttons[nextIndex].dataset.step));
+            });
+        });
+
+        setStep(container, 1);
+    });
 })();
