@@ -16,44 +16,112 @@
   text-align: center;
 }
 
+.hb-avatar {
+  display: block;
+  width: unquote("clamp(200px, 26vw, 280px)");
+  margin: 0 auto;
+}
+
 .hb-main {
   display: block;
-  width: unquote("clamp(168px, 22vw, 220px)");
-  height: unquote("clamp(168px, 22vw, 220px)");
-  object-fit: cover;
-  border-radius: 50%;
-  border: 1px solid rgba(75, 85, 99, 0.16);
-  box-shadow:
-    0 0 0 8px rgba(75, 85, 99, 0.025),
-    0 22px 60px rgba(17, 24, 39, 0.08);
-  filter: saturate(0.84) contrast(1.02);
+  width: 100%;
+  height: auto;
+  border: 0;
+  background: transparent;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  animation: hb-fade-in 700ms ease-out 120ms forwards;
+}
+
+@keyframes hb-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .hb-quote {
-  margin: 1.65rem 0 0;
-  max-width: 30rem;
-  color: var(--color-text-2);
-  font-family: 'Source Serif 4', Georgia, serif;
-  font-size: unquote("clamp(1rem, 1.8vw, 1.2rem)");
-  font-style: italic;
+  position: relative;
+  display: inline-block;
+  margin: 1.8rem 0 0;
+  max-width: unquote("min(28rem, 92vw)");
+  color: color-mix(in srgb, var(--color-text-1) 78%, var(--accent));
+  font-family: 'Nothing You Could Do', 'Segoe Print', 'Bradley Hand ITC', cursive;
+  font-size: unquote("clamp(1.22rem, 2.7vw, 1.62rem)");
+  font-style: normal;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.18;
   letter-spacing: 0;
+  text-wrap: balance;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+  transform: rotate(-3.2deg);
+  transform-origin: center;
+}
+
+.hb-quote::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 5%;
+  bottom: -0.4rem;
+  height: 0.46rem;
+  border-top: 1.25px solid currentColor;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(1deg);
+  opacity: 0.42;
+  pointer-events: none;
 }
 
 html.dark .hb-main {
-  border-color: rgba(209, 213, 219, 0.12);
-  box-shadow:
-    0 0 0 8px rgba(209, 213, 219, 0.018),
-    0 24px 70px rgba(0, 0, 0, 0.32);
+  filter: invert(1);
+  mix-blend-mode: screen;
+}
+
+html.dark .hb-quote {
+  color: color-mix(in srgb, var(--color-text-1) 82%, var(--accent));
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.34);
+}
+
+html.dark .hb-quote::after {
+  opacity: 0.54;
 }
 
 @media (prefers-color-scheme: dark) {
   html:not(.light) .hb-main {
-    border-color: rgba(209, 213, 219, 0.12);
-    box-shadow:
-      0 0 0 8px rgba(209, 213, 219, 0.018),
-      0 24px 70px rgba(0, 0, 0, 0.32);
+    filter: invert(1);
+    mix-blend-mode: screen;
+  }
+
+  html:not(.light) .hb-quote {
+    color: color-mix(in srgb, var(--color-text-1) 82%, var(--accent));
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.34);
+  }
+
+  html:not(.light) .hb-quote::after {
+    opacity: 0.54;
+  }
+}
+
+@media (max-width: 768px) {
+  .hb-quote {
+    max-width: unquote("min(22rem, 88vw)");
+    font-size: unquote("clamp(1.12rem, 6.2vw, 1.42rem)");
+    line-height: 1.16;
+    transform: rotate(-2.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hb-main {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+@media print {
+  .hb-main {
+    mix-blend-mode: normal;
+    filter: none;
+    opacity: 1;
+    animation: none;
   }
 }
 
@@ -64,11 +132,19 @@ html.dark .hb-main {
 }
 
 .posts-item-note {
-  font-family: 'JetBrains Mono', monospace;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  opacity: 0.5;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 1.15rem;
+  color: var(--color-text-1);
+  font-family: 'Inter', system-ui, sans-serif;
+  text-transform: none;
+  font-size: unquote("clamp(1.12rem, 2.2vw, 1.45rem)");
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0;
+  opacity: 1;
 }
 
 .home-section {

@@ -61,17 +61,17 @@ defaultContentLanguage = "fr-fr"
     rssFeedDescription = "summary"
     additionalScripts = []
     sitename = "RacineDuCiel"
-    description = "Blog personnel sur la sécurité, la vie privée, l'IA, la musique et le sport. Par RacineDuCiel."
+    description = ""
 
     [Languages.fr-fr.params.author]
       avatar = "avatar.jpg"
-      description = "What does it mean to be human"
+      description = "What does it mean to be human... ?"
       name = "RacineDuCiel"
 
     [Languages.fr-fr.params.webmanifest]
       start_url = "/"
       theme_color = "#434648"
-      background_color = "#fff"
+      background_color = "#fbfbfd"
       display = "standalone"
 
     [Languages.fr-fr.params.seo]

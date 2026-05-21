@@ -8,12 +8,14 @@
     {{ with $image }}
       {{ $avatar := .Fill "440x440 center webp" }}
       {{ $avatar2x := .Fill "880x880 center webp" }}
-      <img class="hb-main"
-           src="{{ $avatar.RelPermalink }}"
-           srcset="{{ $avatar2x.RelPermalink }} 2x"
-           alt="{{ $avatar_img_alt }}"
-           width="{{ $avatar.Width }}"
-           height="{{ $avatar.Height }}">
+      <div class="hb-avatar">
+        <img class="hb-main"
+             src="{{ $avatar.RelPermalink }}"
+             srcset="{{ $avatar2x.RelPermalink }} 2x"
+             alt="{{ $avatar_img_alt }}"
+             width="{{ $avatar.Width }}"
+             height="{{ $avatar.Height }}">
+      </div>
     {{ end }}
 
     {{ with $author_description }}
