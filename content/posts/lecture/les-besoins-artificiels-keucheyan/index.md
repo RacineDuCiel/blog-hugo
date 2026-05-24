@@ -7,8 +7,6 @@ description: "Notes de lecture sur Les besoins artificiels de Razmig Keucheyan"
 showOnHome: true
 ---
 
-# Lire *Les besoins artificiels* de Razmig Keucheyan : guide pour comprendre une écologie politique des besoins
-
 On parle souvent du consumérisme comme d’un excès personnel : trop d’achats, trop de désirs, trop de comparaison sociale, trop peu de maîtrise de soi. Le reproche est familier, presque rassurant, parce qu’il suppose que la solution serait à portée de volonté individuelle : un peu de discipline, un peu de sobriété, un peu de distance critique devant les vitrines et les écrans. *Les besoins artificiels* de Razmig Keucheyan commence précisément par refuser ce confort moral. Le consumérisme n’y apparaît pas d’abord comme une faiblesse des individus, mais comme une organisation du monde. Nous ne sommes pas simplement entourés de marchandises ; nous vivons dans un système qui produit des objets, mais aussi les besoins qui rendent ces objets désirables, nécessaires, parfois indispensables.
 
 C’est ce déplacement qui donne au livre sa force. Keucheyan ne demande pas seulement : pourquoi consommons-nous trop ? Il demande plutôt : comment certains désirs deviennent-ils des besoins ? Qui les fabrique ? Par quels objets, quelles infrastructures, quelles normes sociales, quelles institutions ? Et surtout : comment reprendre collectivement prise sur ce processus sans tomber ni dans la culpabilisation individuelle ni dans une autorité qui déciderait d’en haut ce que chacun aurait le droit de désirer ?

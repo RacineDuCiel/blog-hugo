@@ -4,7 +4,7 @@ date: 2026-02-25
 categories: ["Securite-Vie-Privee"]
 tags: ["SecurityX", "CASP+", "CompTIA", "GRC", "Certification"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 1 : gouvernance, gestion des risques, conformité, threat modeling et sécurité IA."
-showOnHome: true
+showOnHome: false
 pageClass: "fiche-revision"
 ---
 
