@@ -1,6 +1,7 @@
 ---
 title: Recommandations musicales
 categories: ["Musique"]
+tags: ["metalcore"]
 date: 2025-11-18
 showOnHome: false
 pinned: true

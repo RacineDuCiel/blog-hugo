@@ -31,6 +31,111 @@
     outline: none;
 }
 
+/* ── Barre de filtre par tags ──────────────────────────────────────────── */
+.tag-filter-bar {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border, rgba(29, 29, 31, 0.12));
+}
+
+.tag-filter-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+}
+
+.tag-filter-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-3, #90959d);
+}
+
+.tag-filter-clear {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-2, #6d737c);
+    background: none;
+    border: none;
+    padding: 0.15rem 0.35rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+        color: var(--accent-hover, #1d1d1f);
+        background: var(--accent-subtle, rgba(95, 102, 112, 0.08));
+    }
+}
+
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.32rem 0.8rem;
+    font-size: 0.84rem;
+    font-family: inherit;
+    line-height: 1.2;
+    color: var(--color-text-2, #6d737c);
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, rgba(29, 29, 31, 0.12));
+    border-radius: 99px;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        color: var(--accent, #5f6670);
+        background: var(--accent-subtle, rgba(95, 102, 112, 0.08));
+        border-color: var(--accent, #5f6670);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--accent-ring, rgba(95, 102, 112, 0.28));
+    }
+
+    &.is-active {
+        color: #fff;
+        background: var(--accent, #5f6670);
+        border-color: var(--accent, #5f6670);
+    }
+}
+
+.tag-pill[hidden] {
+    display: none;
+}
+
+.tag-pill__count {
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-3, #90959d);
+    transition: color 0.15s ease;
+
+    .tag-pill:hover & {
+        color: var(--accent, #5f6670);
+    }
+
+    .tag-pill.is-active & {
+        color: rgba(255, 255, 255, 0.75);
+    }
+}
+
+/* ── Compteur de résultats ─────────────────────────────────────────────── */
+.search-count {
+    margin: 0 0 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-3, #90959d);
+}
+
 .search-result-item {
     margin: 0;
     padding: 1rem 0;
@@ -61,9 +166,47 @@
 
 .search-result-item small {
     display: block;
-    margin-top: 0.35rem;
+    margin-top: 0.5rem;
     color: var(--color-text-3, #90959d);
     font-size: 0.78rem;
+}
+
+/* ── Chips de tags sous chaque résultat ────────────────────────────────── */
+.result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+}
+
+.result-tag {
+    font-size: 0.74rem;
+    font-family: inherit;
+    line-height: 1.2;
+    color: var(--color-text-3, #90959d);
+    background: var(--color-surface-2, #f1f2f4);
+    border: 1px solid transparent;
+    border-radius: 99px;
+    padding: 0.18rem 0.6rem;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        color: var(--accent, #5f6670);
+        border-color: var(--accent, #5f6670);
+        background: var(--accent-subtle, rgba(95, 102, 112, 0.08));
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--accent-ring, rgba(95, 102, 112, 0.28));
+    }
+
+    &.is-active {
+        color: #fff;
+        background: var(--accent, #5f6670);
+        border-color: var(--accent, #5f6670);
+    }
 }
 
 @media (max-width: 768px) {
@@ -75,5 +218,10 @@
     #search-input {
         padding: 0.85rem 0.9rem;
         font-size: 16px;
+    }
+
+    .tag-pill {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.86rem;
     }
 }

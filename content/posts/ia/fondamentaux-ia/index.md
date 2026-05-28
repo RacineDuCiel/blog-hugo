@@ -2,6 +2,7 @@
 title: Fondamentaux de l'IA - Cours Hack The Box
 date: 2025-11-28
 categories: ["IA"]
+tags: ["machine learning", "hack the box"]
 showOnHome: true
 pinCategories: ["IA"]
 pinned: true

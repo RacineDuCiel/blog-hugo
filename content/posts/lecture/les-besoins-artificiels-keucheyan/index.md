@@ -2,7 +2,7 @@
 title: "Les besoins artificiels — Razmig Keucheyan"
 date: 2026-05-21
 categories: ["Lecture"]
-tags: ["Écologie politique", "Consumérisme", "Marxisme", "Démocratie", "Essai"]
+tags: ["marxisme", "écologie politique", "consumérisme"]
 description: "Notes de lecture sur Les besoins artificiels de Razmig Keucheyan"
 showOnHome: true
 ---

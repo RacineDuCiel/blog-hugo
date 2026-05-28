@@ -2,6 +2,7 @@
 title: "Réseau Tor : architecture, protocoles et implications de sécurité"
 date: 2025-12-06
 categories: ["Securite-Vie-Privee"]
+tags: ["cybersécurité", "vie privée", "cryptographie"]
 showOnHome: true
 description: "Plongée technique dans le réseau Tor : architecture en oignon, protocoles cryptographiques (Curve25519, ntor), services cachés v3 et modèles de menace."
 ---

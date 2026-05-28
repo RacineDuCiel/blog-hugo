@@ -16,18 +16,18 @@
 
 {{ if hugo.IsProduction }}
 {{ $main = $main | resources.Concat "js/main.js" | resources.Minify | resources.Fingerprint }}
-<script defer src="{{  $main.Permalink }}" integrity="{{ $main.Data.Integrity }}"></script>
+<script defer src="{{  $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}"></script>
 
 {{ if gt (len $custom) 0 }}
 {{ $custom = $custom | resources.Concat "js/custom.js" | resources.Minify | resources.Fingerprint }}
-<script defer src="{{  $custom.Permalink }}" integrity="{{ $custom.Data.Integrity }}"></script>
+<script defer src="{{  $custom.RelPermalink }}" integrity="{{ $custom.Data.Integrity }}"></script>
 {{ end }}
 {{ else }}
 {{ $main = $main | resources.Concat "js/main.js" }}
-<script async src="{{  $main.Permalink }}"></script>
+<script async src="{{  $main.RelPermalink }}"></script>
 
 {{ if gt (len $custom) 0 }}
 {{ $custom = $custom | resources.Concat "js/custom.js" }}
-<script async src="{{  $custom.Permalink }}"></script>
+<script async src="{{  $custom.RelPermalink }}"></script>
 {{ end }}
 {{ end }}

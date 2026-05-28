@@ -10,6 +10,25 @@ BEST PRACTICE: Hugo Pipes pour les assets
     <div class="search-box">
         <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche" autofocus>
     </div>
+
+    {{ with .Site.Taxonomies.tags }}
+    <div class="tag-filter-bar">
+        <div class="tag-filter-head">
+            <span class="tag-filter-label">Filtrer par tag</span>
+            <button type="button" id="tag-filter-clear" class="tag-filter-clear" hidden>Tout effacer</button>
+        </div>
+        <div class="tag-cloud" id="tag-cloud" role="group" aria-label="Filtrer par tag">
+            {{ range .ByCount }}
+            <button type="button" class="tag-pill" data-tag="{{ .Name }}" aria-pressed="false">
+                <span class="tag-pill__label">{{ .Name }}</span>
+                <span class="tag-pill__count">{{ .Count }}</span>
+            </button>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+    <p id="search-count" class="search-count" aria-live="polite" hidden></p>
     <div id="search-results" aria-live="polite" aria-atomic="true"></div>
 </div>
 
