@@ -2,6 +2,23 @@
 
 :root {
     color-scheme: light;
+
+    // Mesure de lecture des ARTICLES (prose). Corps à 1.05rem → colonne un peu
+    // plus large et plus aérée sur grand écran, lecture plus confortable.
+    --reading-measure: 46rem;
+    // Mesure des LISTES (accueil, /posts/) : volontairement plus étroite que la
+    // prose pour garder titre et date proches sur grand écran.
+    --list-measure: 44rem;
+    // Largeur de la colonne TOC latérale (desktop ≥ 1100px).
+    --toc-width: 240px;
+    // Gouttière entre TOC et texte.
+    --toc-gap: 3rem;
+
+    // Échelle de taille de la prose, pilotée par le widget de réglages de lecture.
+    // 1 = taille de base ; le widget écrit des paliers [0.9 … 1.4] sur <html>.
+    // --reading-font-family reste volontairement non défini ici : chaque contexte
+    // (article serif / fiche sans) fournit son propre fallback via var(…, défaut).
+    --reading-font-scale: 1;
 }
 
 html.dark {
@@ -149,6 +166,71 @@ input:focus {
             text-decoration-color: currentColor;
         }
     }
+}
+
+// ── Hiérarchie éditoriale des titres d'article ───────────────────────────────
+// Cible les titres de prose (enfants directs du conteneur de contenu interne).
+// Les fiches CompTIA (.fiche-revision .page-content > h2…) gardent la priorité
+// par spécificité supérieure.
+.page-content > h2,
+.page-content > h3,
+.page-content > h4 {
+    font-family: $font-sans;
+    color: var(--color-text-1);
+    line-height: 1.25;
+}
+
+.page-content > h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.9rem;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.page-content > h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 2.1rem;
+    margin-bottom: 0.4rem;
+}
+
+.page-content > h4 {
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin-top: 1.6rem;
+    margin-bottom: 0.3rem;
+}
+
+// Premier titre du contenu : pas d'espace superflu au-dessus.
+.page-content > h2:first-child,
+.page-content > h3:first-child {
+    margin-top: 0;
+}
+
+// ── Rythme vertical de la prose ──────────────────────────────────────────────
+.page-content > p {
+    margin: 0 0 1.3rem;
+    padding: 0;
+}
+
+.page-content > ul,
+.page-content > ol {
+    margin: 0 0 1.3rem;
+    padding-left: 1.4rem;
+}
+
+.page-content > ul li,
+.page-content > ol li {
+    margin-bottom: 0.4rem;
+}
+
+// Resserre la liste d'articles sur la mesure de lecture (cohérent avec l'accueil
+// et le corps des articles) → rapproche titre et méta sur grand écran.
+// .wrapper.list-page (double classe) bat .wrapper à spécificité égale.
+.wrapper.list-page {
+    max-width: var(--list-measure);
 }
 
 .list-page .header {

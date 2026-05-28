@@ -31,7 +31,7 @@
 }
 
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Source Serif';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -39,7 +39,7 @@
 }
 
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Source Serif';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -47,7 +47,7 @@
 }
 
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Source Serif';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
@@ -70,6 +70,7 @@
 @import "ui";
 @import "typography";
 @import "theme-colors";
+@import "reading-settings";
 @import "ux-improvements";
 @import "hero-bio";
 @import "fiche-revision";

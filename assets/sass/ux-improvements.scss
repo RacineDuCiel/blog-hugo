@@ -123,9 +123,18 @@ details.toc {
 // ── Layout article : grille deux colonnes (article + TOC latérale) ─────────────
 
 .wrapper.post.has-toc-sidebar {
-    max-width: 1160px;
+    // Largeur = TOC + gouttière + mesure de lecture + padding latéral.
+    // Le bloc (TOC + texte) est ainsi centré, avec des marges extérieures
+    // symétriques, et le texte conserve une mesure de lecture optimale.
+    max-width: calc(var(--toc-width) + var(--toc-gap) + var(--reading-measure));
     padding-left: 30px;
     padding-right: 30px;
+}
+
+// Articles sans TOC : centrer le contenu à la même mesure de lecture.
+.wrapper.post:not(.has-toc-sidebar) .article-layout > main.page-content {
+    max-width: var(--reading-measure);
+    margin-inline: auto;
 }
 
 // Sur mobile/tablette : revenir à la largeur standard du thème
@@ -143,8 +152,8 @@ details.toc {
 @media (min-width: 1100px) {
     .wrapper.post.has-toc-sidebar .article-layout {
         display: grid;
-        grid-template-columns: 240px minmax(0, 1fr);
-        gap: 3.5rem;
+        grid-template-columns: var(--toc-width) minmax(0, 1fr);
+        column-gap: var(--toc-gap);
         // align-items: stretch par défaut — l'<aside> occupe toute la hauteur
         // de l'article, .toc-inner (sticky) glisse à l'intérieur.
     }
@@ -442,34 +451,8 @@ html.dark .toc-fab { color: #111; }
     opacity: 1;
 }
 
-// ── (12) CTA "Tous les articles" ──────────────────────────────────────────────
-.home-see-all {
-    margin-top: 1.25rem;
-    margin-bottom: 0;
-}
-
-.home-see-all-link {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    border: 1.5px solid var(--accent);
-    padding: 0.4rem 1.1rem;
-    border-radius: 99px;
-    transition: background 0.2s, color 0.2s;
-
-    &:hover {
-        background: var(--accent);
-        color: #fff;
-        text-decoration: none;
-    }
-}
-
-html.dark .home-see-all-link:hover {
-    color: #111;
-}
+// Le lien « Tous les articles » est désormais stylé dans hero-bio.scss
+// (lien éditorial discret avec flèche), cohérent avec le langage UI du site.
 
 // ── (14) Pagination ───────────────────────────────────────────────────────────
 .pagination {

@@ -1,10 +1,12 @@
 // Typography direction: editorial, restrained, and UI-first.
 //
-// Article prose   : Source Serif 4
+// Article prose   : Source Serif (Source Serif 4 woff2, déclarée sans le « 4 »
+//                   dans le nom de famille pour rester valide même non quotée —
+//                   le minifieur CSS retire les guillemets hors contexte direct)
 // UI and headings : Inter
 // Code            : JetBrains Mono
 
-$font-serif : 'Source Serif 4', Georgia, 'Times New Roman', serif;
+$font-serif : 'Source Serif', Georgia, 'Times New Roman', serif;
 $font-sans  : 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 $font-mono  : 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
 
@@ -30,13 +32,26 @@ h6 {
     > blockquote p,
     > dl dt,
     > dl dd {
-        font-family: $font-serif;
-        font-size: 1.05rem;
-        line-height: 1.9;
+        // Police & taille pilotables par le widget de réglages de lecture.
+        // Fallback contextuel : serif par défaut pour les articles standards.
+        font-family: var(--reading-font-family, #{$font-serif});
+        font-size: calc(1.05rem * var(--reading-font-scale, 1));
+        line-height: 1.75;
+        font-feature-settings: "kern", "liga", "clig";
+        text-rendering: optimizeLegibility;
+    }
+
+    // L'italique exploite la fonte Source Serif italic déjà chargée.
+    > p em,
+    > ul li em,
+    > ol li em,
+    > blockquote em {
+        font-style: italic;
     }
 
     figcaption {
         font-family: $font-serif;
+        font-style: italic;
     }
 
     > h1,

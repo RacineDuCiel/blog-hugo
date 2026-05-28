@@ -125,9 +125,12 @@ html.dark .hb-quote::after {
   }
 }
 
-.wrapper-home {
+// .wrapper.wrapper-home (double classe) pour battre .wrapper (premium-theme.scss,
+// chargé après) à spécificité égale. Aligne la mesure de la liste d'accueil sur
+// celle de lecture des articles → resserre titre↔date, cohérent avec le hero.
+.wrapper.wrapper-home {
   padding: 1.5rem 1.25rem 2rem;
-  max-width: 960px;
+  max-width: var(--list-measure);
   margin: 0 auto;
 }
 
@@ -151,14 +154,38 @@ html.dark .hb-quote::after {
   margin-bottom: 4rem;
 }
 
-.home-see-all-link {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  opacity: 0.5;
-  transition: opacity 150ms ease;
+// Lien « Tous les articles » : CTA éditorial discret, aligné sur le langage UI
+// du site (Inter, gris atténué → accent au survol, flèche qui glisse). Remplace
+// l'ancien rendu monospace qui jurait avec le reste de l'interface.
+.home-see-all {
+  margin: 2rem 0 0;
+}
 
-  &:hover {
-    opacity: 1;
+.home-see-all-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: $font-sans;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--color-text-2);
+  opacity: 1;
+  text-decoration: none;
+  border-bottom: 0;
+  transition: color 160ms ease;
+
+  &::after {
+    content: "\2192"; // →
+    transition: transform 200ms ease;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--accent-hover);
+
+    &::after {
+      transform: translateX(4px);
+    }
   }
 }

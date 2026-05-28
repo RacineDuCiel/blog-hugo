@@ -43,6 +43,7 @@
                     </div>
                     <hr class="post-divider">
                     {{ end }}
+                    {{ partial "reading-settings.html" . }}
                 </header>
 
                 {{/* TOC inline (mobile / tablette) — masquée sur desktop via CSS */}}
@@ -116,6 +117,11 @@
 {{/* Script barre de progression de lecture */}}
 {{ $progress := resources.Get "js/reading-progress.js" | minify | fingerprint }}
 <script defer src="{{ $progress.RelPermalink }}" integrity="{{ $progress.Data.Integrity }}"
+    crossorigin="anonymous"></script>
+
+{{/* Script du widget de réglages de lecture (taille + police) */}}
+{{ $readingSettings := resources.Get "js/reading-settings.js" | minify | fingerprint }}
+<script defer src="{{ $readingSettings.RelPermalink }}" integrity="{{ $readingSettings.Data.Integrity }}"
     crossorigin="anonymous"></script>
 
 {{/* Script TOC spy — suivi de position dans la sidebar */}}

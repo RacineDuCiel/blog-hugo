@@ -1,10 +1,9 @@
 // ══════════════════════════════════════════════════════════════════════════════
-// ARTICLE — Style global optimisé pour lecture et mémorisation
+// FICHES DE RÉVISION — style compact « notes » réservé aux pages CompTIA
 //
-// Override de typography.scss (chargé avant dans custom.scss) :
-// cascade order garantit la priorité sans !important.
-//
-// Appliqué à tous les articles via .page-content.
+// Scopé sous .fiche-revision (pageClass appliqué sur <body>) : ce rendu dense
+// sans-serif ne concerne QUE les 4 fiches CompTIA, jamais les articles normaux,
+// qui héritent du style éditorial serif de typography.scss.
 // ══════════════════════════════════════════════════════════════════════════════
 
 // ── Disclaimer fiches de révision ─────────────────────────────────────────────
@@ -27,7 +26,7 @@
     }
 }
 
-.page-content {
+.fiche-revision .page-content {
 
     // ── 1. Prose : sans-serif compact ─────────────────────────────────────────
     > p,
@@ -37,8 +36,10 @@
     > blockquote p,
     > dl dt,
     > dl dd {
-        font-family: $font-sans;
-        font-size: 0.95rem;
+        // Police & taille pilotables par le widget de réglages de lecture.
+        // Fallback contextuel : sans-serif compact pour les fiches CompTIA.
+        font-family: var(--reading-font-family, #{$font-sans});
+        font-size: calc(0.95rem * var(--reading-font-scale, 1));
         line-height: 1.5;
     }
 
@@ -188,7 +189,7 @@
         > blockquote p,
         > dl dt,
         > dl dd {
-            font-size: 0.9rem;
+            font-size: calc(0.9rem * var(--reading-font-scale, 1));
         }
 
         // H2 badge : padding réduit pour les petits écrans

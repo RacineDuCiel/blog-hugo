@@ -12,3 +12,17 @@ BEST PRACTICE: Hugo Pipes pour minification + fingerprint
 {{ $customStyle := resources.Get "sass/custom.scss" | toCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customStyle.RelPermalink }}" integrity="{{ $customStyle.Data.Integrity }}"
     crossorigin="anonymous">
+
+{{/* Réglages de lecture : applique taille + police mémorisées AVANT le paint
+     (même mécanisme anti-flash que theme.js). CSP : 'unsafe-inline' autorisé. */}}
+<script>
+(function () {
+  try {
+    var d = document.documentElement, s = window.localStorage;
+    var scale = s.getItem("reading-font-scale");
+    if (scale) d.style.setProperty("--reading-font-scale", scale);
+    var fam = s.getItem("reading-font-family");
+    if (fam) d.style.setProperty("--reading-font-family", fam);
+  } catch (e) {}
+})();
+</script>
