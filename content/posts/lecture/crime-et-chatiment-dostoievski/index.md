@@ -16,7 +16,7 @@ Ce guide propose une carte pour y entrer. Il suit quatre mouvements. Le premier 
 
 ---
 
-## Mouvement I — Le monde et le moment du roman
+## I — Le monde et le moment du roman
 
 ### 1. Pétersbourg, ville-fièvre
 
@@ -50,7 +50,7 @@ Cette « forme nouvelle » est l'invention décisive du roman. Dostoïevski reno
 
 ---
 
-## Mouvement II — L'idée et le crime
+## II — L'idée et le crime
 
 ### 5. La théorie de l'homme extraordinaire — et l'article qui la trahit
 
@@ -72,7 +72,7 @@ Le passage à l'acte ruine aussitôt la fiction rationnelle. Raskolnikov avait p
 
 ---
 
-## Mouvement III — Le châtiment et les voix
+## III — Le châtiment et les voix
 
 ### 8. Le châtiment avant la peine
 
@@ -106,7 +106,7 @@ Reste l'épilogue, souvent discuté, et qu'on lit mal si l'on en attend une réd
 
 ---
 
-## Mouvement IV — Portée, limites, postérité
+## IV — Portée, limites, postérité
 
 ### 13. Pourquoi le roman reste inquiétant
 

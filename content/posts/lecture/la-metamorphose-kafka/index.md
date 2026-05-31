@@ -16,7 +16,7 @@ Ce guide propose une carte pour y entrer. Il suit quatre mouvements. Le premier 
 
 ---
 
-## Mouvement I — Le monde et le moment de l'œuvre
+## I — Le monde et le moment de l'œuvre
 
 ### 1. Prague, la chambre et les trois portes
 
@@ -44,7 +44,7 @@ La publication, elle, fut lente. Mécontent de sa fin, Kafka décline d'abord l'
 
 ---
 
-## Mouvement II — L'événement nu et le mot qui le porte
+## II — L'événement nu et le mot qui le porte
 
 ### 5. Une transformation sans pourquoi
 
@@ -66,7 +66,7 @@ Cette scène fixe le malentendu qui ne cessera plus. Gregor pense en fils dévou
 
 ---
 
-## Mouvement III — La lente expulsion et les voix
+## III — La lente expulsion et les voix
 
 ### 8. Les courbes inverses : la famille qui revit
 
@@ -100,7 +100,7 @@ C'est alors que se produit le geste formel le plus audacieux du livre. Pour la p
 
 ---
 
-## Mouvement IV — Portée, limites, postérité
+## IV — Portée, limites, postérité
 
 ### 13. Pourquoi la nouvelle reste inquiétante
 
