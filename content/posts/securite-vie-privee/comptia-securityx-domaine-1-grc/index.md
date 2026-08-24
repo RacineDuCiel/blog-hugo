@@ -7,8 +7,6 @@ description: "Fiche de révision SecurityX (ex CASP+) — Domaine 1 : gouvernanc
 format: "fiche"
 series: "CompTIA SecurityX"
 seriesOrder: 1
-featured: false
-pinned: true
 unlisted: false
 draft: false
 ---

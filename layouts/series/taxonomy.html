@@ -1,3 +1,3 @@
 {{ define "main" }}
-<main id="main-content" class="tags-page editorial-shell"><header class="listing-hero"><p class="eyebrow">Collections</p><h1>Dossiers</h1><p>Des ensembles de textes conçus pour être lus dans la durée.</p></header><div class="tag-index">{{ range .Data.Terms.Alphabetical }}<a href="{{ .Page.RelPermalink }}"><span>{{ .Page.Title }}</span><small>{{ .Count }} textes</small></a>{{ end }}</div></main>
+<main id="main-content" class="tags-page editorial-shell"><header class="listing-hero"><h1>Dossiers</h1><p>Des ensembles de textes conçus pour être lus dans la durée.</p></header><div class="tag-index">{{ range .Data.Terms.Alphabetical }}<a href="{{ .Page.RelPermalink }}"><span>{{ .Page.Title }}</span><small>{{ .Count }} textes</small></a>{{ end }}</div></main>
 {{ end }}

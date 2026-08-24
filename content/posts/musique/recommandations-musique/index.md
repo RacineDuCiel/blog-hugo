@@ -4,8 +4,6 @@ categories: ["musique"]
 date: 2025-11-18
 description: "Une sélection personnelle d'albums et d'EPs, principalement metalcore, pensée comme un mur d'écoute plutôt qu'un classement."
 format: "selection"
-featured: false
-pinned: true
 unlisted: false
 draft: false
 ---

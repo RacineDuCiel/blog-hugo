@@ -7,8 +7,6 @@ description: "Fiche de révision SecurityX (ex CASP+) — Domaine 2 : architectu
 format: "fiche"
 series: "CompTIA SecurityX"
 seriesOrder: 2
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

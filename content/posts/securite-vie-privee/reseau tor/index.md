@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["cybersécurité", "vie privée", "cryptographie"]
 description: "Plongée technique dans le réseau Tor : architecture en oignon, protocoles cryptographiques (Curve25519, ntor), services cachés v3 et modèles de menace."
 format: "guide"
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

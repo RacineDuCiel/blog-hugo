@@ -1,12 +1,15 @@
-{{ $context := partial "article-context.html" . }}
+{{ $page := .page }}
+{{ $showCategory := true }}
+{{ if isset . "showCategory" }}{{ $showCategory = .showCategory }}{{ end }}
+{{ $context := partial "article-context.html" $page }}
 <article class="story-row">
   <div>
-    <p class="story-kicker"><a href="/categories/{{ $context.categorySlug }}/">{{ $context.categoryLabel }}</a> · {{ $context.formatLabel }}</p>
-    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-    {{ with .Description }}<p class="story-row__description">{{ . }}</p>{{ end }}
+    <p class="story-kicker">{{ if $showCategory }}<a href="/categories/{{ $context.categorySlug }}/">{{ $context.categoryLabel }}</a> · {{ end }}{{ $context.formatLabel }}</p>
+    <h2><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+    {{ with $page.Description }}<p class="story-row__description">{{ . }}</p>{{ end }}
   </div>
   <p class="story-meta">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time>
-    {{ if gt .ReadingTime 0 }}<span>{{ .ReadingTime }} min</span>{{ end }}
+    <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date | time.Format "02.01.2006" }}</time>
+    {{ if gt $page.ReadingTime 0 }}<span>{{ $page.ReadingTime }} min</span>{{ end }}
   </p>
 </article>

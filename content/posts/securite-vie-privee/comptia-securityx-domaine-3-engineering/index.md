@@ -7,8 +7,6 @@ description: "Fiche de révision SecurityX (ex CASP+) — Domaine 3 : engineerin
 format: "fiche"
 series: "CompTIA SecurityX"
 seriesOrder: 3
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

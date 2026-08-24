@@ -7,8 +7,6 @@ description: "Fiche de révision SecurityX (ex CASP+) — Domaine 4 : opération
 format: "fiche"
 series: "CompTIA SecurityX"
 seriesOrder: 4
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

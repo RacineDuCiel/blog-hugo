@@ -15,7 +15,7 @@
         <span>{{ .ReadingTime }} min de lecture</span>
       </div>
       <div class="article-tools" aria-label="Outils de lecture">
-        <button type="button" data-bookmark aria-pressed="false">Enregistrer</button>
+        <button type="button" data-bookmark aria-pressed="false">Ajouter à la bibliothèque</button>
         <button type="button" data-share>Partager</button>
         <button type="button" data-reading-toggle aria-expanded="false" aria-controls="reading-panel">Aa <span>Lecture</span></button>
         <div class="reading-panel" id="reading-panel" data-reading-panel hidden>
@@ -47,7 +47,7 @@
     {{ $relatedPosts := where (.Site.RegularPages.Related .) "Section" "posts" }}
     {{ $related := first 3 $relatedPosts }}
     {{ with $related }}
-    <section class="related editorial-shell" aria-labelledby="related-title"><div class="section-heading"><h2 id="related-title">Poursuivre la lecture</h2><span class="section-heading__rule" aria-hidden="true"></span></div><div class="story-list">{{ range . }}{{ partial "postCard" . }}{{ end }}</div></section>
+    <section class="related editorial-shell" aria-labelledby="related-title"><div class="section-heading"><h2 id="related-title">Poursuivre la lecture</h2><span class="section-heading__rule" aria-hidden="true"></span></div><div class="story-list">{{ range . }}{{ partial "postCard" (dict "page" .) }}{{ end }}</div></section>
     {{ end }}
 
     <nav class="article-pagination editorial-shell" aria-label="Articles précédent et suivant">
@@ -58,7 +58,7 @@
   </main>
 {{ else }}
   <main id="main-content" class="standard-page editorial-shell">
-    <header class="listing-hero"><p class="eyebrow">RacineDuCiel</p><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}</header>
+    <header class="listing-hero"><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}</header>
     {{ if eq .RelPermalink "/about/" }}
       {{ with resources.Get "avatar.jpg" }}{{ $avatar := .Fill "360x360 center webp q88" }}<figure class="about-avatar"><img src="{{ $avatar.RelPermalink }}" alt="Portrait illustré de RacineDuCiel" width="{{ $avatar.Width }}" height="{{ $avatar.Height }}"></figure>{{ end }}
     {{ end }}

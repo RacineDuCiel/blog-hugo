@@ -21,7 +21,10 @@
     });
     var dark = root.dataset.appearance === "dark" || (root.dataset.appearance === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
     var themeMeta = document.querySelector("[data-theme-color]");
-    if (themeMeta) themeMeta.setAttribute("content", dark ? "#101218" : "#F6F1E8");
+    if (themeMeta) {
+      var graphite = root.dataset.palette === "graphite";
+      themeMeta.setAttribute("content", dark ? (graphite ? "#151515" : "#101218") : (graphite ? "#F1F1EF" : "#F6F1E8"));
+    }
   }
   document.querySelectorAll("[data-theme-value]").forEach(function (button) {
     button.addEventListener("click", function () {
@@ -176,31 +179,153 @@
   document.querySelectorAll("[data-search-open]").forEach(function (button) { button.addEventListener("click", openSearch); });
   document.addEventListener("keydown", function (event) { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); openSearch(); } });
 
-  function readJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch (error) { return []; } }
+  var storageAvailable = true;
+  function readJSON(key) {
+    try {
+      var value = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(value) ? value.slice(0, 50) : [];
+    } catch (error) { storageAvailable = false; return []; }
+  }
+  function writeJSON(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch (error) { storageAvailable = false; return false; }
+  }
+  function removeStored(key) {
+    try { localStorage.removeItem(key); return true; }
+    catch (error) { storageAvailable = false; return false; }
+  }
+  var notice = document.querySelector("[data-site-notice]");
+  var noticeTimer;
+  function showNotice(message) {
+    if (!notice || !message) return;
+    window.clearTimeout(noticeTimer);
+    notice.textContent = message;
+    notice.hidden = false;
+    noticeTimer = window.setTimeout(function () { notice.hidden = true; }, 2600);
+  }
+  window.addEventListener("rdc:notice", function (event) { showNotice(event.detail); });
+
   var libraryDialog = document.querySelector("[data-library-dialog]");
   var libraryTab = "saved";
+  var clearPending = false;
+  var clearTimer;
+  function libraryKey() { return libraryTab === "saved" ? "rdc:library:v1" : "rdc:recent:v1"; }
+  function resetClearButton() {
+    if (!libraryDialog) return;
+    clearPending = false;
+    window.clearTimeout(clearTimer);
+    var button = libraryDialog.querySelector("[data-library-clear]");
+    button.dataset.confirming = "false";
+    button.textContent = libraryTab === "saved" ? "Effacer les textes enregistrés" : "Effacer l’historique";
+  }
+  function syncLibraryCounts() {
+    var saved = readJSON("rdc:library:v1");
+    var recent = readJSON("rdc:recent:v1");
+    document.querySelectorAll("[data-library-count]").forEach(function (count) {
+      count.textContent = saved.length;
+      count.hidden = saved.length === 0;
+    });
+    document.querySelectorAll("[data-library-open]").forEach(function (button) {
+      button.setAttribute("aria-label", saved.length ? "Ouvrir la bibliothèque, " + saved.length + " texte" + (saved.length > 1 ? "s" : "") + " enregistré" + (saved.length > 1 ? "s" : "") : "Ouvrir la bibliothèque");
+    });
+    document.querySelectorAll("[data-library-tab-count='saved']").forEach(function (count) { count.textContent = saved.length; });
+    document.querySelectorAll("[data-library-tab-count='recent']").forEach(function (count) { count.textContent = recent.length; });
+    return { saved: saved, recent: recent };
+  }
+  function createEmptyLibrary() {
+    var empty = document.createElement("div");
+    empty.className = "library-empty";
+    var heading = document.createElement("h3");
+    var description = document.createElement("p");
+    if (!storageAvailable) {
+      heading.textContent = "Bibliothèque indisponible";
+      description.textContent = "Le stockage local est désactivé dans ce navigateur. La lecture du site reste entièrement disponible.";
+    } else if (libraryTab === "saved") {
+      heading.textContent = "Aucun texte enregistré";
+      description.textContent = "Dans un article, utilisez « Ajouter à la bibliothèque » pour le retrouver ici.";
+    } else {
+      heading.textContent = "Aucun historique pour le moment";
+      description.textContent = "Les articles que vous ouvrez apparaissent automatiquement ici, avec votre progression de lecture.";
+    }
+    empty.appendChild(heading);
+    empty.appendChild(description);
+    if (storageAvailable) {
+      var link = document.createElement("a");
+      link.className = "text-link";
+      link.href = "/categories/";
+      link.textContent = "Explorer les textes →";
+      empty.appendChild(link);
+    }
+    return empty;
+  }
+  function createLibraryItem(item) {
+    var row = document.createElement("article");
+    row.className = "library-item";
+    var link = document.createElement("a");
+    link.className = "library-item__link";
+    link.href = item.url;
+    var label = document.createElement("small");
+    label.textContent = item.category || "RacineDuCiel";
+    var strong = document.createElement("strong");
+    strong.textContent = item.title;
+    link.appendChild(label);
+    link.appendChild(strong);
+    if (typeof item.progress === "number") {
+      var progress = document.createElement("span");
+      progress.textContent = item.progress + " % lu";
+      link.appendChild(progress);
+    }
+    var remove = document.createElement("button");
+    remove.className = "library-remove";
+    remove.type = "button";
+    remove.dataset.libraryRemove = item.url;
+    remove.textContent = "Retirer";
+    remove.setAttribute("aria-label", "Retirer « " + item.title + " » " + (libraryTab === "saved" ? "des textes enregistrés" : "de l’historique"));
+    row.appendChild(link);
+    row.appendChild(remove);
+    return row;
+  }
   function renderLibrary() {
     if (!libraryDialog) return;
     var list = libraryDialog.querySelector("[data-library-list]");
-    var key = libraryTab === "saved" ? "rdc:library:v1" : "rdc:recent:v1";
-    var items = readJSON(key);
+    var collections = syncLibraryCounts();
+    var items = libraryTab === "saved" ? collections.saved : collections.recent;
+    var clear = libraryDialog.querySelector("[data-library-clear]");
     list.replaceChildren();
-    if (!items.length) { var empty = document.createElement("p"); empty.className = "library-empty"; empty.textContent = libraryTab === "saved" ? "Aucun texte enregistré pour le moment." : "Votre historique de lecture apparaîtra ici."; list.appendChild(empty); return; }
-    items.forEach(function (item) {
-      var link = document.createElement("a"); link.className = "library-item"; link.href = item.url;
-      var label = document.createElement("small"); label.textContent = item.category || "RacineDuCiel";
-      var strong = document.createElement("strong"); strong.textContent = item.title;
-      link.appendChild(label); link.appendChild(strong);
-      if (typeof item.progress === "number") { var progress = document.createElement("span"); progress.textContent = item.progress + " % lu"; link.appendChild(progress); }
-      list.appendChild(link);
-    });
+    clear.hidden = !storageAvailable || items.length === 0;
+    if (!items.length) { list.appendChild(createEmptyLibrary()); return; }
+    items.forEach(function (item) { list.appendChild(createLibraryItem(item)); });
   }
   document.querySelectorAll("[data-library-open]").forEach(function (button) { button.addEventListener("click", function () { if (!libraryDialog) return; document.body.classList.remove("nav-open"); if (menuToggle) menuToggle.setAttribute("aria-expanded", "false"); renderLibrary(); libraryDialog.showModal(); }); });
   if (libraryDialog) {
-    libraryDialog.querySelectorAll("[data-library-tab]").forEach(function (button) { button.addEventListener("click", function () { libraryTab = button.dataset.libraryTab; libraryDialog.querySelectorAll("[data-library-tab]").forEach(function (tab) { var active = tab === button; tab.setAttribute("aria-selected", active ? "true" : "false"); }); renderLibrary(); }); });
-    libraryDialog.querySelector("[data-library-clear]").addEventListener("click", function () { try { localStorage.removeItem(libraryTab === "saved" ? "rdc:library:v1" : "rdc:recent:v1"); } catch (error) {} renderLibrary(); });
+    libraryDialog.querySelectorAll("[data-library-tab]").forEach(function (button) { button.addEventListener("click", function () { libraryTab = button.dataset.libraryTab; libraryDialog.querySelectorAll("[data-library-tab]").forEach(function (tab) { var active = tab === button; tab.setAttribute("aria-selected", active ? "true" : "false"); }); resetClearButton(); renderLibrary(); }); });
+    libraryDialog.querySelector("[data-library-list]").addEventListener("click", function (event) {
+      var button = event.target.closest("[data-library-remove]");
+      if (!button) return;
+      var items = readJSON(libraryKey()).filter(function (item) { return item.url !== button.dataset.libraryRemove; });
+      if (writeJSON(libraryKey(), items)) showNotice(libraryTab === "saved" ? "Texte retiré de votre bibliothèque." : "Texte retiré de votre historique.");
+      resetClearButton();
+      renderLibrary();
+      window.dispatchEvent(new CustomEvent("rdc:library-change"));
+    });
+    libraryDialog.querySelector("[data-library-clear]").addEventListener("click", function () {
+      var button = this;
+      if (!clearPending) {
+        clearPending = true;
+        button.dataset.confirming = "true";
+        button.textContent = "Confirmer l’effacement";
+        clearTimer = window.setTimeout(resetClearButton, 5000);
+        return;
+      }
+      if (removeStored(libraryKey())) showNotice(libraryTab === "saved" ? "Bibliothèque vidée." : "Historique effacé.");
+      resetClearButton();
+      renderLibrary();
+      window.dispatchEvent(new CustomEvent("rdc:library-change"));
+    });
+    libraryDialog.addEventListener("close", resetClearButton);
   }
   window.addEventListener("rdc:library-change", renderLibrary);
+  renderLibrary();
   document.querySelectorAll("[data-dialog-close]").forEach(function (button) { button.addEventListener("click", function () { button.closest("dialog").close(); }); });
   document.querySelectorAll("dialog").forEach(function (dialog) { dialog.addEventListener("click", function (event) { if (event.target === dialog) dialog.close(); }); });
 

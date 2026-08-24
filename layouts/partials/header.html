@@ -9,25 +9,25 @@
       <a href="/categories/"{{ if hasPrefix .RelPermalink "/categories/" }} aria-current="page"{{ end }}>Explorer</a>
       <a href="/posts/"{{ if hasPrefix .RelPermalink "/posts/" }} aria-current="page"{{ end }}>Archives</a>
       <a href="/about/"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>À propos</a>
-      <div class="mobile-nav-actions"><a href="/search/" data-search-open>Rechercher</a><button type="button" data-library-open>À lire</button></div>
+      <div class="mobile-nav-actions"><a href="/search/" data-search-open>Rechercher</a><button type="button" data-library-open>Bibliothèque <span class="library-count" data-library-count hidden>0</span></button></div>
     </nav>
     <div class="site-tools" aria-label="Outils">
       <a class="tool-button" href="/search/" data-search-open aria-label="Ouvrir la recherche"><span aria-hidden="true">Rechercher</span><kbd>⌘K</kbd></a>
-      <button class="tool-button tool-button--compact" type="button" data-library-open aria-label="Ouvrir la bibliothèque">À lire</button>
+      <button class="tool-button tool-button--compact" type="button" data-library-open aria-label="Ouvrir la bibliothèque">Bibliothèque <span class="library-count" data-library-count hidden>0</span></button>
       <div class="theme-control" data-theme-control>
-        <button class="tool-button tool-button--compact" type="button" data-theme-toggle aria-expanded="false" aria-controls="theme-panel">Thème</button>
+        <button class="tool-button tool-button--compact" type="button" data-theme-toggle aria-expanded="false" aria-controls="theme-panel">Apparence</button>
         <div class="theme-panel" id="theme-panel" data-theme-panel hidden>
           <fieldset>
-            <legend>Apparence</legend>
+            <legend>Mode</legend>
             <div class="segmented" data-theme-group="appearance">
               <button type="button" data-theme-value="auto">Auto</button><button type="button" data-theme-value="light">Clair</button><button type="button" data-theme-value="dark">Sombre</button>
             </div>
           </fieldset>
           <fieldset>
-            <legend>Palette</legend>
+            <legend>Thème</legend>
             <div class="palette-options" data-theme-group="palette">
-              <button type="button" data-theme-value="cobalt"><span class="swatch swatch--cobalt" aria-hidden="true"></span>Cobalt</button>
               <button type="button" data-theme-value="carmin"><span class="swatch swatch--carmin" aria-hidden="true"></span>Carmin</button>
+              <button type="button" data-theme-value="graphite"><span class="swatch swatch--graphite" aria-hidden="true"></span>Graphite</button>
             </div>
           </fieldset>
         </div>

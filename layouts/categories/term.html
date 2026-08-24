@@ -2,9 +2,7 @@
 {{ $pages := where .RegularPages ".Params.unlisted" "!=" true }}
 {{ $paginator := .Paginate $pages.ByDate.Reverse }}
 <main id="main-content" class="listing-page editorial-shell">
-  <header class="listing-hero"><p class="eyebrow">Univers</p><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}</header>
-  {{ $pinned := where $pages ".Params.pinned" true }}
-  {{ with $pinned }}<section class="term-selection"><p class="eyebrow">Sélection</p><div class="story-list">{{ range . }}{{ partial "postCard" . }}{{ end }}</div></section>{{ end }}
-  <section class="term-all"><p class="eyebrow">Tous les textes</p><div class="story-list">{{ range $paginator.Pages }}{{ partial "postCard" . }}{{ else }}<p>Aucun article pour le moment.</p>{{ end }}</div>{{ partial "pagination.html" $paginator }}</section>
+  <header class="listing-hero"><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}<small>{{ len $pages }} {{ if eq (len $pages) 1 }}texte{{ else }}textes{{ end }}</small></header>
+  <section class="term-all"><div class="story-list">{{ range $paginator.Pages }}{{ partial "postCard" (dict "page" . "showCategory" false) }}{{ else }}<p>Aucun article pour le moment.</p>{{ end }}</div>{{ partial "pagination.html" $paginator }}</section>
 </main>
 {{ end }}

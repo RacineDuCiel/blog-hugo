@@ -14,7 +14,7 @@ module.exports = defineConfig({
     screenshot: "only-on-failure"
   },
   webServer: {
-    command: "hugo server --bind 127.0.0.1 --port 1414 --disableFastRender --renderToMemory",
+    command: "hugo server --bind 127.0.0.1 --port 1414 --disableFastRender --renderToMemory --noBuildLock",
     url: "http://127.0.0.1:1414",
     reuseExistingServer: !process.env.CI,
     timeout: 120000

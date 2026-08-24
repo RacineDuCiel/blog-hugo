@@ -5,8 +5,6 @@ categories: ["lettres-idees"]
 tags: ["Marcel Proust", "Sur la lecture", "Théorie littéraire"]
 description: "Proust pense la lecture comme une amitié silencieuse et un seuil : une impulsion irremplaçable qui doit conduire le lecteur vers sa propre vie intérieure."
 format: "essai"
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

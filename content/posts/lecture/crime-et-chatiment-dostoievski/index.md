@@ -7,8 +7,6 @@ description: "Une carte de lecture de Crime et châtiment : la théorie de Rasko
 format: "essai"
 series: "Dostoïevski"
 seriesOrder: 2
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

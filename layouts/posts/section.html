@@ -3,7 +3,6 @@
 {{ $articles := where .RegularPagesRecursive ".Params.unlisted" "!=" true }}
 <main id="main-content" class="listing-page editorial-shell">
   <header class="listing-hero">
-    <p class="eyebrow">{{ if $isRoot }}Chronologie complète{{ else }}Section{{ end }}</p>
     <h1>{{ if $isRoot }}Archives{{ else }}{{ .Title }}{{ end }}</h1>
     <p>{{ if $isRoot }}Tous les textes publiés, du plus récent au plus ancien.{{ else }}{{ .Description }}{{ end }}</p>
   </header>
@@ -23,7 +22,7 @@
       <div class="story-list">
         {{ range .Pages }}
         {{ $ctx := partial "article-context.html" . }}
-        <div data-archive-item="{{ $ctx.categorySlug }}">{{ partial "postCard" . }}</div>
+        <div data-archive-item="{{ $ctx.categorySlug }}">{{ partial "postCard" (dict "page" .) }}</div>
         {{ end }}
       </div>
     </section>

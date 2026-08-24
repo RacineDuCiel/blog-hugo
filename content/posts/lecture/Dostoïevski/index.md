@@ -7,8 +7,6 @@ description: "Un guide pour entrer dans l'œuvre de Dostoïevski : sa vie, ses r
 format: "guide"
 series: "Dostoïevski"
 seriesOrder: 1
-featured: true
-pinned: true
 unlisted: false
 draft: false
 ---

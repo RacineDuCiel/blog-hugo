@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["IA"]
 description: "Une introduction structurée aux concepts essentiels de l'intelligence artificielle et du machine learning à partir du parcours Hack The Box Academy."
 format: "guide"
-featured: false
-pinned: true
 unlisted: false
 draft: false
 ---

@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{ $pages := where .RegularPagesRecursive ".Params.unlisted" "!=" true }}
 <main id="main-content" class="listing-page editorial-shell">
-  <header class="listing-hero"><p class="eyebrow">Collection</p><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}</header>
-  <div class="story-list">{{ range $pages.ByDate.Reverse }}{{ partial "postCard" . }}{{ else }}<p>Aucun article pour le moment.</p>{{ end }}</div>
+  <header class="listing-hero"><h1>{{ .Title }}</h1>{{ with .Description }}<p>{{ . }}</p>{{ end }}</header>
+  <div class="story-list">{{ range $pages.ByDate.Reverse }}{{ partial "postCard" (dict "page" .) }}{{ else }}<p>Aucun article pour le moment.</p>{{ end }}</div>
 </main>
 {{ end }}

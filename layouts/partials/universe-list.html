@@ -1,0 +1,18 @@
+{{ $universes := slice
+  (dict "slug" "lettres-idees" "index" "01")
+  (dict "slug" "tech-cyber" "index" "02")
+  (dict "slug" "corps-sante" "index" "03")
+  (dict "slug" "musique" "index" "04")
+}}
+<div class="universe-list{{ with .class }} {{ . }}{{ end }}">
+  {{ range $universes }}
+    {{ $universe := site.GetPage (printf "/categories/%s" .slug) }}
+    {{ $pages := where $universe.RegularPages ".Params.unlisted" "!=" true }}
+    <a href="{{ $universe.RelPermalink }}">
+      <span>{{ .index }}</span>
+      <strong>{{ $universe.Title }}</strong>
+      <small>{{ $universe.Description }}</small>
+      {{ if $.showCounts }}<em>{{ len $pages }} {{ if eq (len $pages) 1 }}texte{{ else }}textes{{ end }}</em>{{ end }}
+    </a>
+  {{ end }}
+</div>

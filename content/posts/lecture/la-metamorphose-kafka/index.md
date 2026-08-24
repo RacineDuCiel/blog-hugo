@@ -5,8 +5,6 @@ categories: ["lettres-idees"]
 tags: ["kafka"]
 description: "Une lecture de La Métamorphose comme expérience familiale, sociale et narrative : ce que devient un lien quand un être cesse d'être utile et reconnaissable."
 format: "essai"
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

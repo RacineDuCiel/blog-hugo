@@ -5,8 +5,6 @@ categories: ["lettres-idees"]
 tags: ["marxisme", "consumérisme", "écologie"]
 description: "Une lecture critique de Razmig Keucheyan sur la fabrication sociale des besoins, le consumérisme et les voies d'une écologie démocratique."
 format: "essai"
-featured: false
-pinned: false
 unlisted: false
 draft: false
 ---

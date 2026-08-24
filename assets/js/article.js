@@ -19,7 +19,12 @@
   function readJSON(key, fallback) {
     try { var value = JSON.parse(localStorage.getItem(key)); return value || fallback; } catch (error) { return fallback; }
   }
-  function writeJSON(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (error) {} }
+  function readItems(key) {
+    var value = readJSON(key, []);
+    return Array.isArray(value) ? value.slice(0, 50) : [];
+  }
+  function writeJSON(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (error) { return false; } }
+  function notify(message) { window.dispatchEvent(new CustomEvent("rdc:notice", { detail: message })); }
   function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
   function percentRead() {
     var max = document.documentElement.scrollHeight - window.innerHeight;
@@ -27,7 +32,7 @@
   }
 
   function recentRecord() {
-    var items = readJSON(recentKey, []);
+    var items = readItems(recentKey);
     var current = items.find(function (item) { return item.url === url; });
     return current || null;
   }
@@ -36,27 +41,36 @@
     if (!force && now - lastSaved < 1500) return;
     lastSaved = now;
     var progress = percentRead();
-    var items = readJSON(recentKey, []).filter(function (item) { return item.url !== url; });
+    var items = readItems(recentKey).filter(function (item) { return item.url !== url; });
     items.unshift({ url: url, title: title, category: category, progress: progress, viewedAt: new Date().toISOString() });
-    writeJSON(recentKey, items.slice(0, 50));
-    window.dispatchEvent(new CustomEvent("rdc:library-change"));
+    var recentSaved = writeJSON(recentKey, items.slice(0, 50));
+    var libraryItems = readItems(libraryKey);
+    var libraryChanged = false;
+    libraryItems.forEach(function (item) {
+      if (item.url === url) { item.progress = progress; libraryChanged = true; }
+    });
+    if (libraryChanged) writeJSON(libraryKey, libraryItems.slice(0, 50));
+    if (recentSaved || libraryChanged) window.dispatchEvent(new CustomEvent("rdc:library-change"));
   }
 
   function syncBookmark() {
     if (!bookmarkButton) return;
-    var saved = readJSON(libraryKey, []).some(function (item) { return item.url === url; });
+    var saved = readItems(libraryKey).some(function (item) { return item.url === url; });
     bookmarkButton.classList.toggle("is-active", saved);
     bookmarkButton.setAttribute("aria-pressed", saved ? "true" : "false");
-    bookmarkButton.textContent = saved ? "Enregistré" : "Enregistrer";
+    bookmarkButton.textContent = saved ? "Dans la bibliothèque" : "Ajouter à la bibliothèque";
   }
+  window.addEventListener("rdc:library-change", syncBookmark);
   if (bookmarkButton) bookmarkButton.addEventListener("click", function () {
-    var items = readJSON(libraryKey, []);
+    var items = readItems(libraryKey);
     var saved = items.some(function (item) { return item.url === url; });
     items = items.filter(function (item) { return item.url !== url; });
-    if (!saved) items.unshift({ url: url, title: title, category: category, savedAt: new Date().toISOString() });
-    writeJSON(libraryKey, items.slice(0, 50));
+    if (!saved) items.unshift({ url: url, title: title, category: category, progress: percentRead(), savedAt: new Date().toISOString() });
+    var stored = writeJSON(libraryKey, items.slice(0, 50));
     syncBookmark();
     window.dispatchEvent(new CustomEvent("rdc:library-change"));
+    if (stored) notify(saved ? "Texte retiré de votre bibliothèque." : "Texte ajouté à votre bibliothèque.");
+    else notify("La bibliothèque n’est pas disponible dans ce navigateur.");
   });
 
   var shareButton = document.querySelector("[data-share]");

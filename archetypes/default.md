@@ -5,8 +5,6 @@ description: ""
 categories: ["lettres-idees"]
 format: "note"
 tags: []
-featured: false
-pinned: false
 unlisted: false
 draft: true
 aliases: []

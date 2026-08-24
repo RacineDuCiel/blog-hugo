@@ -13,7 +13,7 @@ const urls = ["/", "/posts/lecture/la-metamorphose-kafka/"];
 const failures = [];
 mkdirSync(reports, { recursive: true });
 
-const build = spawnSync("hugo", ["--gc", "--minify", "--destination", output], { stdio: "inherit" });
+const build = spawnSync("hugo", ["--gc", "--minify", "--noBuildLock", "--destination", output], { stdio: "inherit" });
 if (build.status !== 0) process.exit(build.status || 1);
 
 const serveBinary = resolve("node_modules/.bin/serve");
