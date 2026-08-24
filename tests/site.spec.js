@@ -32,7 +32,7 @@ test("l’accueil expose immédiatement six textes récents et les univers ne co
   await expect(page.getByText("À la une", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Dossiers", { exact: true })).toHaveCount(0);
   await expect(page.locator("a[href^='/series/']")).toHaveCount(0);
-  expect(await page.locator(".home-intro").evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("0px");
+  expect(await page.locator(".home-intro").evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("1px");
 
   for (const url of ["/categories/lettres-idees/", "/categories/tech-cyber/", "/categories/corps-sante/", "/categories/musique/"]) {
     await page.goto(url);
