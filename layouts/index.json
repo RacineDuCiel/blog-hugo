@@ -12,7 +12,6 @@
       "categoryLabel" $context.categoryLabel
       "format" $context.format
       "formatLabel" $context.formatLabel
-      "series" (.Params.series | default "")
       "date" (.Date.Format "2006-01-02")
       "readingTime" .ReadingTime
     ) -}}

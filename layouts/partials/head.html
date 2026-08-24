@@ -8,7 +8,6 @@
   {{ if eq .Kind "term" }}
     {{ if eq .Type "categories" }}{{ $titleLabel = printf "%s — Explorer" .Title }}
     {{ else if eq .Type "tags" }}{{ $titleLabel = printf "Tag %s" .Title }}
-    {{ else if eq .Type "series" }}{{ $titleLabel = printf "Dossier %s" .Title }}
     {{ end }}
   {{ else if eq .Kind "section" }}
     {{ $titleLabel = printf "%s — Archives" .Title }}

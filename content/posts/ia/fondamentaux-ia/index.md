@@ -2,7 +2,7 @@
 title: Fondamentaux de l'IA - Cours Hack The Box
 date: 2025-11-28
 categories: ["tech-cyber"]
-tags: ["IA"]
+tags: ["intelligence artificielle"]
 description: "Une introduction structurée aux concepts essentiels de l'intelligence artificielle et du machine learning à partir du parcours Hack The Box Academy."
 format: "guide"
 unlisted: false

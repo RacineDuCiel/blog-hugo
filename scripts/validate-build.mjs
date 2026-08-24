@@ -21,6 +21,7 @@ if (!existsSync(root)) process.exit(1);
 for (const file of ["CNAME", "index.xml", "sitemap.xml", "robots.txt", "index.json", "og.png", "site.webmanifest"]) {
   assert(existsSync(join(root, file)), `Fichier de distribution manquant : ${file}`);
 }
+assert(!existsSync(join(root, "series")), "La taxonomie Dossiers ne doit plus être publiée");
 if (existsSync(join(root, "CNAME"))) assert(readFileSync(join(root, "CNAME"), "utf8").trim() === "racineduciel.fr", "CNAME invalide");
 
 const legacyURLs = readFileSync(join(project, "tests/legacy-urls.txt"), "utf8").split(/\r?\n/).filter(Boolean);
@@ -58,8 +59,14 @@ for (const file of walk(root, ".html")) {
 if (existsSync(join(root, "index.json"))) {
   const index = JSON.parse(readFileSync(join(root, "index.json"), "utf8"));
   const required = ["title", "url", "description", "body", "tags", "category", "format", "date", "readingTime"];
+  const allowedTags = new Set(["certification", "cryptographie", "cybersécurité", "dostoïevski", "écologie", "intelligence artificielle", "littérature", "musique", "philosophie", "santé", "société", "vie privée"]);
   assert(Array.isArray(index) && index.length > 0, "Index de recherche vide");
-  for (const item of index) for (const field of required) assert(Object.hasOwn(item, field), `Champ ${field} absent de l’index : ${item.title || item.url}`);
+  for (const item of index) {
+    for (const field of required) assert(Object.hasOwn(item, field), `Champ ${field} absent de l’index : ${item.title || item.url}`);
+    assert(!Object.hasOwn(item, "series"), `Champ Dossiers encore présent dans l’index : ${item.title || item.url}`);
+    assert(item.tags.length <= 3, `Plus de trois tags dans l’index : ${item.title || item.url}`);
+    for (const tag of item.tags) assert(allowedTags.has(tag), `Tag non normalisé dans l’index (${tag}) : ${item.title || item.url}`);
+  }
 }
 
 const globalCSS = walk(join(root, "css"), ".css").filter((file) => /site\.min\./.test(file));

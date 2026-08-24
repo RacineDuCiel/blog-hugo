@@ -30,6 +30,9 @@ test("l’accueil expose immédiatement six textes récents et les univers ne co
   expect(dates).toEqual([...dates].sort((a, b) => b.localeCompare(a)));
   expect((await page.getByRole("heading", { name: "Derniers textes" }).boundingBox()).y).toBeLessThan(1000);
   await expect(page.getByText("À la une", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Dossiers", { exact: true })).toHaveCount(0);
+  await expect(page.locator("a[href^='/series/']")).toHaveCount(0);
+  expect(await page.locator(".home-intro").evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("0px");
 
   for (const url of ["/categories/lettres-idees/", "/categories/tech-cyber/", "/categories/corps-sante/", "/categories/musique/"]) {
     await page.goto(url);
@@ -38,6 +41,23 @@ test("l’accueil expose immédiatement six textes récents et les univers ne co
     await expect(page.locator(".term-selection")).toHaveCount(0);
     await expect(page.locator(".term-all > .eyebrow")).toHaveCount(0);
   }
+});
+
+test("les tags restent limités au vocabulaire éditorial normalisé", async ({ page }) => {
+  await page.goto("/");
+  const index = await page.evaluate(() => fetch("/index.json").then((response) => response.json()));
+  const expected = ["certification", "cryptographie", "cybersécurité", "dostoïevski", "écologie", "intelligence artificielle", "littérature", "musique", "philosophie", "santé", "société", "vie privée"];
+  const tags = [...new Set(index.flatMap((item) => item.tags))].sort((a, b) => a.localeCompare(b, "fr"));
+  expect(tags).toEqual([...expected].sort((a, b) => a.localeCompare(b, "fr")));
+  expect(index.every((item) => item.tags.length <= 3)).toBe(true);
+  expect(index.every((item) => !("series" in item))).toBe(true);
+
+  await page.goto("/search/");
+  await page.locator("[data-search-input]").focus();
+  const options = page.locator("[data-search-tag] option:not([value='all'])");
+  await expect(options).toHaveCount(expected.length);
+  const searchTags = await options.allTextContents();
+  expect(searchTags).toEqual([...expected].sort((a, b) => a.localeCompare(b, "fr")));
 });
 
 test("Carmin est le thème par défaut, Cobalt migre et Graphite persiste", async ({ page }) => {

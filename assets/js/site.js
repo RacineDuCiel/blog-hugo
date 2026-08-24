@@ -124,7 +124,7 @@
         if (format !== "all" && item.format !== format) return false;
         if (tag !== "all" && !(item.tags || []).some(function (value) { return normalize(value) === tag; })) return false;
         if (!query) return activeCategory !== "all" || format !== "all" || tag !== "all";
-        return normalize([item.title, item.description, item.body, (item.tags || []).join(" "), item.series].join(" ")).indexOf(query) !== -1;
+        return normalize([item.title, item.description, item.body, (item.tags || []).join(" ")].join(" ")).indexOf(query) !== -1;
       }).map(function (item) {
         var score = 0;
         if (query) {

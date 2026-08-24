@@ -2,11 +2,9 @@
 title: "Dostoïevski"
 date: 2026-05-30
 categories: ["lettres-idees"]
-tags: ["dostoïevski", "littérature russe", "philosophie"]
+tags: ["dostoïevski", "littérature", "philosophie"]
 description: "Un guide pour entrer dans l'œuvre de Dostoïevski : sa vie, ses romans, ses idées, ses lectures et ses limites."
 format: "guide"
-series: "Dostoïevski"
-seriesOrder: 1
 unlisted: false
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "Les besoins artificiels — Razmig Keucheyan"
 date: 2026-05-21
 categories: ["lettres-idees"]
-tags: ["marxisme", "consumérisme", "écologie"]
+tags: ["écologie", "philosophie", "société"]
 description: "Une lecture critique de Razmig Keucheyan sur la fabrication sociale des besoins, le consumérisme et les voies d'une écologie démocratique."
 format: "essai"
 unlisted: false

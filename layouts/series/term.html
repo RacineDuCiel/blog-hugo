@@ -1,3 +1,0 @@
-{{ define "main" }}
-<main id="main-content" class="listing-page editorial-shell"><header class="listing-hero"><h1>{{ .Title }}</h1></header><div class="story-list">{{ range sort .RegularPages "Params.seriesOrder" "asc" }}{{ partial "postCard" (dict "page" .) }}{{ end }}</div></main>
-{{ end }}

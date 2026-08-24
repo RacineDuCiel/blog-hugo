@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 2 : architecture sécurisée, Zero Trust, cloud, authentification et cycle de vie des systèmes."
 format: "fiche"
-series: "CompTIA SecurityX"
-seriesOrder: 2
 unlisted: false
 draft: false
 ---

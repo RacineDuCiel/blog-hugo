@@ -2,9 +2,14 @@
   {{ $context := partial "article-context.html" . }}
   {{ $allowedCategories := slice "lettres-idees" "tech-cyber" "corps-sante" "musique" }}
   {{ $allowedFormats := slice "essai" "note" "guide" "fiche" "selection" }}
+  {{ $allowedTags := .Site.Params.allowedTags }}
   {{ if not .Title }}{{ errorf "Article publié sans titre: %s" .File.Path }}{{ end }}
   {{ if not .Date }}{{ errorf "Article publié sans date: %s" .File.Path }}{{ end }}
   {{ if not .Description }}{{ errorf "Article publié sans description: %s" .File.Path }}{{ end }}
   {{ if not (in $allowedCategories $context.categorySlug) }}{{ errorf "Univers invalide (%s): %s" $context.categorySlug .File.Path }}{{ end }}
   {{ if not (in $allowedFormats $context.format) }}{{ errorf "Format invalide (%s): %s" $context.format .File.Path }}{{ end }}
+  {{ if gt (len (.Params.tags | default slice)) 3 }}{{ errorf "Un article ne peut pas avoir plus de trois tags: %s" .File.Path }}{{ end }}
+  {{ range (.Params.tags | default slice) }}
+    {{ if not (in $allowedTags .) }}{{ errorf "Tag non normalisé (%s): %s" . $.File.Path }}{{ end }}
+  {{ end }}
 {{ end }}

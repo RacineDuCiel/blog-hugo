@@ -2,7 +2,7 @@
 title: "La Métamorphose — Kafka"
 date: 2026-05-31
 categories: ["lettres-idees"]
-tags: ["kafka"]
+tags: ["littérature", "société"]
 description: "Une lecture de La Métamorphose comme expérience familiale, sociale et narrative : ce que devient un lien quand un être cesse d'être utile et reconnaissable."
 format: "essai"
 unlisted: false

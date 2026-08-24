@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 4 : opérations sécurité, analyse de données, threat hunting et réponse aux incidents."
 format: "fiche"
-series: "CompTIA SecurityX"
-seriesOrder: 4
 unlisted: false
 draft: false
 ---

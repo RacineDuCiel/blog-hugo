@@ -4,6 +4,7 @@ date: 2025-09-17
 categories: ["corps-sante"]
 description: "Comprendre la dépense énergétique totale, ses composantes et ses adaptations, puis l'estimer avec un calculateur pensé comme un point de départ."
 format: "guide"
+tags: ["santé"]
 unlisted: false
 draft: false
 ---

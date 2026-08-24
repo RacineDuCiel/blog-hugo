@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 1 : gouvernance, gestion des risques, conformité, threat modeling et sécurité IA."
 format: "fiche"
-series: "CompTIA SecurityX"
-seriesOrder: 1
 unlisted: false
 draft: false
 ---

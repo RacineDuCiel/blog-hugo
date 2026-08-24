@@ -17,7 +17,6 @@ defaultContentLanguage = "fr-fr"
 [taxonomies]
   category = "categories"
   tag = "tags"
-  series = "series"
 
 [related]
   includeNewer = true
@@ -26,9 +25,6 @@ defaultContentLanguage = "fr-fr"
   [[related.indices]]
     name = "categories"
     weight = 80
-  [[related.indices]]
-    name = "series"
-    weight = 100
   [[related.indices]]
     name = "tags"
     weight = 60
@@ -67,6 +63,7 @@ defaultContentLanguage = "fr-fr"
     rssFeedDescription = "summary"
     sitename = "RacineDuCiel"
     description = "Des essais et des notes sur les livres, les idées, les systèmes, le corps et la musique."
+    allowedTags = ["certification", "cryptographie", "cybersécurité", "dostoïevski", "écologie", "intelligence artificielle", "littérature", "musique", "philosophie", "santé", "société", "vie privée"]
 
     [Languages.fr-fr.params.author]
       avatar = "avatar.jpg"

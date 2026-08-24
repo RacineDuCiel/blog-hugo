@@ -5,8 +5,6 @@ categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification", "cryptographie"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 3 : engineering sécurité, identité, endpoints, réseau, cryptographie et automatisation."
 format: "fiche"
-series: "CompTIA SecurityX"
-seriesOrder: 3
 unlisted: false
 draft: false
 ---

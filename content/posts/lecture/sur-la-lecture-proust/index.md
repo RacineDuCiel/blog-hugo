@@ -2,7 +2,7 @@
 title: "Sur la lecture — Marcel Proust"
 date: 2026-06-02
 categories: ["lettres-idees"]
-tags: ["Marcel Proust", "Sur la lecture", "Théorie littéraire"]
+tags: ["littérature", "philosophie"]
 description: "Proust pense la lecture comme une amitié silencieuse et un seuil : une impulsion irremplaçable qui doit conduire le lecteur vers sa propre vie intérieure."
 format: "essai"
 unlisted: false
