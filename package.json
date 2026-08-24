@@ -1,0 +1,20 @@
+{
+  "name": "racineduciel",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "build": "hugo --gc --minify",
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "test:dist": "node scripts/validate-build.mjs public",
+    "test:lighthouse": "node scripts/lighthouse.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.4.1",
+    "serve": "^14.2.6"
+  }
+}

@@ -1,4 +1,4 @@
 ---
 title: "Musique"
-description: ""
+description: "Écoutes, sélections et notes sur les œuvres."
 ---

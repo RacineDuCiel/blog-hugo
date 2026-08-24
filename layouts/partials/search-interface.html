@@ -1,0 +1,14 @@
+{{ $standalone := .standalone | default false }}
+<div class="search-interface" data-search-root>
+  <label class="search-field"><span class="sr-only">Rechercher dans les articles</span><input type="search" data-search-input placeholder="Rechercher un auteur, une idée, une technique…" autocomplete="off" spellcheck="false"></label>
+  <div class="search-filters" aria-label="Filtres de recherche">
+    <div class="search-filter-pills" data-search-categories>
+      <button type="button" class="is-active" data-value="all">Tout</button><button type="button" data-value="lettres-idees">Lettres &amp; idées</button><button type="button" data-value="tech-cyber">Tech &amp; cyber</button><button type="button" data-value="corps-sante">Corps &amp; santé</button><button type="button" data-value="musique">Musique</button>
+    </div>
+    <label>Format<select data-search-format><option value="all">Tous</option><option value="essai">Essai</option><option value="note">Note</option><option value="guide">Guide</option><option value="fiche">Fiche</option><option value="selection">Sélection</option></select></label>
+    <label>Tag<select data-search-tag><option value="all">Tous</option></select></label>
+  </div>
+  <p class="search-status" data-search-status aria-live="polite">Commencez à écrire pour rechercher, ou utilisez les filtres.</p>
+  <div class="search-results" data-search-results></div>
+  {{ if $standalone }}<noscript><p>La recherche textuelle nécessite JavaScript. Les <a href="/categories/">univers</a>, <a href="/tags/">tags</a> et <a href="/posts/">archives</a> restent accessibles.</p></noscript>{{ end }}
+</div>

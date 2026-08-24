@@ -1,0 +1,41 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+
+{{- if $u.IsAbs -}}
+{{/* Remote image: just render standard tag */}}
+<img src="{{ $src }}" alt="{{ $alt }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+{{- else -}}
+{{/* Local image: process page-bundle resources into AVIF and WebP. */}}
+{{- $img := .Page.Resources.GetMatch $src -}}
+
+{{- if $img -}}
+{{- if gt $img.Width 800 -}}
+{{- $src400 := $img.Resize "400x webp q90" -}}
+{{- $src800 := $img.Resize "800x webp q90" -}}
+{{- $avif400 := $img.Resize "400x avif q72" -}}
+{{- $avif800 := $img.Resize "800x avif q72" -}}
+<picture>
+    <source srcset="{{ $avif400.RelPermalink }} 400w, {{ $avif800.RelPermalink }} 800w"
+        sizes="(max-width: 800px) 100vw, 800px" type="image/avif">
+    <source srcset="{{ $src400.RelPermalink }} 400w, {{ $src800.RelPermalink }} 800w"
+        sizes="(max-width: 800px) 100vw, 800px" type="image/webp">
+    <img src="{{ $src800.RelPermalink }}" alt="{{ $alt }}" width="{{ $src800.Width }}" height="{{ $src800.Height }}" {{
+        with $title }} title="{{ . }}" {{ end }} loading="lazy">
+</picture>
+{{- else -}}
+{{- $processed := $img.Resize (printf "%dx%d webp q90" $img.Width $img.Height) -}}
+{{- $processedAvif := $img.Resize (printf "%dx%d avif q72" $img.Width $img.Height) -}}
+<picture>
+    <source srcset="{{ $processedAvif.RelPermalink }}" type="image/avif">
+    <source srcset="{{ $processed.RelPermalink }}" type="image/webp">
+    <img src="{{ $processed.RelPermalink }}" alt="{{ $alt }}" width="{{ $processed.Width }}"
+        height="{{ $processed.Height }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+</picture>
+{{- end -}}
+{{- else -}}
+{{/* Image not found in bundle (maybe in static?): Fallback */}}
+<img src="{{ $src | safeURL }}" alt="{{ $alt }}" {{ with $title }} title="{{ . }}" {{ end }} loading="lazy">
+{{- end -}}
+{{- end -}}

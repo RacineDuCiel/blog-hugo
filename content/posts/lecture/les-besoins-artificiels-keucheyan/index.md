@@ -1,10 +1,14 @@
 ---
 title: "Les besoins artificiels — Razmig Keucheyan"
 date: 2026-05-21
-categories: ["Lecture"]
+categories: ["lettres-idees"]
 tags: ["marxisme", "consumérisme", "écologie"]
-description: "Notes de lecture sur Les besoins artificiels de Razmig Keucheyan"
-showOnHome: true
+description: "Une lecture critique de Razmig Keucheyan sur la fabrication sociale des besoins, le consumérisme et les voies d'une écologie démocratique."
+format: "essai"
+featured: false
+pinned: false
+unlisted: false
+draft: false
 ---
 
 On parle souvent du consumérisme comme d’un excès personnel : trop d’achats, trop de désirs, trop de comparaison sociale, trop peu de maîtrise de soi. Le reproche est familier, presque rassurant, parce qu’il suppose que la solution serait à portée de volonté individuelle : un peu de discipline, un peu de sobriété, un peu de distance critique devant les vitrines et les écrans. *Les besoins artificiels* de Razmig Keucheyan commence précisément par refuser ce confort moral. Le consumérisme n’y apparaît pas d’abord comme une faiblesse des individus, mais comme une organisation du monde. Nous ne sommes pas simplement entourés de marchandises ; nous vivons dans un système qui produit des objets, mais aussi les besoins qui rendent ces objets désirables, nécessaires, parfois indispensables.

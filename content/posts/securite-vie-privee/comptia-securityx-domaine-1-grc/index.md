@@ -1,11 +1,16 @@
 ---
 title: "CompTIA SecurityX — Domaine 1 : Governance, Risk & Compliance"
 date: 2026-02-25
-categories: ["Securite-Vie-Privee"]
+categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 1 : gouvernance, gestion des risques, conformité, threat modeling et sécurité IA."
-showOnHome: false
-pageClass: "fiche-revision"
+format: "fiche"
+series: "CompTIA SecurityX"
+seriesOrder: 1
+featured: false
+pinned: true
+unlisted: false
+draft: false
 ---
 
 # DOMAIN 1 -- GOVERNANCE, RISK & COMPLIANCE

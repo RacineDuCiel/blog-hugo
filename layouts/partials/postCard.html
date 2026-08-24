@@ -1,36 +1,12 @@
-{{/*
-===========================================================================
-Partial: Post Card (liste d'articles)
----------------------------------------------------------------------------
-- DRY: helpers/format-date pour le formatage de date
-- Accessibilite: <h2> pour une hierarchie correcte
-- SEO: attribut datetime au format ISO 8601
-- Icone star reutilisee via partial icons/star.html
-- Temps de lecture affiche quand il est disponible
-===========================================================================
-*/}}
-<article class="post-item">
-    <h2 class="post-item-title">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    </h2>
-
-    {{ if .Params.isStarred }}
-    <div class="post-item-right">
-        {{ partial "icons/star.html" . }}
-    </div>
-    {{ end }}
-
-    <div class="post-item-meta-row">
-        {{ if (ne .Params.showDate false) }}
-        <span class="post-item-meta post-item-date">
-            {{ partial "helpers/format-date" (dict "date" .Date "context" . "showDate" true) }}
-        </span>
-        {{ end }}
-
-        {{ if gt .ReadingTime 0 }}
-        <span class="post-item-meta post-item-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">
-            &middot; {{ .ReadingTime }} min
-        </span>
-        {{ end }}
-    </div>
+{{ $context := partial "article-context.html" . }}
+<article class="story-row">
+  <div>
+    <p class="story-kicker"><a href="/categories/{{ $context.categorySlug }}/">{{ $context.categoryLabel }}</a> · {{ $context.formatLabel }}</p>
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    {{ with .Description }}<p class="story-row__description">{{ . }}</p>{{ end }}
+  </div>
+  <p class="story-meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time>
+    {{ if gt .ReadingTime 0 }}<span>{{ .ReadingTime }} min</span>{{ end }}
+  </p>
 </article>

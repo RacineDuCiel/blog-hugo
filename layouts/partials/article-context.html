@@ -1,0 +1,29 @@
+{{ $category := "" }}
+{{ with .Params.categories }}{{ $category = index . 0 | urlize }}{{ end }}
+{{ $categoryLabels := dict
+  "lettres-idees" "Lettres & idées"
+  "lecture" "Lettres & idées"
+  "auteur" "Lettres & idées"
+  "tech-cyber" "Tech & cyber"
+  "ia" "Tech & cyber"
+  "securite-vie-privee" "Tech & cyber"
+  "corps-sante" "Corps & santé"
+  "sport-sante" "Corps & santé"
+  "musique" "Musique"
+}}
+{{ $categorySlugs := dict
+  "lecture" "lettres-idees"
+  "auteur" "lettres-idees"
+  "ia" "tech-cyber"
+  "securite-vie-privee" "tech-cyber"
+  "sport-sante" "corps-sante"
+}}
+{{ $format := .Params.format | default "note" | urlize }}
+{{ $formatLabels := dict "essai" "Essai" "note" "Note" "guide" "Guide" "fiche" "Fiche" "selection" "Sélection" }}
+{{ return (dict
+  "category" ($category | default "notes")
+  "categorySlug" (index $categorySlugs $category | default $category | default "notes")
+  "categoryLabel" (index $categoryLabels $category | default "Notes")
+  "format" $format
+  "formatLabel" (index $formatLabels $format | default "Note")
+) }}

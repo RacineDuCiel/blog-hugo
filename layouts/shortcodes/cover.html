@@ -17,10 +17,15 @@ Usage: {{< cover "image.jpg" "Alt text optional">}}
         {{/* Image Processing: génère 1x et 2x pour les écrans Retina */}}
         {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
         {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
+        {{ $avif1x := $image.Fill "300x300 Center avif q72" }}
+        {{ $avif2x := $image.Fill "600x600 Center avif q72" }}
 
-        <img class="cover-img" srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x"
-            src="{{ $thumb1x.RelPermalink }}" alt="{{ $alt }}" width="{{ $thumb1x.Width }}"
-            height="{{ $thumb1x.Height }}" loading="lazy">
+        <picture>
+            <source type="image/avif" srcset="{{ $avif1x.RelPermalink }} 1x, {{ $avif2x.RelPermalink }} 2x">
+            <source type="image/webp" srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x">
+            <img class="cover-img" src="{{ $thumb1x.RelPermalink }}" alt="{{ $alt }}" width="{{ $thumb1x.Width }}"
+                height="{{ $thumb1x.Height }}" loading="lazy" decoding="async">
+        </picture>
         {{ else }}
         {{/* Fallback si l'image n'est pas trouvée */}}
         <p class="shortcode-error">Image introuvable : {{ $src }}</p>

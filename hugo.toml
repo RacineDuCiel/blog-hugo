@@ -1,9 +1,9 @@
 title = "RacineDuCiel"
 baseURL = "https://racineduciel.fr/"
-theme = "ablog"
 enableGitInfo = true
 enableEmoji = true
 enableRobotsTXT = true
+summaryLength = 36
 
 [pagination]
   pagerSize = 15
@@ -17,6 +17,21 @@ defaultContentLanguage = "fr-fr"
 [taxonomies]
   category = "categories"
   tag = "tags"
+  series = "series"
+
+[related]
+  includeNewer = true
+  threshold = 30
+  toLower = true
+  [[related.indices]]
+    name = "categories"
+    weight = 80
+  [[related.indices]]
+    name = "series"
+    weight = 100
+  [[related.indices]]
+    name = "tags"
+    weight = 60
 
 [markup.goldmark.renderer]
   unsafe = true
@@ -33,18 +48,12 @@ defaultContentLanguage = "fr-fr"
     block = [['$$', '$$'], ['\\[', '\\]']]
     inline = [['$', '$'], ['\\(', '\\)']]
 
-[privacy.googleAnalytics]
-  respectDoNotTrack = true
-
 [privacy.youtube]
   privacyEnhanced = true
 
 [sitemap]
   changefreq = "weekly"
   priority = 0.5
-
-[params]
-  browserconfig.TileColor = "#2d89ef"
 
 [Languages.fr-fr]
   label = "French"
@@ -53,57 +62,18 @@ defaultContentLanguage = "fr-fr"
   weight = 1
 
   [Languages.fr-fr.params]
-    defaultColor = "auto"
     mainSections = ["posts"]
-    toc = false
-    goToTop = true
     dateFormat = "02/01/2006"
     rssFeedDescription = "summary"
-    additionalScripts = []
     sitename = "RacineDuCiel"
-    description = ""
+    description = "Des essais et des notes sur les livres, les idées, les systèmes, le corps et la musique."
 
     [Languages.fr-fr.params.author]
       avatar = "avatar.jpg"
-      description = "What does it mean to be human... ?"
+      description = "Des essais et des notes sur les livres, les idées, les systèmes, le corps et la musique."
       name = "RacineDuCiel"
-
-    [Languages.fr-fr.params.webmanifest]
-      start_url = "/"
-      theme_color = "#434648"
-      background_color = "#fbfbfd"
-      display = "standalone"
-
-    [Languages.fr-fr.params.seo]
-      images = ["og-image.jpg"]
-
-   [[Languages.fr-fr.menu.main]]
-    pageRef = "/"
-    name = "Accueil"
-    url = "/"
-    weight = 10
-  [[Languages.fr-fr.menu.main]]
-    pageRef = "posts"
-    name = "Articles"
-    url = "/posts/"
-    weight = 20
-  [[Languages.fr-fr.menu.main]]
-    name = "Catégories"
-    url = "/categories/"
-    weight = 32
-  [[Languages.fr-fr.menu.main]]
-    pageRef = "about"
-    name = "À propos"
-    url = "/about/"
-    weight = 40
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
   page = ["HTML"]
   section = ["HTML", "RSS"]
-
-[[Languages.fr-fr.menu.main]]
-  name = "Recherche"
-  url = "/search/"
-  weight = 35
-

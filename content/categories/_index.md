@@ -1,4 +1,4 @@
 ---
-title: "Catégories"
-description: "Parcourir les articles par thème."
+title: "Explorer"
+description: "Quatre univers pour parcourir les textes de RacineDuCiel."
 ---

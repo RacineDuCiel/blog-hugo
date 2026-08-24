@@ -1,0 +1,4 @@
+{{ define "main" }}
+{{ $paginator := .Paginate .RegularPages.ByDate.Reverse }}
+<main id="main-content" class="listing-page editorial-shell"><header class="listing-hero"><p class="eyebrow">Tag</p><h1>{{ .Title }}</h1></header><div class="story-list">{{ range $paginator.Pages }}{{ partial "postCard" . }}{{ end }}</div>{{ partial "pagination.html" $paginator }}</main>
+{{ end }}

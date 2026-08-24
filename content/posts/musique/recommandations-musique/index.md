@@ -1,11 +1,13 @@
 ---
 title: Recommandations musicales
-categories: ["Musique"]
+categories: ["musique"]
 date: 2025-11-18
-showOnHome: false
+description: "Une sélection personnelle d'albums et d'EPs, principalement metalcore, pensée comme un mur d'écoute plutôt qu'un classement."
+format: "selection"
+featured: false
 pinned: true
-pinCategories: ["Musique"]
-pageClass: "music-recs"
+unlisted: false
+draft: false
 ---
 
 Une sélection personnelle d'albums et d'EPs, pour la plupart proches du metalcore.

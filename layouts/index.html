@@ -1,20 +1,65 @@
 {{ define "main" }}
-{{ partial "bio" . }}
-<div class="wrapper wrapper-home">
-    <main aria-label="Content">
-        {{ $articlesSorted := (where .Site.RegularPages "Params.showOnHome" true).ByDate.Reverse }}
-
-        <section class="home-section">
-            <h3 class="posts-item-note" aria-label="Recent Articles">{{ T "home.recent_posts" }}</h3>
-            {{ range first 5 $articlesSorted }}
-            {{ partial "postCard" . }}
-            {{ end }}
-            {{ range $firstSection := (where .Site.Sections "Section" "in" (first 1 (.Site.Params.mainSections))) }}
-            <p class="home-see-all">
-                <a class="home-see-all-link" href="{{ $firstSection.Permalink }}">Tous les articles</a>
-            </p>
-            {{ end }}
-        </section>
-    </main>
-</div>
+{{ $visible := where .Site.RegularPages "Section" "posts" }}
+{{ $visible = where $visible ".Params.unlisted" "!=" true }}
+{{ $featured := first 1 (where $visible ".Params.featured" true) }}
+{{ if ne (len (where $visible ".Params.featured" true)) 1 }}{{ errorf "L'accueil exige exactement un article avec featured: true" }}{{ end }}
+{{ $hero := index $featured 0 }}
+{{ $latest := where $visible ".RelPermalink" "ne" $hero.RelPermalink }}
+<main id="main-content">
+  <section class="home-intro editorial-shell" aria-labelledby="home-title">
+    <p class="eyebrow">Une publication personnelle</p>
+    <h1 id="home-title">RacineDuCiel</h1>
+    <p class="home-intro__dek">Des essais et des notes sur les livres, les idées, les systèmes, le corps et la musique.</p>
+    <a class="text-link" href="/about/">Lire la ligne éditoriale <span aria-hidden="true">→</span></a>
+  </section>
+  {{ with $hero }}
+  <section class="featured editorial-shell" aria-labelledby="featured-title">
+    <div class="section-heading"><p class="eyebrow">À la une</p><span class="section-heading__rule" aria-hidden="true"></span></div>
+    <article class="featured-story">
+      {{ $context := partial "article-context.html" . }}
+      <p class="story-kicker">{{ $context.categoryLabel }} · {{ $context.formatLabel }}</p>
+      <h2 id="featured-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="featured-story__dek">{{ .Description | default (.Summary | plainify | truncate 230) }}</p>
+      <p class="story-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time><span>·</span><span>{{ .ReadingTime }} min de lecture</span></p>
+    </article>
+  </section>
+  {{ end }}
+  <section class="latest editorial-shell" aria-labelledby="latest-title">
+    <div class="section-heading"><h2 id="latest-title">Dernières parutions</h2><a class="text-link" href="/posts/">Toutes les archives <span aria-hidden="true">→</span></a></div>
+    <div class="story-list">
+      {{ range first 6 $latest.ByDate.Reverse }}
+        {{ $context := partial "article-context.html" . }}
+        <article class="story-row">
+          <div>
+            <p class="story-kicker">{{ $context.categoryLabel }} · {{ $context.formatLabel }}</p>
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ with .Description }}<p class="story-row__description">{{ . }}</p>{{ end }}
+          </div>
+          <p class="story-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time><span>{{ .ReadingTime }} min</span></p>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+  <section class="universes editorial-shell" aria-labelledby="universes-title">
+    <div class="section-heading"><h2 id="universes-title">Quatre univers</h2><span class="section-heading__rule" aria-hidden="true"></span></div>
+    <div class="universe-list">
+      <a href="/categories/lettres-idees/"><span>01</span><strong>Lettres &amp; idées</strong><small>Littérature, philosophie, critique et lectures au long cours.</small></a>
+      <a href="/categories/tech-cyber/"><span>02</span><strong>Tech &amp; cyber</strong><small>Informatique, intelligence artificielle, sécurité et vie privée.</small></a>
+      <a href="/categories/corps-sante/"><span>03</span><strong>Corps &amp; santé</strong><small>Entraînement, nutrition, santé et compréhension du corps.</small></a>
+      <a href="/categories/musique/"><span>04</span><strong>Musique</strong><small>Écoutes, sélections et notes sur les œuvres.</small></a>
+    </div>
+  </section>
+  {{ with .Site.Taxonomies.series }}
+  <section class="dossiers editorial-shell" aria-labelledby="dossiers-title">
+    <div class="section-heading"><h2 id="dossiers-title">Dossiers</h2><a class="text-link" href="/series/">Tous les dossiers <span aria-hidden="true">→</span></a></div>
+    <div class="dossier-list">
+      {{ range $name, $pages := . }}
+      {{ with site.GetPage (printf "/series/%s" $name) }}
+      <a href="{{ .RelPermalink }}"><span class="story-kicker">{{ len $pages }} textes</span><strong>{{ .Title }}</strong><small>Lire le dossier <span aria-hidden="true">→</span></small></a>
+      {{ end }}
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</main>
 {{ end }}

@@ -149,7 +149,7 @@
     var p = pct(kcal, total);
     return '<div class="tdee-bar-row">' +
       '<span class="tdee-bar-label">' + label + '</span>' +
-      '<div class="tdee-bar-track"><div class="tdee-bar-fill" style="--tdee-bar-w:' + p + '%"></div></div>' +
+      '<div class="tdee-bar-track"><div class="tdee-bar-fill" data-bar-width="' + p + '"></div></div>' +
       '<span class="tdee-bar-kcal">' + formatKcal(kcal) + '</span>' +
       '<span class="tdee-bar-pct">' + p + '%</span>' +
       '</div>';
@@ -221,6 +221,9 @@
           '<p>La fourchette +/-10&nbsp;% reflète l’incertitude individuelle normale. La calibration observée devient prioritaire si les apports, le poids moyen et l’activité ont été suivis proprement.</p>' +
         '</details>' +
       '</div>';
+    container.querySelectorAll('[data-bar-width]').forEach(function (bar) {
+      bar.style.setProperty('--tdee-bar-w', bar.dataset.barWidth + '%');
+    });
   }
 
   function update() {

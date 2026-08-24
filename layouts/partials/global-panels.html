@@ -1,0 +1,10 @@
+<dialog class="global-dialog search-dialog" data-search-dialog aria-labelledby="global-search-title">
+  <div class="dialog-header"><div><p class="eyebrow">Recherche</p><h2 id="global-search-title">Trouver un texte</h2></div><button type="button" data-dialog-close aria-label="Fermer la recherche">Fermer</button></div>
+  {{ partial "search-interface.html" (dict "standalone" false) }}
+</dialog>
+<dialog class="global-dialog library-dialog" data-library-dialog aria-labelledby="library-title">
+  <div class="dialog-header"><div><p class="eyebrow">Privée et locale</p><h2 id="library-title">Votre bibliothèque</h2></div><button type="button" data-dialog-close aria-label="Fermer la bibliothèque">Fermer</button></div>
+  <div class="library-tabs" role="tablist" aria-label="Bibliothèque"><button type="button" role="tab" aria-selected="true" data-library-tab="saved">À lire</button><button type="button" role="tab" aria-selected="false" data-library-tab="recent">Récemment lus</button></div>
+  <div class="library-list" data-library-list aria-live="polite"></div>
+  <button class="library-clear" type="button" data-library-clear>Tout effacer</button>
+</dialog>

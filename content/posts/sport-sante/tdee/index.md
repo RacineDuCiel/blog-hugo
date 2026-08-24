@@ -1,8 +1,13 @@
 ---
 title: Dépense énergétique totale (TDEE)
 date: 2025-09-17
-categories: ["Sport-Sante"]
-showOnHome: true
+categories: ["corps-sante"]
+description: "Comprendre la dépense énergétique totale, ses composantes et ses adaptations, puis l'estimer avec un calculateur pensé comme un point de départ."
+format: "guide"
+featured: false
+pinned: true
+unlisted: false
+draft: false
 ---
 
 La **TDEE** (*Total Daily Energy Expenditure*) désigne la dépense énergétique totale d'une journée. Autrement dit : toute l'énergie qu'un corps utilise pour rester vivant, digérer, bouger, travailler, s'entraîner, récupérer, maintenir sa température, penser, dormir, et traverser une vraie journée dans un vrai environnement.

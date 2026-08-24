@@ -1,10 +1,16 @@
 ---
 title: "Dostoïevski"
 date: 2026-05-30
-categories: ["Auteur"]
+categories: ["lettres-idees"]
 tags: ["dostoïevski", "littérature russe", "philosophie"]
 description: "Un guide pour entrer dans l'œuvre de Dostoïevski : sa vie, ses romans, ses idées, ses lectures et ses limites."
-showOnHome: true
+format: "guide"
+series: "Dostoïevski"
+seriesOrder: 1
+featured: true
+pinned: true
+unlisted: false
+draft: false
 ---
 
 On aborde souvent Dostoïevski par ses scènes : un étudiant qui lève une hache sur une vieille usurière, un prince épileptique qui dit la vérité à une société qui ne veut pas l'entendre, un vieil inquisiteur qui reproche au Christ d'avoir rendu les hommes libres. Ces images sont justes, et elles expliquent en partie pourquoi cet auteur continue d'être lu avec une intensité que peu d'écrivains suscitent. Mais elles peuvent aussi tromper. Elles font de Dostoïevski un pourvoyeur de sensations fortes, un romancier du crime, de la fièvre et de la confession, alors qu'il est d'abord un penseur — un penseur qui a choisi le roman parce qu'il y voyait le seul lieu où certaines questions pouvaient être posées sans être trahies.

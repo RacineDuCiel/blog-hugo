@@ -1,0 +1,3 @@
+{{ define "main" }}
+<main id="main-content" class="tags-page editorial-shell"><header class="listing-hero"><p class="eyebrow">Index</p><h1>Tags</h1><p>Concepts, auteurs, techniques et thèmes transversaux.</p></header><div class="tag-index">{{ range .Data.Terms.Alphabetical }}<a href="{{ .Page.RelPermalink }}"><span>{{ .Page.Title }}</span><small>{{ .Count }}</small></a>{{ end }}</div></main>
+{{ end }}

@@ -17,3 +17,9 @@ Thumbs.db
 # Logs et scripts de debug
 *.log
 fix_index.py
+
+# Front-end quality reports
+/node_modules/
+/playwright-report/
+/test-results/
+/.lighthouseci/

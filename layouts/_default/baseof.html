@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-{{- $defaultColor := .Site.Params.defaultColor | default "auto" -}}
-
-{{- if eq $defaultColor "dark" -}}
-<html lang="{{ .Site.Language.Locale }}" class="dark">
-{{- else if eq $defaultColor "light" -}}
-<html lang="{{ .Site.Language.Locale }}" class="light">
-{{- else -}}
-<html lang="{{ .Site.Language.Locale }}">
-{{- end -}}
-
-    {{- partial "head.html" . -}}
-
-    <body data-theme="{{ $defaultColor }}" class="notransition{{ with .Params.pageClass }} {{ . }}{{ end }}">
-        {{- partial "scriptsBodyStart.html" . -}}
-        {{- partial "header.html" . -}}
-        {{- block "main" . }}{{- end }}
-        {{- partial "footer.html" . -}}
-        {{- partial "scriptsBodyEnd.html" . -}}
-    </body>
-
+<!doctype html>
+<html lang="{{ .Site.Language.Locale | default "fr-FR" }}" data-appearance="auto" data-palette="cobalt">
+  {{ partial "head.html" . }}
+  <body class="page page--{{ .Kind }}{{ with .Params.format }} format--{{ . }}{{ end }}">
+    <a class="skip-link" href="#main-content">Aller au contenu</a>
+    {{ partial "header.html" . }}
+    {{ if ne .Layout "search" }}{{ partial "global-panels.html" . }}{{ end }}
+    {{ block "main" . }}{{ end }}
+    {{ partial "footer.html" . }}
+    {{ $siteScript := resources.Get "js/site.js" | minify | fingerprint }}
+    <script defer src="{{ $siteScript.RelPermalink }}" integrity="{{ $siteScript.Data.Integrity }}" crossorigin="anonymous"></script>
+    {{ block "scripts" . }}{{ end }}
+  </body>
 </html>

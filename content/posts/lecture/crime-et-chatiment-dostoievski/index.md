@@ -1,9 +1,16 @@
 ---
 title: "Crime et châtiment — Dostoïevski"
 date: 2026-05-29
-categories: ["Lecture"]
+categories: ["lettres-idees"]
 tags: ["dostoïevski"]
-showOnHome: true
+description: "Une carte de lecture de Crime et châtiment : la théorie de Raskolnikov, le franchissement moral, le châtiment intérieur et le retour parmi les hommes."
+format: "essai"
+series: "Dostoïevski"
+seriesOrder: 2
+featured: false
+pinned: false
+unlisted: false
+draft: false
 ---
 
 ### Introduction — Un roman policier qui déborde le crime

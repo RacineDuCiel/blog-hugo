@@ -1,75 +1,37 @@
-<div class="navbar" role="navigation">
-    <nav class="menu" aria-label="Main Navigation">
-        <a href="{{ .Site.Home.Permalink }}" class="logo">
-            {{ partial "svgs/home.svg" (dict "height" 25 "width" 25) . }}
-        </a>
-        <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-hidden="true" tabindex="-1" />
-        <label for="menu-trigger">
-            <span class="menu-icon">
-                {{ partial "svgs/menu.svg" (dict "height" 25 "width" 25) . }}
-            </span>
-        </label>
-
-        <div class="trigger">
-            <ul class="trigger-container">
-                {{ $currentPage := . }}
-                {{ range .Site.Menus.main }}
-                <li>
-                    <a class="menu-link {{ if or ($currentPage.IsMenuCurrent " main" .)
-                        ($currentPage.HasMenuCurrent "main" .) }}active{{ end }}" href="{{ .URL }}">
-                        {{ .Name }}
-                    </a>
-                    {{ if .HasChildren }}
-                    <ul>
-                        {{ range .Children }}
-                        <li>
-                            <a class="menu-link {{ if $currentPage.IsMenuCurrent " main" . }}active{{ end }}"
-                                href="{{ .URL }}">
-                                {{ .Name }}
-                            </a>
-                        </li>
-                        {{ end }}
-                    </ul>
-                    {{ end }}
-                </li>
-                {{ end }}
-                <li class="menu-separator">
-                    <span>|</span>
-                </li>
-                <!-- Language List -->
-                {{ if .IsTranslated }}
-                <li>
-                    <select aria-label="Select Language" class="lang-list" id="select-language"
-                        onchange="location = this.value;">
-                        {{ $siteLanguages := .Site.Languages}}
-                        {{ $pageLang := .Page.Lang}}
-                        {{ range .Page.AllTranslations }}
-                        {{ $translation := .}}
-                        {{ range $siteLanguages }}
-                        {{ if eq $translation.Lang .Lang }}
-                        {{ $selected := false }}
-                        {{ if eq $pageLang .Lang}}
-                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{
-                            .Locale | upper }}
-                        </option>
-                        {{ else }}
-                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .Locale |
-                            upper }}</option>
-                        {{ end }}
-                        {{ end }}
-                        {{ end }}
-                        {{ end }}
-                    </select>
-                </li>
-                <li class="menu-separator">
-                    <span>|</span>
-                </li>
-                {{ end }}
-            </ul>
-            <a id="mode" href="#" aria-label="Basculer entre le thème sombre et clair">
-                {{ partial "svgs/sun.svg" (dict "height" 21 "width" 21 "class" "mode-sunny" "title" "LIGHT") . }}
-                {{ partial "svgs/moon.svg" (dict "height" 21 "width" 21 "class" "mode-moon" "title" "DARK") . }}
-            </a>
-        </div>
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="wordmark" href="/" aria-label="RacineDuCiel — Accueil">RacineDuCiel</a>
+    <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-navigation">
+      <span class="menu-toggle__lines" aria-hidden="true"></span>
+      <span class="sr-only" data-menu-label>Ouvrir le menu</span>
+    </button>
+    <nav class="site-nav" id="site-navigation" data-site-nav aria-label="Navigation principale">
+      <a href="/categories/"{{ if hasPrefix .RelPermalink "/categories/" }} aria-current="page"{{ end }}>Explorer</a>
+      <a href="/posts/"{{ if hasPrefix .RelPermalink "/posts/" }} aria-current="page"{{ end }}>Archives</a>
+      <a href="/about/"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>À propos</a>
+      <div class="mobile-nav-actions"><a href="/search/" data-search-open>Rechercher</a><button type="button" data-library-open>À lire</button></div>
     </nav>
-</div>
+    <div class="site-tools" aria-label="Outils">
+      <a class="tool-button" href="/search/" data-search-open aria-label="Ouvrir la recherche"><span aria-hidden="true">Rechercher</span><kbd>⌘K</kbd></a>
+      <button class="tool-button tool-button--compact" type="button" data-library-open aria-label="Ouvrir la bibliothèque">À lire</button>
+      <div class="theme-control" data-theme-control>
+        <button class="tool-button tool-button--compact" type="button" data-theme-toggle aria-expanded="false" aria-controls="theme-panel">Thème</button>
+        <div class="theme-panel" id="theme-panel" data-theme-panel hidden>
+          <fieldset>
+            <legend>Apparence</legend>
+            <div class="segmented" data-theme-group="appearance">
+              <button type="button" data-theme-value="auto">Auto</button><button type="button" data-theme-value="light">Clair</button><button type="button" data-theme-value="dark">Sombre</button>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Palette</legend>
+            <div class="palette-options" data-theme-group="palette">
+              <button type="button" data-theme-value="cobalt"><span class="swatch swatch--cobalt" aria-hidden="true"></span>Cobalt</button>
+              <button type="button" data-theme-value="carmin"><span class="swatch swatch--carmin" aria-hidden="true"></span>Carmin</button>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

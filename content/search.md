@@ -1,5 +1,5 @@
 ---
 title: "Recherche"
 layout: "search"
-summary: "Rechercher dans les articles"
+description: "Rechercher dans les essais, notes, guides, fiches et sélections de RacineDuCiel."
 ---

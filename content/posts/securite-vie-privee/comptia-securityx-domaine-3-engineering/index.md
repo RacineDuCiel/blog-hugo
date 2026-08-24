@@ -1,11 +1,16 @@
 ---
 title: "CompTIA SecurityX — Domaine 3 : Security Engineering"
 date: 2026-02-25
-categories: ["Securite-Vie-Privee"]
+categories: ["tech-cyber"]
 tags: ["cybersécurité", "certification", "cryptographie"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 3 : engineering sécurité, identité, endpoints, réseau, cryptographie et automatisation."
-showOnHome: false
-pageClass: "fiche-revision"
+format: "fiche"
+series: "CompTIA SecurityX"
+seriesOrder: 3
+featured: false
+pinned: false
+unlisted: false
+draft: false
 ---
 
 # DOMAIN 3 -- SECURITY ENGINEERING

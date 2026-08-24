@@ -1,0 +1,10 @@
+{{ if and (eq .Section "posts") (eq .Kind "page") (not .Draft) }}
+  {{ $context := partial "article-context.html" . }}
+  {{ $allowedCategories := slice "lettres-idees" "tech-cyber" "corps-sante" "musique" }}
+  {{ $allowedFormats := slice "essai" "note" "guide" "fiche" "selection" }}
+  {{ if not .Title }}{{ errorf "Article publié sans titre: %s" .File.Path }}{{ end }}
+  {{ if not .Date }}{{ errorf "Article publié sans date: %s" .File.Path }}{{ end }}
+  {{ if not .Description }}{{ errorf "Article publié sans description: %s" .File.Path }}{{ end }}
+  {{ if not (in $allowedCategories $context.categorySlug) }}{{ errorf "Univers invalide (%s): %s" $context.categorySlug .File.Path }}{{ end }}
+  {{ if not (in $allowedFormats $context.format) }}{{ errorf "Format invalide (%s): %s" $context.format .File.Path }}{{ end }}
+{{ end }}

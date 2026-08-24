@@ -1,0 +1,13 @@
+{
+  "name": "RacineDuCiel",
+  "short_name": "RacineDuCiel",
+  "description": "Des essais et des notes sur les livres, les idées, les systèmes, le corps et la musique.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F1E8",
+  "theme_color": "#F6F1E8",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
