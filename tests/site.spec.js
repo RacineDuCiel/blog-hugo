@@ -170,6 +170,17 @@ test("les expériences interactives historiques restent actives", async ({ page 
   await expect(page.locator(".album-cover-img").first()).toHaveJSProperty("complete", true);
 });
 
+test("le guide pilote respecte le nouveau contrat éditorial", async ({ page }) => {
+  await page.goto(articleURL);
+  await expect(page.locator(".article-header .story-kicker")).toContainText("Guide");
+  await expect(page.locator(".article-meta")).toContainText(/1[2-6] min de lecture/);
+  const memo = page.locator(".reading-memo");
+  await expect(memo).toHaveCount(1);
+  await expect(memo.getByRole("heading", { name: "Mémo" })).toBeVisible();
+  await expect(memo.locator("li")).toHaveCount(6);
+  expect(await page.locator(".article-prose > :last-child").evaluate((element) => element.classList.contains("reading-memo"))).toBe(true);
+});
+
 test("les quatre combinaisons visuelles de thème sont capturées", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "Une baseline unique évite les écarts de rendu entre moteurs.");
   await page.setViewportSize({ width: 1440, height: 1000 });

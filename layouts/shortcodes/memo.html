@@ -1,0 +1,6 @@
+{{- $title := .Get "title" | default "Mémo" -}}
+{{- $id := printf "reading-memo-%d" .Ordinal -}}
+<section class="reading-memo" aria-labelledby="{{ $id }}">
+  <h2 id="{{ $id }}">{{ $title }}</h2>
+  <div class="reading-memo__content">{{ .Page.RenderString .Inner }}</div>
+</section>

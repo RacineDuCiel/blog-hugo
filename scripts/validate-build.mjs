@@ -67,6 +67,22 @@ if (existsSync(join(root, "index.json"))) {
     assert(item.tags.length <= 3, `Plus de trois tags dans l’index : ${item.title || item.url}`);
     for (const tag of item.tags) assert(allowedTags.has(tag), `Tag non normalisé dans l’index (${tag}) : ${item.title || item.url}`);
   }
+  const pilot = index.find((item) => item.url === "/posts/lecture/la-metamorphose-kafka/");
+  assert(pilot, "Article pilote La Métamorphose absent de l’index");
+  if (pilot) {
+    assert(pilot.format === "guide", "L’article pilote doit utiliser le format guide");
+    assert(pilot.readingTime >= 12 && pilot.readingTime <= 16, `Temps de lecture du pilote hors cible : ${pilot.readingTime} min`);
+  }
+}
+
+const pilotFile = join(root, "posts/lecture/la-metamorphose-kafka/index.html");
+if (existsSync(pilotFile)) {
+  const pilotHTML = readFileSync(pilotFile, "utf8");
+  const sourcePosition = pilotHTML.search(/id=(?:["'])?sources-et-repères/);
+  const memoPosition = pilotHTML.search(/class=(?:["'])?reading-memo(?:["'\s>])/);
+  assert(sourcePosition >= 0, "Section Sources et repères absente de l’article pilote");
+  assert(memoPosition > sourcePosition, "Le mémo doit apparaître après les sources");
+  assert((pilotHTML.match(/class=(?:["'])?reading-memo(?:["'\s>])/g) || []).length === 1, "L’article pilote doit contenir un seul mémo");
 }
 
 const globalCSS = walk(join(root, "css"), ".css").filter((file) => /site\.min\./.test(file));
