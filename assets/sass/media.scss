@@ -1,0 +1,18 @@
+.shortcode-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 36px 24px; margin: 28px 0 48px; }
+.album-card { min-width: 0; }
+.album-cover { aspect-ratio: 1; }
+.prose .album-cover-img { width: 100%; height: 100%; object-fit: cover; margin: 0; }
+.album-info { padding-top: 12px; font-family: var(--sans); }
+.album-info h3 { font-size: 13px; font-weight: 500; line-height: 1.45; margin: 0 0 4px; }
+.album-info p { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+.youtube-playlist-container { aspect-ratio: 16/9; }
+.youtube-playlist-container iframe { width: 100%; height: 100%; border: 0; }
+.youtube-card { display: flex; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.youtube-card-thumbnail { width: 140px; position: relative; flex-shrink: 0; }
+.prose .youtube-card-thumbnail img { margin: 0; }
+.youtube-card-play { position: absolute; width: 30px; height: 30px; top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--paper); padding: 6px; border-radius: 50%; }
+.youtube-card-info h3 { font-size: 16px; margin: 0 0 8px; }
+.youtube-card-info p { font: 12px var(--sans); color: var(--muted); margin: 0; }
+.cover-container { margin: 2em 0; }
+@media(max-width: 760px) { .shortcode-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 20px; } }
+@media(max-width: 360px) { .shortcode-grid { gap: 24px 12px; } }

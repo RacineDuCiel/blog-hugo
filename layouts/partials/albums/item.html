@@ -1,0 +1,27 @@
+{{/* Explicit inputs: page, album, presentation, listItem and eager. */}}
+{{ $valid := true }}
+{{ range slice "artist" "title" "cover" }}
+  {{ if not (index $.album .) }}
+    {{ errorf "Albums (%s): champ obligatoire '%s' absent (%v)" $.page.File.Path . $.album }}
+    {{ $valid = false }}
+  {{ end }}
+{{ end }}
+{{ if $valid }}
+  {{ $image := .page.Resources.Get .album.cover }}
+  {{ if not $image }}
+    {{ errorf "Albums (%s): pochette introuvable '%s' pour '%s'" .page.File.Path .album.cover .album.title }}
+  {{ else if ne $image.ResourceType "image" }}
+    {{ errorf "Albums (%s): '%s' n'est pas une image" .page.File.Path .album.cover }}
+  {{ else }}
+    {{ $source := partial "albums/image.html" (dict "image" $image "presentation" .presentation) }}
+    {{ if .listItem }}<li class="album-card">{{ else }}<div class="album-card">{{ end }}
+      <div class="album-cover"><img class="album-cover-img" src="{{ $source.src }}" srcset="{{ $source.srcset }}" sizes="{{ $source.sizes }}" alt="" width="{{ $source.width }}" height="{{ $source.height }}" loading="{{ if .eager }}eager{{ else }}lazy{{ end }}" decoding="async"></div>
+      <div class="album-info">
+        {{ if eq .presentation "legacy" }}<h3>{{ .album.artist }}</h3>
+        <p>{{ .album.title }}</p>
+        {{ else }}<h3>{{ .album.title }}</h3>
+        <p>{{ .album.artist }}</p>{{ end }}
+      </div>
+    {{ if .listItem }}</li>{{ else }}</div>{{ end }}
+  {{ end }}
+{{ end }}

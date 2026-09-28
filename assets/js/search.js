@@ -1,408 +1,101 @@
-/**
- * ===========================================================================
- * Module de recherche + filtrage par tags
- * ---------------------------------------------------------------------------
- * - IIFE pour éviter les variables globales
- * - Debounce sur la saisie texte
- * - createElement() au lieu de innerHTML (prévention XSS)
- * - Filtrage multi-tags en ET, combinable avec la recherche texte
- * - État des tags synchronisé avec l'URL (?tags=a,b) — partageable
- * ===========================================================================
- */
+// Local-only search. Query and AND-combined tags remain shareable in the URL.
 (function () {
-    'use strict';
-
-    // =========================================================================
-    // Configuration
-    // =========================================================================
-    const CONFIG = {
-        DEBOUNCE_DELAY: 200,      // ms avant de lancer la recherche
-        MAX_RESULTS: 10,          // Max de résultats en mode recherche texte
-        SNIPPET_LENGTH: 120,      // Longueur du résumé
-        FUSE_OPTIONS: {
-            keys: [
-                { name: 'title', weight: 0.5 },
-                { name: 'tags', weight: 0.3 },
-                { name: 'categories', weight: 0.3 },
-                { name: 'summary', weight: 0.4 },
-                { name: 'contents', weight: 0.5 }
-            ],
-            threshold: 0.1,
-            minMatchCharLength: 1,
-            ignoreLocation: true,
-            useExtendedSearch: true,
-            includeMatches: true
-        }
-    };
-
-    // =========================================================================
-    // Éléments du DOM
-    // =========================================================================
-    const searchInput = document.getElementById('search-input');
-    const searchResults = document.getElementById('search-results');
-    const searchCount = document.getElementById('search-count');
-    const tagCloud = document.getElementById('tag-cloud');
-    const tagClear = document.getElementById('tag-filter-clear');
-
-    // Élément réutilisable pour stripper le HTML
-    const tempDiv = document.createElement('div');
-
-    // État
-    let fuse = null;
-    let allItems = [];
-    const activeTags = new Set();
-    let query = '';
-
-    // =========================================================================
-    // Utilitaires
-    // =========================================================================
-
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
-    function stripHtml(html) {
-        tempDiv.innerHTML = html;
-        return tempDiv.textContent || tempDiv.innerText || '';
-    }
-
-    /** Normalise un tag pour comparaison (minuscule, sans espaces superflus). */
-    function normTag(t) {
-        return (t || '').toString().trim().toLowerCase();
-    }
-
-    /** Minuscule + suppression des accents, pour une recherche tolérante. */
-    function deburr(s) {
-        const n = (s || '').toString().normalize('NFD');
-        let out = '';
-        for (let i = 0; i < n.length; i++) {
-            const c = n.charCodeAt(i);
-            // Ignore les diacritiques combinants (plage U+0300–U+036F)
-            if (c < 0x300 || c > 0x36F) out += n[i];
-        }
-        return out.trim().toLowerCase();
-    }
-
-    function itemTags(item) {
-        return Array.isArray(item.tags) ? item.tags : [];
-    }
-
-    /** Un item possède-t-il TOUS les tags actifs (ET) ? */
-    function itemHasAllTags(item) {
-        if (activeTags.size === 0) return true;
-        const set = new Set(itemTags(item).map(normTag));
-        for (const t of activeTags) {
-            if (!set.has(t)) return false;
-        }
-        return true;
-    }
-
-    /**
-     * Surligne les termes correspondants via les indices Fuse.js
-     */
-    function highlightMatches(text, indices) {
-        const frag = document.createDocumentFragment();
-        if (!indices || indices.length === 0) {
-            frag.appendChild(document.createTextNode(text));
-            return frag;
-        }
-        let lastIndex = 0;
-        const sorted = [...indices].sort((a, b) => a[0] - b[0]);
-        sorted.forEach(([start, end]) => {
-            if (start > lastIndex) {
-                frag.appendChild(document.createTextNode(text.slice(lastIndex, start)));
-            }
-            const mark = document.createElement('mark');
-            mark.textContent = text.slice(start, end + 1);
-            frag.appendChild(mark);
-            lastIndex = end + 1;
-        });
-        if (lastIndex < text.length) {
-            frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-        }
-        return frag;
-    }
-
-    // =========================================================================
-    // URL <-> état des tags
-    // =========================================================================
-
-    function readTagsFromURL() {
-        const params = new URLSearchParams(window.location.search);
-        const raw = params.get('tags');
-        if (!raw) return;
-        raw.split(',').forEach(t => {
-            const tag = normTag(decodeURIComponent(t));
-            if (tag) activeTags.add(tag);
-        });
-    }
-
-    function syncURL() {
-        const params = new URLSearchParams(window.location.search);
-        if (activeTags.size > 0) {
-            params.set('tags', [...activeTags].map(encodeURIComponent).join(','));
-        } else {
-            params.delete('tags');
-        }
-        const qs = params.toString();
-        const newUrl = window.location.pathname + (qs ? '?' + qs : '');
-        window.history.replaceState(null, '', newUrl);
-    }
-
-    // =========================================================================
-    // Rendu d'un résultat
-    // =========================================================================
-
-    function createResultElement(item, matches) {
-        matches = matches || [];
-        const matchMap = {};
-        matches.forEach(m => { matchMap[m.key] = m.indices; });
-
-        const article = document.createElement('div');
-        article.className = 'search-result-item';
-
-        // Titre
-        const h3 = document.createElement('h3');
-        const link = document.createElement('a');
-        link.href = item.permalink;
-        if (matchMap['title']) {
-            link.appendChild(highlightMatches(item.title, matchMap['title']));
-        } else {
-            link.textContent = item.title;
-        }
-        h3.appendChild(link);
-        article.appendChild(h3);
-
-        // Snippet
-        const content = item.summary || item.contents || '';
-        const plainText = stripHtml(content);
-        const snippet = plainText.length > CONFIG.SNIPPET_LENGTH
-            ? plainText.substring(0, CONFIG.SNIPPET_LENGTH) + '...'
-            : plainText;
-
-        const p = document.createElement('p');
-        if (matchMap['summary'] || matchMap['contents']) {
-            const indices = matchMap['summary'] || matchMap['contents'];
-            const filtered = indices.filter(([s]) => s < CONFIG.SNIPPET_LENGTH);
-            p.appendChild(highlightMatches(snippet, filtered));
-        } else {
-            p.textContent = snippet;
-        }
-        article.appendChild(p);
-
-        // Tags cliquables
-        const tags = itemTags(item);
-        if (tags.length > 0) {
-            const tagWrap = document.createElement('div');
-            tagWrap.className = 'result-tags';
-            tags.forEach(t => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'result-tag';
-                btn.dataset.tag = normTag(t);
-                btn.textContent = t;
-                if (activeTags.has(normTag(t))) {
-                    btn.classList.add('is-active');
-                }
-                tagWrap.appendChild(btn);
-            });
-            article.appendChild(tagWrap);
-        }
-
-        // Date
-        if (item.date) {
-            const small = document.createElement('small');
-            small.textContent = new Date(item.date).toLocaleDateString('fr-FR');
-            article.appendChild(small);
-        }
-
-        return article;
-    }
-
-    function showMessage(message, isError = false) {
-        const p = document.createElement('p');
-        p.textContent = message;
-        if (isError) p.style.color = 'red';
-        searchResults.innerHTML = '';
-        searchResults.appendChild(p);
-    }
-
-    function updateCount(text) {
-        if (!searchCount) return;
-        if (text) {
-            searchCount.textContent = text;
-            searchCount.hidden = false;
-        } else {
-            searchCount.textContent = '';
-            searchCount.hidden = true;
-        }
-    }
-
-    // =========================================================================
-    // Rendu principal
-    // =========================================================================
-
-    function render() {
-        if (!searchResults) return;
-        const q = query.trim();
-        const hasQuery = q.length > 0;
-        const hasTags = activeTags.size > 0;
-
-        // État vide : aucun critère → on laisse le nuage de tags guider
-        if (!hasQuery && !hasTags) {
-            searchResults.innerHTML = '';
-            updateCount('');
-            return;
-        }
-
-        // Construction de la base de résultats
-        let results;
-        if (hasQuery) {
-            if (!fuse) return;
-            results = fuse.search(q).map(r => ({ item: r.item, matches: r.matches }));
-        } else {
-            results = allItems
-                .slice()
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .map(item => ({ item, matches: [] }));
-        }
-
-        // Filtre tags (ET)
-        if (hasTags) {
-            results = results.filter(r => itemHasAllTags(r.item));
-        }
-
-        searchResults.innerHTML = '';
-
-        if (results.length === 0) {
-            updateCount('');
-            showMessage('Aucun résultat trouvé.');
-            return;
-        }
-
-        const shown = hasQuery ? results.slice(0, CONFIG.MAX_RESULTS) : results;
-        const fragment = document.createDocumentFragment();
-        shown.forEach(r => fragment.appendChild(createResultElement(r.item, r.matches)));
-        searchResults.appendChild(fragment);
-
-        const n = results.length;
-        const noun = hasQuery ? 'résultat' : 'article';
-        updateCount(n + ' ' + noun + (n > 1 ? 's' : ''));
-    }
-
-    // =========================================================================
-    // Gestion des tags
-    // =========================================================================
-
-    /**
-     * Filtre les pills visibles selon la saisie (insensible casse/accents).
-     * Les tags actifs restent toujours visibles pour pouvoir les désactiver.
-     */
-    function filterTagCloud(q) {
-        if (!tagCloud) return;
-        const term = deburr(q);
-        tagCloud.querySelectorAll('.tag-pill').forEach(pill => {
-            const tag = deburr(pill.dataset.tag);
-            const visible = term === '' || tag.indexOf(term) !== -1 || activeTags.has(normTag(pill.dataset.tag));
-            pill.hidden = !visible;
-        });
-    }
-
-    function syncPillStates() {
-        if (tagCloud) {
-            tagCloud.querySelectorAll('.tag-pill').forEach(pill => {
-                const active = activeTags.has(normTag(pill.dataset.tag));
-                pill.classList.toggle('is-active', active);
-                pill.setAttribute('aria-pressed', active ? 'true' : 'false');
-            });
-        }
-        if (tagClear) tagClear.hidden = activeTags.size === 0;
-    }
-
-    function toggleTag(tag) {
-        const t = normTag(tag);
-        if (!t) return;
-        if (activeTags.has(t)) {
-            activeTags.delete(t);
-        } else {
-            activeTags.add(t);
-        }
-        syncURL();
-        syncPillStates();
-        render();
-    }
-
-    function clearTags() {
-        activeTags.clear();
-        syncURL();
-        syncPillStates();
-        render();
-    }
-
-    // =========================================================================
-    // Initialisation
-    // =========================================================================
-
-    function loadSearchIndex() {
-        fetch('/index.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                allItems = data;
-                fuse = new Fuse(data, CONFIG.FUSE_OPTIONS);
-                render();
-            })
-            .catch(error => {
-                console.error('Error loading search index:', error);
-                showMessage('Erreur de chargement de la recherche. Vérifiez la console.', true);
-            });
-    }
-
-    function initEventListeners() {
-        if (searchInput) {
-            const debouncedRender = debounce(render, CONFIG.DEBOUNCE_DELAY);
-            searchInput.addEventListener('input', () => {
-                query = searchInput.value;
-                filterTagCloud(query);   // filtrage instantané du nuage
-                debouncedRender();       // recherche d'articles débounce
-            });
-        }
-
-        if (tagCloud) {
-            tagCloud.addEventListener('click', e => {
-                const pill = e.target.closest('.tag-pill');
-                if (pill) toggleTag(pill.dataset.tag);
-            });
-        }
-
-        if (tagClear) {
-            tagClear.addEventListener('click', clearTags);
-        }
-
-        // Délégation pour les chips de tags dans les résultats
-        if (searchResults) {
-            searchResults.addEventListener('click', e => {
-                const chip = e.target.closest('.result-tag');
-                if (chip) toggleTag(chip.dataset.tag);
-            });
-        }
-    }
-
-    function init() {
-        readTagsFromURL();
-        syncPillStates();
-        initEventListeners();
-        loadSearchIndex();
-    }
-
-    init();
-
+  'use strict';
+  const root = document.querySelector('.search-container');
+  if (!root) return;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  const status = document.getElementById('search-count');
+  const cloud = document.getElementById('tag-cloud');
+  const clear = document.getElementById('tag-filter-clear');
+  const more = document.getElementById('search-more');
+  const retry = document.getElementById('search-retry');
+  const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const tags = new Set();
+  let items = [], fuse, loaded = false, loading = false, failed = false, limit = 10, timer;
+  function fromURL() {
+    const params = new URLSearchParams(location.search);
+    input.value = params.get('q') || '';
+    tags.clear();
+    (params.get('tags') || '').split(',').filter(Boolean).forEach(t => {
+      // Older shared links encoded tags twice. Accept both representations.
+      try { t = decodeURIComponent(t); } catch (_) {}
+      tags.add(t.trim().toLowerCase());
+    });
+  }
+  function syncURL() {
+    const params = new URLSearchParams(location.search);
+    if (input.value.trim()) params.set('q', input.value.trim()); else params.delete('q');
+    if (tags.size) params.set('tags',[...tags].join(',')); else params.delete('tags');
+    history.replaceState(null,'',location.pathname + (params.size ? '?' + params : ''));
+  }
+  function syncButtons() {
+    if (cloud) cloud.querySelectorAll('[data-tag]').forEach(b => b.setAttribute('aria-pressed',String(tags.has(b.dataset.tag.toLowerCase()))));
+    clear.hidden = !tags.size && !input.value;
+  }
+  function toggle(tag) {
+    tag = tag.trim().toLowerCase();
+    if (tags.has(tag)) tags.delete(tag); else tags.add(tag);
+    limit = 10; syncURL(); render();
+  }
+  function highlightedTitle(title) {
+    const fragment = document.createDocumentFragment();
+    const q = normalize(input.value), i = normalize(title).indexOf(q);
+    if (!q || i < 0) { fragment.append(title); return fragment; }
+    fragment.append(title.slice(0,i));
+    const mark = document.createElement('mark'); mark.textContent = title.slice(i,i+q.length);
+    fragment.append(mark,title.slice(i+q.length)); return fragment;
+  }
+  function card(item) {
+    const el = document.createElement('article'); el.className = 'search-result-item';
+    const h = document.createElement('h2'), a = document.createElement('a');
+    a.href = item.permalink; a.append(highlightedTitle(item.title)); h.append(a); el.append(h);
+    const p = document.createElement('p');
+    const excerpt = item.summary || item.contents || '';
+    p.textContent = excerpt.length > 180 ? excerpt.slice(0,180).replace(/\s+\S*$/,'') + '…' : excerpt;
+    el.append(p);
+    const tagRow = document.createElement('div'); tagRow.className = 'search-result-tags';
+    (item.tags || []).forEach(t => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = t;
+      b.setAttribute('aria-pressed',String(tags.has(t.toLowerCase())));
+      b.addEventListener('click',() => toggle(t)); tagRow.append(b);
+    });
+    el.append(tagRow); return el;
+  }
+  function render() {
+    syncButtons(); results.replaceChildren(); more.hidden = true;
+    if (loading) { status.textContent = 'Chargement de la recherche…'; return; }
+    if (failed) { status.textContent = 'La recherche n’a pas pu être chargée. Réessaie ou consulte la liste des articles.'; return; }
+    if (!loaded) return;
+    const q = normalize(input.value);
+    if (!q && !tags.size) { status.textContent = 'Saisis un mot ou choisis un tag pour explorer les articles.'; return; }
+    let found = q ? fuse.search(q).map(r => items[r.item.index]) : items.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
+    found = found.filter(item => [...tags].every(t => (item.tags || []).some(it => it.toLowerCase() === t)));
+    const n = found.length;
+    status.textContent = n ? n + ' résultat' + (n > 1 ? 's' : '') + (n > limit ? ' · ' + limit + ' affichés' : '') : 'Aucun résultat. Essaie un autre mot ou retire un filtre.';
+    found.slice(0,limit).forEach(item => results.append(card(item)));
+    more.hidden = n <= limit;
+  }
+  async function load() {
+    if (loading) return;
+    loading = true; failed = false; retry.hidden = true; render();
+    try {
+      const response = await fetch(root.dataset.index);
+      if (!response.ok) throw new Error('Index unavailable');
+      items = await response.json();
+      if (!Array.isArray(items)) throw new Error('Invalid index');
+      const indexed = items.map((item,index) => ({index,title:normalize(item.title),summary:normalize(item.summary),contents:normalize(item.contents),tags:(item.tags || []).map(normalize),categories:(item.categories || []).map(normalize)}));
+      fuse = new Fuse(indexed,{keys:[{name:'title',weight:3},{name:'tags',weight:2},'categories','summary','contents'],threshold:.2,ignoreLocation:true});
+      loaded = true;
+    } catch (_) { failed = true; retry.hidden = false; }
+    loading = false; render();
+  }
+  input.addEventListener('input',() => { clearTimeout(timer); timer = setTimeout(() => { limit = 10; syncURL(); render(); },180); });
+  root.querySelector('form').addEventListener('submit',e => { e.preventDefault(); clearTimeout(timer); limit = 10; syncURL(); render(); });
+  if (cloud) cloud.addEventListener('click',e => { const b = e.target.closest('[data-tag]'); if (b) toggle(b.dataset.tag); });
+  clear.addEventListener('click',() => { clearTimeout(timer); tags.clear(); input.value = ''; limit = 10; syncURL(); render(); input.focus(); });
+  more.addEventListener('click',() => { limit += 10; render(); });
+  retry.addEventListener('click',load);
+  addEventListener('popstate',() => { fromURL(); limit = 10; render(); });
+  fromURL(); load();
 })();

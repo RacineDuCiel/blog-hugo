@@ -1,40 +1,11 @@
 {{ define "main" }}
-{{/*
-BEST PRACTICE: Hugo Pipes pour les assets
-- CSS chargé en premier pour éviter le FOUC
-- JS minifié et fingerprinted pour un cache optimal
-- SRI pour la sécurité
-*/}}
-
-<div class="search-container" role="search">
-    <div class="search-box">
-        <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Recherche" autofocus>
-    </div>
-
-    {{ with .Site.Taxonomies.tags }}
-    <div class="tag-filter-bar">
-        <div class="tag-filter-head">
-            <span class="tag-filter-label">Filtrer par tag</span>
-            <button type="button" id="tag-filter-clear" class="tag-filter-clear" hidden>Tout effacer</button>
-        </div>
-        <div class="tag-cloud" id="tag-cloud" role="group" aria-label="Filtrer par tag">
-            {{ range .ByCount }}
-            <button type="button" class="tag-pill" data-tag="{{ .Name }}" aria-pressed="false">
-                <span class="tag-pill__label">{{ .Name }}</span>
-                <span class="tag-pill__count">{{ .Count }}</span>
-            </button>
-            {{ end }}
-        </div>
-    </div>
-    {{ end }}
-
-    <p id="search-count" class="search-count" aria-live="polite" hidden></p>
-    <div id="search-results" aria-live="polite" aria-atomic="true"></div>
-</div>
-
-{{/* JS — Minifié + Fingerprint + SRI */}}
-{{ $fuse := resources.Get "js/fuse.js" | minify | fingerprint }}
-{{ $search := resources.Get "js/search.js" | minify | fingerprint }}
-<script defer src="{{ $fuse.RelPermalink }}" integrity="{{ $fuse.Data.Integrity }}" crossorigin="anonymous"></script>
-<script defer src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}" crossorigin="anonymous"></script>
+<main id="main" class="list-shell search-shell" tabindex="-1">
+{{ partial "page-heading.html" . }}
+<div class="search-container" data-index="{{ "index.json" | relURL }}">
+<form role="search" class="search-form"><label class="sr-only" for="search-input">Rechercher dans les articles</label><input type="search" id="search-input" placeholder="Un titre, un sujet, un mot…" autocomplete="off"><button type="submit" aria-label="Lancer la recherche">↗</button></form>
+{{ with .Site.Taxonomies.tags }}<div class="tag-filter-bar"><div class="tag-filter-head"><span>Filtrer par tag</span><button type="button" id="tag-filter-clear" hidden>Tout effacer</button></div><div id="tag-cloud" class="tag-cloud" role="group" aria-label="Filtrer par tag">{{ range .ByCount }}<button type="button" class="tag-pill" data-tag="{{ .Name }}" aria-pressed="false">{{ .Name }} <span>{{ .Count }}</span></button>{{ end }}</div></div>{{ end }}
+<p id="search-count" class="search-count" role="status">Chargement de la recherche…</p><div id="search-results"></div><button type="button" id="search-more" hidden>Afficher plus de résultats</button><button type="button" id="search-retry" hidden>Réessayer</button>
+<noscript><p>La recherche nécessite JavaScript. <a href="{{ "posts/" | relURL }}">Parcourir tous les articles</a>.</p></noscript>
+</div></main>
+{{ range slice "js/fuse.js" "js/search.js" }}{{ $js := resources.Get . | minify | fingerprint }}<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>{{ end }}
 {{ end }}

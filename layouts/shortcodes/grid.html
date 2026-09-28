@@ -1,12 +1,8 @@
-{{/*
-===========================================================================
-Shortcode: Grid Layout
----------------------------------------------------------------------------
-Usage: {{< grid>}} ... content ... {{< /grid>}}
-
-        BEST PRACTICE: Classe CSS externalisée au lieu de style inline
-        ===========================================================================
-        */}}
-        <div class="shortcode-grid">
-            {{ .Inner }}
-        </div>
+{{/* The optional classics variant only affects the music collection. */}}
+{{ if eq .Page.Params.pageClass "music-recs" }}
+<ul role="list" class="shortcode-grid music-grid{{ if eq (.Get "variant") "classics" }} music-grid--classics{{ end }}">
+{{ .Inner }}
+</ul>
+{{ else }}
+<div class="shortcode-grid">{{ .Inner }}</div>
+{{ end }}

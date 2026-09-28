@@ -1,10 +1,13 @@
+// Interactive figures use interface typography, independently of prose settings.
+.tdee-calc, .tdee-figure { font-family: var(--sans); }
+
 // TDEE article diagrams and estimator.
 
 .tdee-figure {
   margin: 2.4rem 0;
   padding: 1.15rem;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: var(--color-surface);
   color: var(--color-text-1);
   box-shadow: var(--shadow-soft);
@@ -42,7 +45,7 @@
   gap: 1px;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: var(--color-border);
 }
 
@@ -75,7 +78,7 @@
 
 .tdee-stack__row--bmr {
   min-height: 7.5rem;
-  background: linear-gradient(180deg, var(--color-surface), var(--color-surface-2));
+  background: var(--color-surface-2);
 }
 
 .tdee-stack__row--neat {
@@ -90,7 +93,7 @@
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: var(--color-border);
   list-style: none;
 
@@ -144,7 +147,7 @@
   margin: 2rem 0 2.4rem;
   padding: 1.2rem;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
   color: var(--color-text-1);
@@ -230,7 +233,7 @@
   min-height: 2.1rem;
   padding: 0.42rem 0.7rem;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: transparent;
   color: var(--color-text-2);
   cursor: pointer;
@@ -244,7 +247,6 @@
   &:focus-visible {
     border-color: var(--color-border-strong);
     color: var(--color-text-1);
-    outline: none;
   }
 
   &.is-active {
@@ -290,7 +292,7 @@
     box-sizing: border-box;
     padding: 0.48rem 2.35rem 0.48rem 0.65rem;
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 3px;
     background: var(--color-bg);
     color: var(--color-text-1);
     font: inherit;
@@ -304,7 +306,6 @@
     &:focus {
       border-color: var(--color-border-strong);
       box-shadow: 0 0 0 4px var(--accent-subtle);
-      outline: none;
     }
   }
 }
@@ -391,25 +392,21 @@
   margin: 0;
   padding: 0.85rem 0.95rem;
   border: 1px solid rgba(185, 28, 28, 0.26);
-  border-radius: 8px;
-  background: rgba(185, 28, 28, 0.06);
-  color: #b91c1c;
+  border-radius: 3px;
+  background: var(--wash);
+  color: var(--ink);
   font-size: 0.88rem;
   line-height: 1.55;
 }
 
-html.dark .tdee-error {
-  color: #fca5a5;
-  background: rgba(248, 113, 113, 0.08);
-  border-color: rgba(248, 113, 113, 0.22);
-}
+
 
 .tdee-hero,
 .tdee-calibration-result,
 .tdee-breakdown,
 .tdee-method {
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 3px;
   background: var(--color-bg);
 }
 

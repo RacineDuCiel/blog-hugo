@@ -1,0 +1,57 @@
+// Long-form reading and reference pages share typography and rhythm.
+.article-shell { max-width: 740px; padding: 0 32px; margin: 64px auto 0; }
+.article-column { min-width: 0; }
+.article-header { margin-bottom: 36px; }
+.article-categories { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.article-categories a { text-decoration: none; }
+.article-header h1 { font-size: 40px; letter-spacing: -.045em; line-height: 1.16; margin: 0 0 20px; font-weight: 500; }
+.article-meta-line { display: flex; align-items: center; gap: 16px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.post-meta { display: flex; flex-wrap: wrap; gap: 5px 18px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.prose { font-family: var(--reading-font-family, var(--serif)); font-size: calc(19px * var(--reading-font-scale)); line-height: 1.75; overflow-wrap: break-word; }
+.prose > p, .prose > ul, .prose > ol { margin: 0 0 1.35em; }
+.prose > h1, .prose > h2 { font-size: 1.3em; line-height: 1.35; margin: 2.6em 0 .8em; letter-spacing: -.025em; }
+.prose > h3 { font-size: 1.08em; line-height: 1.4; margin: 2em 0 .75em; }
+.prose > h4, .prose > h5, .prose > h6 { font-size: 1em; margin: 1.7em 0 .7em; }
+.prose > :first-child { margin-top: 0; }
+.prose li { margin: .4em 0; }
+.prose ul, .prose ol { padding-left: 1.35em; }
+.prose a { overflow-wrap: anywhere; }
+.prose strong { font-weight: 700; }
+.prose blockquote { margin: 2em 0; padding: .2em 0 .2em 1.2em; border-left: 2px solid var(--line); color: var(--muted); }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
+.prose figure { margin: 2em 0; }
+.prose img { margin: 1.5em auto; }
+.prose figcaption { font: 12px/1.6 var(--sans); color: var(--muted); text-align: center; }
+.prose code,.prose pre { font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: .82em; }
+.prose :not(pre) > code { padding: .12em .3em; background: var(--wash); border-radius: 2px; }
+.prose pre { padding: 20px; overflow-x: auto; line-height: 1.65; background: var(--wash); color: var(--ink); border: 1px solid var(--line); }
+.prose pre code { font-size: inherit; }
+.prose .highlight { overflow: auto; margin: 1.6em 0; }
+.prose table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; font: .78em/1.6 var(--sans); margin: 1.8em 0; }
+.prose th,.prose td { text-align: left; padding: 12px 14px; border: 1px solid var(--line); vertical-align: top; min-width: 100px; }
+.prose th { background: var(--wash); font-weight: 600; }
+.prose .footnotes { margin-top: 3em; font-size: .8em; }
+.prose sup { line-height: 0; }
+.related-posts { margin-top: 64px; }
+.article-back { display: inline-block; margin-top: 36px; font-size: 12px; text-decoration: none; }
+.fiche-revision .prose { font-family: var(--reading-font-family, var(--sans)); font-size: calc(16px * var(--reading-font-scale)); line-height: 1.8; }
+.disclaimer-revision { padding: 20px; margin: 0 0 36px; border-left: 2px solid var(--line); background: var(--wash); font: 12px/1.7 var(--sans); color: var(--muted); }
+@media(min-width: 1200px) {
+  .article-shell.with-toc { max-width: 1120px; display: grid; grid-template-columns: 200px minmax(0,676px); column-gap: 64px; }
+}
+@media(max-width: 760px) {
+  .article-shell { padding: 0 24px; margin-top: 44px; }
+  .article-header h1 { font-size: 32px; }
+  .prose { font-size: calc(18px * var(--reading-font-scale)); }
+  .prose > h2 { font-size: 1.22em; }
+  .article-meta-line { align-items: flex-start; }
+  .post-meta { gap: 6px 14px; }
+}
+@media print {
+  .site-header,.site-footer,.toc-sidebar,.toc-mobile,.toc-fab,dialog,.reading-settings,.related-posts,.article-back,.skip-link,#reading-progress { display: none !important; }
+  .article-shell.with-toc { display: block; max-width: none; padding: 0; margin: 0; }
+  body { background: white; color: black; }
+  .prose { font-size: 11pt; }
+  .prose pre,.prose table { overflow: visible; }
+}

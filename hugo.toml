@@ -44,6 +44,7 @@ defaultContentLanguage = "fr-fr"
   priority = 0.5
 
 [params]
+  showFooter = false
   browserconfig.TileColor = "#2d89ef"
 
 [Languages.fr-fr]

@@ -1,0 +1,24 @@
+{{ $collection := .Get 0 }}
+{{ $file := .Page.Resources.Get "albums.yaml" }}
+{{ if not $file }}
+  {{ errorf "Albums (%s): fichier albums.yaml introuvable" .Page.File.Path }}
+{{ else if not (in (slice "classiques" "recommandes") $collection) }}
+  {{ errorf "Albums (%s): collection inconnue '%s' (classiques ou recommandes)" .Page.File.Path $collection }}
+{{ else }}
+  {{ $data := $file.Content | transform.Unmarshal }}
+  {{ if not (isset $data $collection) }}
+    {{ errorf "Albums (%s): collection '%s' absente de albums.yaml" .Page.File.Path $collection }}
+  {{ else }}
+    {{ $albums := index $data $collection }}
+    {{ if not (reflect.IsSlice $albums) }}
+      {{ errorf "Albums (%s): la collection '%s' doit être une liste" .Page.File.Path $collection }}
+    {{ else }}
+      {{ $presentation := cond (eq $collection "classiques") "classics" "standard" }}
+      <ul role="list" class="shortcode-grid music-grid{{ if eq $presentation "classics" }} music-grid--classics{{ end }}">
+      {{ range $index, $album := $albums }}
+        {{ partial "albums/item.html" (dict "page" $.Page "album" $album "presentation" $presentation "listItem" true "eager" (and (eq $.Ordinal 0) (lt $index 2))) }}
+      {{ end }}
+      </ul>
+    {{ end }}
+  {{ end }}
+{{ end }}

@@ -1,19 +1,38 @@
-# Hugo generated files
+# Hugo : site compilé et ressources régénérables
 /public/
 /resources/_gen/
-.hugo_build.lock
+/.hugo_build.lock
+/hugo_stats.json
+/.cache/
 
-# OS files
-.DS_Store
-Thumbs.db
+# Python : caches et environnements locaux des scripts de vérification
+__pycache__/
+*.py[cod]
+/.venv/
+/venv/
+.pytest_cache/
+.ruff_cache/
 
-# Editor files
-.vscode/
-.idea/
+# Variables d'environnement locales (conserver les modèles partageables)
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Réglages personnels des outils (launch.json reste partageable)
+/.claude/settings.local.json
+/.vscode/
+/.idea/
 *.swp
 *.swo
 *~
 
-# Logs et scripts de debug
+# Fichiers système
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Journaux d'exécution
 *.log
-fix_index.py

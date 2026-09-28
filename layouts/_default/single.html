@@ -1,133 +1,37 @@
 {{ define "main" }}
-{{/* La TOC latérale est affichée uniquement si Hugo a généré des entrées de navigation.
-     Hugo retourne une template.HTML vide "" quand il n'y a pas de titres, ou
-     "<nav id=\"TableOfContents\"></nav>" quand les titres ne sont pas H2/H3.
-     On utilise le filtre `replaceRE` pour extraire les <li> et tester leur présence. */}}
-{{ $tocContent := .TableOfContents }}
-{{ $tocItems := $tocContent | replaceRE `(?s).*?(<li>).*` "$1" }}
-{{ $showSidebar := eq $tocItems "<li>" }}
-
-<div class="wrapper post{{ if $showSidebar }} has-toc-sidebar{{ end }}">
-    <div class="article-layout">
-        {{/* TOC latérale sticky (desktop uniquement) — placée avant <main> pour être à gauche dans la grille */}}
-        {{ if $showSidebar }}
-        <aside class="toc-sidebar" aria-label="Table des matières">
-            <div class="toc-inner">
-                <p class="toc-sidebar-title">Table des matières</p>
-                {{ $tocContent | safeHTML }}
-            </div>
-        </aside>
-        {{ end }}
-
-        <main class="page-content" aria-label="Content">
-            <article>
-                <header class="header">
-                    <h1 class="header-title">{{ .Title }}</h1>
-                    {{ $configDateFormat := .Site.Params.dateFormat | default ":date_medium" }}
-                    {{ if and (.Date) (ne .Params.showDate false) }}
-                    {{ $pubDate := .Date }}
-                    {{ $modDate := .Lastmod }}
-                    {{ $pubISO := dateFormat "2006-01-02T15:04:05-07:00" $pubDate }}
-                    {{ $modISO := dateFormat "2006-01-02T15:04:05-07:00" $modDate }}
-                    {{ $datesAreDifferent := ne (dateFormat "2006-01-02" $pubDate) (dateFormat "2006-01-02" $modDate) }}
-                    <div class="post-meta">
-                        <time datetime="{{ $pubISO }}" itemprop="datePublished">{{ $pubDate | time.Format $configDateFormat }}</time>
-                        {{ if $datesAreDifferent }}
-                        <span class="post-meta-sep">·</span>
-                        <span class="post-meta-updated">mis à jour le <time datetime="{{ $modISO }}"
-                                itemprop="dateModified">{{ $modDate | time.Format $configDateFormat }}</time></span>
-                        {{ end }}
-                        {{ if gt .ReadingTime 0 }}
-                        <span class="post-reading-time" aria-label="{{ .ReadingTime }} minutes de lecture">· {{ .ReadingTime }} min de lecture</span>
-                        {{ end }}
-                    </div>
-                    <hr class="post-divider">
-                    {{ end }}
-                    {{ partial "reading-settings.html" . }}
-                </header>
-
-                {{/* TOC inline (mobile / tablette) — masquée sur desktop via CSS */}}
-                {{ partial "toc.html" . }}
-
-                <div class="page-content">
-                    {{ if eq .Params.pageClass "fiche-revision" }}
-                    <aside class="disclaimer-revision" role="note">
+{{ $isArticle := eq .Section "posts" }}
+{{ $isMusic := eq .Params.pageClass "music-recs" }}
+{{ $hasToc := and $isArticle (ne .Params.pageClass "music-recs") (strings.Contains .TableOfContents "<li>") }}
+<main id="main" class="article-shell{{ if $hasToc }} with-toc{{ end }}{{ if eq .Params.pageClass "music-recs" }} music-shell{{ end }}" tabindex="-1">
+{{ if $hasToc }}<aside class="toc-sidebar" aria-label="Sommaire"><div class="toc-inner"><p class="toc-label">Dans cet article</p>{{ partial "toc-tree.html" . }}</div></aside>{{ end }}
+<div class="article-column">
+<article>
+<header class="article-header">
+{{ if $isArticle }}<div class="article-categories">{{ range .GetTerms "categories" }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</div>{{ end }}
+<h1>{{ .Title }}</h1>
+<div class="article-meta-line"><div class="post-meta">
+{{ if and (not .Date.IsZero) (ne .Params.showDate false) }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time>
+{{ if ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02") }}<span>Mis à jour le <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod | time.Format "02.01.2006" }}</time></span>{{ end }}
+{{ if and $isArticle (not $isMusic) }}<span>{{ .ReadingTime }} min de lecture</span>{{ end }}{{ end }}</div>
+{{ if and $isArticle (not $isMusic) }}{{ partial "reading-settings.html" . }}{{ end }}</div>
+</header>
+{{ if $hasToc }}<details class="toc-mobile"><summary>Dans cet article</summary>{{ partial "toc-tree.html" . }}</details>{{ end }}
+<div class="prose page-content">
+{{ if eq .Params.pageClass "fiche-revision" }}<aside class="disclaimer-revision" role="note">
                         <strong>Fiche de révision personnelle</strong> — Ce document est un support de mémorisation rédigé à titre personnel, sans affiliation avec CompTIA. Il peut contenir des inexactitudes ou ne pas refléter la version la plus récente des examens : vérifiez toujours les informations auprès des sources officielles. CompTIA SecurityX™ et CASP+™ sont des marques déposées de CompTIA, Inc.
-                    </aside>
-                    {{ end }}
-                    {{ .Content }}
-                </div>
-            </article>
-
-            {{ $related := .Site.RegularPages.Related . | first 3 }}
-            {{ with $related }}
-            <section class="related-posts">
-                <h2 class="related-posts-title">{{ T "post.related_posts" | default "Pour aller plus loin" }}</h2>
-                {{ range . }}
-                {{ partial "postCard" . }}
-                {{ end }}
-            </section>
-            {{ end }}
-        </main>
-    </div>
+                    </aside>{{ end }}
+{{ .Content }}
 </div>
-
-{{/* FAB + Drawer TOC mobile — position:fixed, hors flux, visible uniquement < 1100px */}}
-{{ if $showSidebar }}
-<div class="toc-mobile-wrapper">
-    <button class="toc-fab" id="toc-fab"
-            aria-label="Table des matières"
-            aria-expanded="false"
-            aria-controls="toc-drawer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round" aria-hidden="true" width="16" height="16">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="15" y2="12"/>
-            <line x1="3" y1="18" x2="18" y2="18"/>
-        </svg>
-        <span class="toc-fab-label" aria-live="polite">Plan</span>
-    </button>
-
-    <div class="toc-overlay" id="toc-overlay" aria-hidden="true"></div>
-
-    <div class="toc-drawer" id="toc-drawer"
-         role="dialog" aria-modal="true"
-         aria-label="Table des matières"
-         aria-hidden="true">
-        <div class="toc-drawer-header">
-            <span class="toc-drawer-title">Table des matières</span>
-            <button class="toc-drawer-close" id="toc-drawer-close"
-                    aria-label="Fermer la table des matières">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" aria-hidden="true" width="18" height="18">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>
-        </div>
-        <div class="toc-drawer-nav">
-            {{ $tocContent | safeHTML }}
-        </div>
-    </div>
-</div>
+</article>
+{{ if $isArticle }}
+{{ $related := where (.Site.RegularPages.Related .) "Section" "posts" | first 3 }}
+{{ if not $isMusic }}{{ with $related }}<section class="related-posts" aria-label="Pour aller plus loin"><h2 class="section-label">Pour aller plus loin</h2>{{ range . }}{{ partial "postCard.html" . }}{{ end }}</section>{{ end }}{{ end }}
+<a class="article-back" href="{{ "posts/" | relURL }}">← Tous les articles</a>
 {{ end }}
-
-{{/* Script barre de progression de lecture */}}
-{{ $progress := resources.Get "js/reading-progress.js" | minify | fingerprint }}
-<script defer src="{{ $progress.RelPermalink }}" integrity="{{ $progress.Data.Integrity }}"
-    crossorigin="anonymous"></script>
-
-{{/* Script du widget de réglages de lecture (taille + police) */}}
-{{ $readingSettings := resources.Get "js/reading-settings.js" | minify | fingerprint }}
-<script defer src="{{ $readingSettings.RelPermalink }}" integrity="{{ $readingSettings.Data.Integrity }}"
-    crossorigin="anonymous"></script>
-
-{{/* Script TOC spy — suivi de position dans la sidebar */}}
-{{ if $showSidebar }}
-{{ $tocSpy := resources.Get "js/toc-spy.js" | minify | fingerprint }}
-<script defer src="{{ $tocSpy.RelPermalink }}" integrity="{{ $tocSpy.Data.Integrity }}"
-    crossorigin="anonymous"></script>
+</div>
+</main>
+{{ if $hasToc }}
+<button class="toc-fab" hidden aria-controls="toc-dialog" aria-haspopup="dialog">Sommaire <span aria-hidden="true">↑</span></button>
+<dialog id="toc-dialog" aria-labelledby="toc-dialog-title"><div class="toc-dialog-header"><h2 id="toc-dialog-title">Dans cet article</h2><button class="toc-close" aria-label="Fermer le sommaire">Fermer ×</button></div>{{ partial "toc-tree.html" . }}</dialog>
 {{ end }}
 {{ end }}

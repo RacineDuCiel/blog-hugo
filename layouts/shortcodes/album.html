@@ -1,36 +1,11 @@
-{{/*
-===========================================================================
-Shortcode: Album Card
----------------------------------------------------------------------------
-Usage: {{< album cover="image.jpg" artist="Nom" title="Titre">}}
-
-    BEST PRACTICE: Styles externalisés dans assets/sass/shortcodes.scss
-    - CSS :hover au lieu de onmouseover/onmouseout inline (plus performant)
-    - Classes sémantiques plutôt que styles inline
-    ===========================================================================
-    */}}
-    {{ $src := .Get "cover" }}
-    {{ $artist := .Get "artist" }}
-    {{ $title := .Get "title" }}
-    {{ $image := .Page.Resources.GetMatch $src }}
-
-    <div class="album-card">
-        {{ if $image }}
-        {{/* Image Processing: génère 1x et 2x pour les écrans Retina */}}
-        {{ $thumb1x := $image.Fill "300x300 Center webp q90" }}
-        {{ $thumb2x := $image.Fill "600x600 Center webp q90" }}
-
-        <div class="album-cover">
-            <img class="album-cover-img" srcset="{{ $thumb1x.RelPermalink }} 1x, {{ $thumb2x.RelPermalink }} 2x"
-                src="{{ $thumb1x.RelPermalink }}" alt="{{ $title }} by {{ $artist }}" width="{{ $thumb1x.Width }}"
-                height="{{ $thumb1x.Height }}" loading="lazy">
-        </div>
-        {{ else }}
-        <p class="shortcode-error">Image not found: {{ $src }}</p>
-        {{ end }}
-
-        <div class="album-info">
-            <h3>{{ $artist }}</h3>
-            <p>{{ $title }}</p>
-        </div>
-    </div>
+{{/* Compatibility adapter for the original album/grid syntax. */}}
+{{ $music := eq .Page.Params.pageClass "music-recs" }}
+{{ $presentation := cond $music "standard" "legacy" }}
+{{ $listItem := false }}
+{{ with .Parent }}
+  {{ if and $music (eq .Name "grid") }}
+    {{ $listItem = true }}
+    {{ if eq (.Get "variant") "classics" }}{{ $presentation = "classics" }}{{ end }}
+  {{ end }}
+{{ end }}
+{{ partial "albums/item.html" (dict "page" .Page "album" (dict "artist" (.Get "artist") "title" (.Get "title") "cover" (.Get "cover")) "presentation" $presentation "listItem" $listItem "eager" false) }}

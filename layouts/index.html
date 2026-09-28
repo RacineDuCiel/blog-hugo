@@ -1,20 +1,12 @@
 {{ define "main" }}
-{{ partial "bio" . }}
-<div class="wrapper wrapper-home">
-    <main aria-label="Content">
-        {{ $articlesSorted := (where .Site.RegularPages "Params.showOnHome" true).ByDate.Reverse }}
-
-        <section class="home-section">
-            <h3 class="posts-item-note" aria-label="Recent Articles">{{ T "home.recent_posts" }}</h3>
-            {{ range first 5 $articlesSorted }}
-            {{ partial "postCard" . }}
-            {{ end }}
-            {{ range $firstSection := (where .Site.Sections "Section" "in" (first 1 (.Site.Params.mainSections))) }}
-            <p class="home-see-all">
-                <a class="home-see-all-link" href="{{ $firstSection.Permalink }}">Tous les articles</a>
-            </p>
-            {{ end }}
-        </section>
-    </main>
-</div>
+<main id="main" class="home-shell" tabindex="-1">
+{{ partial "fragment.html" "ouverture" }}
+<section class="home-articles" aria-labelledby="recent-heading">
+<div class="section-label"><h2 id="recent-heading">Articles récents</h2><a href="{{ "categories/" | relURL }}">Par thème <span aria-hidden="true">↗</span></a></div>
+{{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.showOnHome" true }}
+{{ range first 5 ($articles.ByDate.Reverse) }}{{ partial "postCard.html" . }}{{ end }}
+<a class="all-posts" href="{{ "posts/" | relURL }}">Tous les articles <span aria-hidden="true">→</span></a>
+</section>
+{{ partial "fragment.html" "interlude" }}
+</main>
 {{ end }}

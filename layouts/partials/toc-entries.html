@@ -1,0 +1,5 @@
+{{ range . }}
+{{ if .Title }}
+<li>{{ if .Headings }}<details><summary><a href="#{{ .ID }}">{{ .Title | safeHTML }}</a><span class="toc-disclosure" aria-hidden="true">+</span></summary>{{ partial "toc-level.html" .Headings }}</details>{{ else }}<a href="#{{ .ID }}">{{ .Title | safeHTML }}</a>{{ end }}</li>
+{{ else }}{{ partial "toc-entries.html" .Headings }}{{ end }}
+{{ end }}

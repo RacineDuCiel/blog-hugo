@@ -1,0 +1,7 @@
+{{ $remaining := .pages }}
+{{ with .pinned }}<section class="pinned-posts" aria-label="Sélection"><h2 class="section-label">Sélection</h2>{{ range sort . "Date" "desc" }}{{ partial "postCard.html" . }}{{ end }}</section>{{ $remaining = $remaining | complement . }}{{ end }}
+{{ $pager := .page.Paginate $remaining 15 }}
+{{ range $pager.Pages.GroupByDate "2006" }}
+<section class="year-group" aria-label="{{ .Key }}"><h2 class="year-label">{{ .Key }}</h2><div>{{ range .Pages }}{{ partial "postCard.html" . }}{{ end }}</div></section>
+{{ else }}{{ if not $.pinned }}<p class="empty-state">Aucun article pour le moment.</p>{{ end }}{{ end }}
+{{ if gt $pager.TotalPages 1 }}<nav class="pagination" aria-label="Pagination">{{ if $pager.HasPrev }}<a href="{{ $pager.Prev.URL }}">← Précédente</a>{{ end }}{{ range $pager.Pagers }}<a href="{{ .URL }}"{{ if eq . $pager }} aria-current="page"{{ end }}>{{ .PageNumber }}</a>{{ end }}{{ if $pager.HasNext }}<a href="{{ $pager.Next.URL }}">Suivante →</a>{{ end }}</nav>{{ end }}

@@ -1,22 +1,11 @@
 <!DOCTYPE html>
-{{- $defaultColor := .Site.Params.defaultColor | default "auto" -}}
-
-{{- if eq $defaultColor "dark" -}}
-<html lang="{{ .Site.Language.Locale }}" class="dark">
-{{- else if eq $defaultColor "light" -}}
-<html lang="{{ .Site.Language.Locale }}" class="light">
-{{- else -}}
 <html lang="{{ .Site.Language.Locale }}">
-{{- end -}}
-
-    {{- partial "head.html" . -}}
-
-    <body data-theme="{{ $defaultColor }}" class="notransition{{ with .Params.pageClass }} {{ . }}{{ end }}">
-        {{- partial "scriptsBodyStart.html" . -}}
-        {{- partial "header.html" . -}}
-        {{- block "main" . }}{{- end }}
-        {{- partial "footer.html" . -}}
-        {{- partial "scriptsBodyEnd.html" . -}}
-    </body>
-
+{{ partial "head.html" . }}
+<body{{ with .Params.pageClass }} class="{{ . }}"{{ end }}{{ if eq .Site.Params.showFooter false }} data-footer="hidden"{{ end }}>
+<a class="skip-link" href="#main">Aller au contenu</a>
+{{ partial "header.html" . }}
+{{ block "main" . }}{{ end }}
+{{ if ne .Site.Params.showFooter false }}{{ partial "footer.html" . }}{{ end }}
+{{ partial "scriptsBodyEnd.html" . }}
+</body>
 </html>

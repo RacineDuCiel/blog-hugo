@@ -16,7 +16,8 @@
   if (!toggle || !panel) return;
 
   var doc = document.documentElement;
-  var store = window.localStorage;
+  var store;
+  try { store = window.localStorage; } catch (_) {}
 
   var KEY_SCALE = "reading-font-scale";
   var KEY_FAMILY = "reading-font-family";
@@ -76,8 +77,12 @@
   function stepSize(delta) {
     var next = Math.min(STEPS.length - 1, Math.max(0, sizeIndex + delta));
     if (next === sizeIndex) return;
+    var focused = document.activeElement;
     sizeIndex = next;
     applySize(true);
+    // Keep keyboard focus inside the panel when a limit disables its button.
+    if (focused === incBtn && incBtn.disabled) decBtn.focus();
+    if (focused === decBtn && decBtn.disabled) incBtn.focus();
   }
 
   if (decBtn) decBtn.addEventListener("click", function () { stepSize(-1); });
@@ -95,6 +100,7 @@
       var active = fontBtns[i].getAttribute("data-rs-font") === name;
       fontBtns[i].setAttribute("aria-checked", active ? "true" : "false");
       fontBtns[i].classList.toggle("is-active", active);
+      fontBtns[i].tabIndex = active ? 0 : -1;
     }
   }
 
@@ -127,6 +133,17 @@
       });
     })(fontBtns[i]);
   }
+
+  panel.querySelector('[role="radiogroup"]').addEventListener('keydown', function (event) {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+    event.preventDefault();
+    var next = event.target.dataset.rsFont === 'serif' ? 'sans' : 'serif';
+    applyFont(next, true);
+    panel.querySelector('[data-rs-font="' + next + '"]').focus();
+  });
+  root.addEventListener('focusout', function () {
+    setTimeout(function () { if (isOpen && !root.contains(document.activeElement)) closePanel(false); }, 0);
+  });
 
   // ── Réinitialiser ─────────────────────────────────────────────────────────
   var resetBtn = panel.querySelector("[data-rs-reset]");
@@ -167,13 +184,7 @@
     toggle.setAttribute("aria-expanded", "false");
     document.removeEventListener("keydown", onKeydown, true);
     document.removeEventListener("click", onOutsideClick, true);
-    var hide = function () { panel.hidden = true; };
-    // Laisse jouer la transition de fermeture si elle existe.
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      hide();
-    } else {
-      window.setTimeout(hide, 160);
-    }
+    panel.hidden = true;
     if (restoreFocus) toggle.focus();
   }
 

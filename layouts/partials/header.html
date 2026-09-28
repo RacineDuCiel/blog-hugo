@@ -1,75 +1,16 @@
-<div class="navbar" role="navigation">
-    <nav class="menu" aria-label="Main Navigation">
-        <a href="{{ .Site.Home.Permalink }}" class="logo">
-            {{ partial "svgs/home.svg" (dict "height" 25 "width" 25) . }}
-        </a>
-        <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-hidden="true" tabindex="-1" />
-        <label for="menu-trigger">
-            <span class="menu-icon">
-                {{ partial "svgs/menu.svg" (dict "height" 25 "width" 25) . }}
-            </span>
-        </label>
-
-        <div class="trigger">
-            <ul class="trigger-container">
-                {{ $currentPage := . }}
-                {{ range .Site.Menus.main }}
-                <li>
-                    <a class="menu-link {{ if or ($currentPage.IsMenuCurrent " main" .)
-                        ($currentPage.HasMenuCurrent "main" .) }}active{{ end }}" href="{{ .URL }}">
-                        {{ .Name }}
-                    </a>
-                    {{ if .HasChildren }}
-                    <ul>
-                        {{ range .Children }}
-                        <li>
-                            <a class="menu-link {{ if $currentPage.IsMenuCurrent " main" . }}active{{ end }}"
-                                href="{{ .URL }}">
-                                {{ .Name }}
-                            </a>
-                        </li>
-                        {{ end }}
-                    </ul>
-                    {{ end }}
-                </li>
-                {{ end }}
-                <li class="menu-separator">
-                    <span>|</span>
-                </li>
-                <!-- Language List -->
-                {{ if .IsTranslated }}
-                <li>
-                    <select aria-label="Select Language" class="lang-list" id="select-language"
-                        onchange="location = this.value;">
-                        {{ $siteLanguages := .Site.Languages}}
-                        {{ $pageLang := .Page.Lang}}
-                        {{ range .Page.AllTranslations }}
-                        {{ $translation := .}}
-                        {{ range $siteLanguages }}
-                        {{ if eq $translation.Lang .Lang }}
-                        {{ $selected := false }}
-                        {{ if eq $pageLang .Lang}}
-                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{
-                            .Locale | upper }}
-                        </option>
-                        {{ else }}
-                        <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .Locale |
-                            upper }}</option>
-                        {{ end }}
-                        {{ end }}
-                        {{ end }}
-                        {{ end }}
-                    </select>
-                </li>
-                <li class="menu-separator">
-                    <span>|</span>
-                </li>
-                {{ end }}
-            </ul>
-            <a id="mode" href="#" aria-label="Basculer entre le thème sombre et clair">
-                {{ partial "svgs/sun.svg" (dict "height" 21 "width" 21 "class" "mode-sunny" "title" "LIGHT") . }}
-                {{ partial "svgs/moon.svg" (dict "height" 21 "width" 21 "class" "mode-moon" "title" "DARK") . }}
-            </a>
-        </div>
-    </nav>
+<header class="site-header" id="top">
+<div class="site-header-inner">
+{{ if .IsHome }}<h1 class="site-name"><a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a></h1>{{ else }}<a class="site-name" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>{{ end }}
+<button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" hidden>Menu <span aria-hidden="true">+</span></button>
+<nav id="site-nav" class="site-nav" aria-label="Navigation principale">
+{{ $page := . }}
+{{ range .Site.Menus.main }}
+{{ $active := or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}
+{{ if and (eq .URL "/posts/") (eq $page.Section "posts") }}{{ $active = true }}{{ end }}
+{{ if and (eq .URL "/categories/") (eq $page.Section "categories") }}{{ $active = true }}{{ end }}
+<a href="{{ .URL | relURL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+{{ end }}
+</nav>
+<button id="mode" class="theme-toggle" aria-label="Activer le thème sombre" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none"/></svg></button>
 </div>
+</header>

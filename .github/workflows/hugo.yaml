@@ -11,11 +11,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: false
 
 defaults:
@@ -26,7 +24,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.161.0
+      HUGO_VERSION: 0.162.0
     steps:
       - name: Install Hugo CLI
         run: |
@@ -39,16 +37,21 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-
       - name: Build with Hugo
         run: |
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "https://racineduciel.fr/"
+
+      - name: Validate generated pages
+        run: python3 scripts/verify.py public
+
+      - name: Validate personal fragments
+        run: python3 scripts/test_fragments.py
+
+      - name: Validate album collections
+        run: python3 scripts/test_albums.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -56,6 +59,10 @@ jobs:
           path: ./public
 
   deploy:
+    permissions:
+      pages: write
+      id-token: write
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
