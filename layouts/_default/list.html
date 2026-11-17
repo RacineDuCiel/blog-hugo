@@ -1,10 +1,5 @@
 {{ define "main" }}
 <main id="main" class="list-shell" tabindex="-1">
 {{ partial "page-heading.html" . }}
-{{ $pages := where .Pages "Params.unlisted" "!=" true }}{{ $pinned := slice }}
-{{ if and (eq .Kind "term") (eq .Data.Plural "categories") }}
-{{ $term := .Data.Term | lower }}
-{{ range $pages }}{{ $p := . }}{{ if .Params.pinned }}{{ $targets := .Params.pinCategories | default slice }}{{ if not (reflect.IsSlice $targets) }}{{ $targets = slice $targets }}{{ end }}{{ range $targets }}{{ if eq (lower .) $term }}{{ $pinned = $pinned | append $p }}{{ end }}{{ end }}{{ end }}{{ end }}
-{{ end }}
-{{ partial "article-list.html" (dict "page" . "pages" $pages "pinned" $pinned) }}
+{{ partial "article-list.html" (dict "page" . "pages" (where .Pages "Params.unlisted" "!=" true)) }}
 </main>{{ end }}

@@ -1,19 +1,23 @@
 {{ $items := slice }}
 {{ range where (where .site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
-  {{ $summary := .Summary | plainify }}
-  {{ if and (not $.fullText) (not $summary) }}
-    {{ $summary = .Plain | truncate 180 }}
+  {{ $summary := .Summary | plainify | htmlUnescape }}
+  {{ if not $summary }}
+    {{ $summary = .Plain | htmlUnescape | truncate 180 }}
+  {{ end }}
+  {{ $themes := slice }}
+  {{ range .GetTerms "themes" }}
+    {{ $themes = $themes | append (dict "slug" .Data.Term "title" .Title) }}
   {{ end }}
   {{ $item := dict
     "title" .Title
-    "tags" (.Params.tags | default slice)
-    "categories" (.Params.categories | default slice)
+    "themes" $themes
     "permalink" .RelPermalink
     "date" .Date
+    "pinned" (.Params.pinned | default false)
     "summary" $summary
   }}
   {{ if $.fullText }}
-    {{ $item = merge $item (dict "contents" .Plain) }}
+    {{ $item = merge $item (dict "contents" (.Plain | htmlUnescape)) }}
   {{ end }}
   {{ $items = $items | append $item }}
 {{ end }}

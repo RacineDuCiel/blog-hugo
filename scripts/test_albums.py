@@ -48,6 +48,7 @@ with tempfile.TemporaryDirectory(prefix='racineduciel-albums-') as directory:
     config = work/'fixture.toml'
     config.write_text('[Languages.fr-fr]\ncontentDir = '+json.dumps(str(content))+'\n')
     destination = work/'public'
+    archive = destination/'posts/index.html'
     def build(expected_error=None):
         result = subprocess.run(['hugo','--noBuildLock','--config',str(REPO/'hugo.toml')+','+str(config),'--destination',str(destination)],cwd=REPO,capture_output=True,text=True)
         if expected_error:
@@ -58,6 +59,8 @@ with tempfile.TemporaryDirectory(prefix='racineduciel-albums-') as directory:
         return source, AlbumHTML(source)
     source, page = build()
     assert len(page.images) == page.items == expected_count and page.lists == 2
+    label = f'{expected_count} disque' + ('s' if expected_count != 1 else '')
+    assert f'<span>{label}</span>' in archive.read_text()
     assert [i['loading'] for i in page.images] == ['eager']*2 + ['lazy']*(expected_count-2)
     assert 'id="classiques"' in source and 'id="hautement-recommandés"' in source
     search = next(x for x in json.loads((destination/'index.json').read_text()) if x['title']=='Recommandations musicales')
@@ -69,6 +72,7 @@ with tempfile.TemporaryDirectory(prefix='racineduciel-albums-') as directory:
     long_title = 'Un titre long : ' + 'la musique et ses silences ' * 8
     data.write_text(json.dumps({'classiques':[{'artist':'Artiste & invité','title':long_title,'cover':'small.png'}], 'recommandes':[]}))
     _, page = build(); image = page.images[0]
+    assert '<span>1 disque</span>' in archive.read_text()
     assert (image['width'],image['height']) == ('160','80')
     assert len(image['srcset'].split(',')) == 1 and image['srcset'].endswith(' 160w')
     assert page.titles == [long_title] and page.artists == ['Artiste & invité']

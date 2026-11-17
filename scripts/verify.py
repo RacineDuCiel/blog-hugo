@@ -7,7 +7,7 @@ import json
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urljoin, urlparse, unquote
+from urllib.parse import parse_qs, urljoin, urlparse, unquote
 import xml.etree.ElementTree as ET
 
 class Page(HTMLParser):
@@ -34,6 +34,51 @@ class Page(HTMLParser):
     def handle_endtag(self, tag):
         if tag == 'script' and self.in_json:
             self.json_data.append(json.loads(self.json_buffer)); self.in_json = False
+
+def verify_theme_archives(root, pages, index):
+    errors = []
+    theme_slugs = set()
+    for item in index:
+        themes = item.get('themes', [])
+        if not themes or 'categories' in item or 'tags' in item:
+            errors.append(f"{item['permalink']}: expected a thematic classification")
+        for theme in themes:
+            slug = theme.get('slug')
+            if not slug or not theme.get('title') or f'themes/{slug}/index.html' not in pages:
+                errors.append(f"{item['permalink']}: invalid theme {slug}")
+            else:
+                theme_slugs.add(slug)
+
+    archives = ('categories', 'tags', 'themes')
+    for archive in archives:
+        if f'{archive}/index.html' not in pages:
+            errors.append(f'Missing archive redirect: /{archive}/')
+
+    for name, page in pages.items():
+        folder = Path(name).parts
+        if folder[0] not in archives:
+            continue
+        target = urlparse(page.canonical)
+        filters = parse_qs(target.query).get('themes', [])
+        if len(folder) == 2:
+            valid_filter = not filters
+        elif folder[0] == 'themes':
+            valid_filter = filters == [folder[1]]
+        else:
+            valid_filter = len(filters) == 1 and filters[0] in theme_slugs
+        if not page.redirect or target.path != '/search/' or not valid_filter:
+            errors.append(f'{name}: expected a redirect to the corresponding search')
+        if '/page/' in name:
+            continue
+        feed = (root / name).with_suffix('.xml')
+        try:
+            channel = ET.parse(feed).getroot().find('channel')
+            link = channel.findtext('link') if channel is not None else None
+            if link != page.canonical:
+                errors.append(f'{feed}: expected a feed pointing to {page.canonical}')
+        except (OSError, ET.ParseError) as error:
+            errors.append(f'{feed}: {error}')
+    return errors
 
 def verify(root, baseline=None):
     errors = []; pages = {}; references = 0
@@ -62,9 +107,12 @@ def verify(root, baseline=None):
                 errors.append(f'{name}: missing anchor {ref}')
     if baseline:
         old = {p.relative_to(baseline) for p in baseline.rglob('*.html')}
+        for archive in ('categories', 'tags', 'themes'):
+            old.update(p.relative_to(baseline) for p in (baseline / archive).rglob('*.xml'))
         missing = sorted(str(p) for p in old if not (root/p).is_file())
         errors.extend(f'Lost URL: {p}' for p in missing)
     index = json.loads((root/'index.json').read_text())
+    errors.extend(verify_theme_archives(root, pages, index))
     articles = {unquote(urlparse(page.canonical).path) for page in pages.values()
                 if any(d.get('@type') == 'BlogPosting' for d in page.json_data)}
     searchable = [unquote(urlparse(item['permalink']).path) for item in index]
@@ -74,6 +122,8 @@ def verify(root, baseline=None):
     for name in ('sitemap.xml','index.xml'):
         xml = (root/name).read_text(); ET.fromstring(xml)
         if '/fragments/' in xml: errors.append(f'Fragment leaked into {name}')
+        if name == 'sitemap.xml' and any(path in xml for path in ('/categories/', '/tags/', '/themes/')):
+            errors.append('Archive redirects leaked into the sitemap')
     if (root/'fragments/index.html').exists(): errors.append('Fragment section was published')
     if errors:
         for error in errors: print('FAIL',error)

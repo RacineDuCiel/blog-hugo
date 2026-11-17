@@ -15,8 +15,14 @@ defaultContentLanguage = "fr-fr"
   lastmod = [":git", ":fileModTime", "lastmod", "date"]
 
 [taxonomies]
-  category = "categories"
-  tag = "tags"
+  theme = "themes"
+
+[related]
+  includeNewer = true
+
+  [[related.indices]]
+    name = "themes"
+    weight = 100
 
 [markup.goldmark.renderer]
   unsafe = true
@@ -89,10 +95,6 @@ defaultContentLanguage = "fr-fr"
     url = "/posts/"
     weight = 20
   [[Languages.fr-fr.menu.main]]
-    name = "Catégories"
-    url = "/categories/"
-    weight = 32
-  [[Languages.fr-fr.menu.main]]
     pageRef = "about"
     name = "À propos"
     url = "/about/"
@@ -105,6 +107,6 @@ defaultContentLanguage = "fr-fr"
 
 [[Languages.fr-fr.menu.main]]
   name = "Recherche"
-  url = "/search/"
+  pageRef = "/search"
   weight = 35
 

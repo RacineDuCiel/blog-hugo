@@ -1,7 +1,7 @@
 // A collection of records, independent from the long-form reading controls.
 .music-shell { max-width: 1120px; --music-rail: 176px; --music-gap: 48px; }
 .music-shell .article-header { display: grid; grid-template-columns: var(--music-rail) minmax(0,1fr); column-gap: var(--music-gap); margin-bottom: 18px; }
-.music-shell .article-categories { padding-top: 13px; margin: 0; }
+.music-shell .article-themes { padding-top: 13px; margin: 0; }
 .music-shell .article-header h1 { font-size: clamp(32px,3.35vw,48px); margin-bottom: 18px; }
 .music-shell .article-meta-line { grid-column: 2; border: 0; padding: 0; }
 .music-shell .prose { display: grid; grid-template-columns: var(--music-rail) minmax(0,1fr); column-gap: var(--music-gap); font: 19px/1.65 var(--serif); }
@@ -19,7 +19,7 @@
 .music-shell .article-back { margin: 0 0 0 calc(var(--music-rail) + var(--music-gap)); }
 @media(max-width: 1000px) {
   .music-shell .article-header, .music-shell .prose { display: block; }
-  .music-shell .article-categories { padding: 0; margin-bottom: 20px; }
+  .music-shell .article-themes { padding: 0; margin-bottom: 20px; }
   .music-shell .article-header h1 { max-width: 700px; }
   .music-shell .prose > h2 { border: 0; padding: 0; margin-bottom: 20px; font-size: 24px; }
   .music-shell .music-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 36px 32px; margin-bottom: 56px; }

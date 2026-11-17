@@ -1,8 +1,7 @@
 ---
 title: "CompTIA SecurityX — Domaine 2 : Security Architecture"
 date: 2026-02-25
-categories: ["Securite-Vie-Privee"]
-tags: ["cybersécurité", "certification"]
+themes: ["cybersecurite-et-vie-privee"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 2 : architecture sécurisée, Zero Trust, cloud, authentification et cycle de vie des systèmes."
 showOnHome: false
 pageClass: "fiche-revision"

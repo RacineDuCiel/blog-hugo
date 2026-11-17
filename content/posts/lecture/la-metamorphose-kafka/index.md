@@ -1,8 +1,7 @@
 ---
 title: "La Métamorphose — Kafka"
 date: 2026-05-31
-categories: ["Lecture"]
-tags: ["kafka"]
+themes: ["litterature"]
 showOnHome: true
 ---
 

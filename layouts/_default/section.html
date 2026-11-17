@@ -1,1 +1,1 @@
-{{ define "main" }}<main id="main" class="list-shell" tabindex="-1">{{ partial "page-heading.html" . }}{{ partial "article-list.html" (dict "page" . "pages" (where .RegularPagesRecursive "Params.unlisted" "!=" true) "pinned" slice) }}</main>{{ end }}
+{{ define "main" }}<main id="main" class="list-shell" tabindex="-1">{{ partial "page-heading.html" . }}{{ partial "article-list.html" (dict "page" . "pages" (where .RegularPagesRecursive "Params.unlisted" "!=" true)) }}</main>{{ end }}

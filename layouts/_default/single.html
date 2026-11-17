@@ -7,7 +7,7 @@
 <div class="article-column">
 <article>
 <header class="article-header">
-{{ if $isArticle }}<div class="article-categories">{{ range .GetTerms "categories" }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</div>{{ end }}
+{{ if $isArticle }}{{ with .GetTerms "themes" }}<div class="article-themes">{{ range . }}<a href="{{ partial "themes/search-url.html" .Data.Term }}">{{ .Title }}</a>{{ end }}</div>{{ end }}{{ end }}
 <h1>{{ .Title }}</h1>
 <div class="article-meta-line"><div class="post-meta">
 {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time>
@@ -24,7 +24,8 @@
 </div>
 </article>
 {{ if $isArticle }}
-{{ $related := where (.Site.RegularPages.Related .) "Section" "posts" | first 3 }}
+{{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
+{{ $related := $articles.Related . | first 3 }}
 {{ if not $isMusic }}{{ with $related }}<section class="related-posts" aria-label="Pour aller plus loin"><h2 class="section-label">Pour aller plus loin</h2>{{ range . }}{{ partial "postCard.html" . }}{{ end }}</section>{{ end }}{{ end }}
 <a class="article-back" href="{{ "posts/" | relURL }}">← Tous les articles</a>
 {{ end }}

@@ -1,4 +1,0 @@
----
-title: "Intelligence Artificielle"
-description: ""
----

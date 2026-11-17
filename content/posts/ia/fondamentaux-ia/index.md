@@ -1,10 +1,8 @@
 ---
 title: Fondamentaux de l'IA - Cours Hack The Box
 date: 2025-11-28
-categories: ["IA"]
-tags: ["IA"]
+themes: ["intelligence-artificielle"]
 showOnHome: true
-pinCategories: ["IA"]
 pinned: true
 ---
 

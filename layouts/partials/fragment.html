@@ -8,7 +8,7 @@
 {{ with $image }}
 {{ $small := .Fit "360x360 webp q85" }}{{ $large := .Fit "720x720 webp q85" }}
 <figure>
-<img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 360w, {{ $large.RelPermalink }} 720w" sizes="(max-width: 600px) 140px, 180px" alt="{{ $fragment.Params.alt | default "" }}" width="{{ $small.Width }}" height="{{ $small.Height }}">
+<img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} {{ $small.Width }}w{{ if gt $large.Width $small.Width }}, {{ $large.RelPermalink }} {{ $large.Width }}w{{ end }}" sizes="(max-width: 760px) 140px, 180px" alt="{{ $fragment.Params.alt | default "" }}" width="{{ $small.Width }}" height="{{ $small.Height }}">
 </figure>
 {{ end }}
 <div class="fragment-copy">{{ .Content }}{{ with .Params.caption }}<p class="fragment-caption">{{ . }}</p>{{ end }}{{ with .Params.link }}<a class="fragment-link" href="{{ . }}">{{ $fragment.Params.linkLabel | default "Voir" }} <span aria-hidden="true">↗</span></a>{{ end }}</div>

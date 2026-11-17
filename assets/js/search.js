@@ -1,4 +1,4 @@
-// Local-only search. Query and AND-combined tags remain shareable in the URL.
+// Local-only search. Queries and theme filters remain shareable in the URL.
 (function () {
   'use strict';
   const root = document.querySelector('.search-container');
@@ -6,37 +6,53 @@
   const input = document.getElementById('search-input');
   const results = document.getElementById('search-results');
   const status = document.getElementById('search-count');
-  const cloud = document.getElementById('tag-cloud');
-  const clear = document.getElementById('tag-filter-clear');
+  const filters = document.getElementById('theme-filters');
+  const filterButtons = new Map(Array.from(
+    filters?.querySelectorAll('[data-theme]') || [],
+    button => [button.dataset.theme, button]
+  ));
+  const clear = document.getElementById('theme-filter-clear');
   const more = document.getElementById('search-more');
+  const recovery = document.getElementById('search-recovery');
   const retry = document.getElementById('search-retry');
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  const tags = new Set();
+  const themes = new Set();
   let items = JSON.parse(document.getElementById('search-metadata').textContent);
+  const availableThemes = new Set(items.flatMap(item => item.themes.map(theme => theme.slug)));
+  const normalizeSlug = value => normalize(value).replace(/\s+/g, '-');
+  const legacyTags = new Map(Object.entries(JSON.parse(document.getElementById('search-legacy-tags').textContent))
+    .map(([tag, theme]) => [normalizeSlug(tag), theme]));
   let fuse, loading = false, failed = false, limit = 10, timer;
   function fromURL() {
     const params = new URLSearchParams(location.search);
     input.value = params.get('q') || '';
-    tags.clear();
-    (params.get('tags') || '').split(',').filter(Boolean).forEach(t => {
-      // Older shared links encoded tags twice. Accept both representations.
-      try { t = decodeURIComponent(t); } catch (_) {}
-      tags.add(t.trim().toLowerCase());
-    });
+    themes.clear();
+    const selected = (params.get('themes') || '').split(',').map(normalizeSlug);
+    if (params.has('tags') && !params.has('themes')) {
+      for (let tag of params.get('tags').split(',')) {
+        // Some older shared links encoded tags twice.
+        try { tag = decodeURIComponent(tag); } catch (_) {}
+        selected.push(legacyTags.get(normalizeSlug(tag)));
+      }
+    }
+    selected.filter(theme => availableThemes.has(theme)).forEach(theme => themes.add(theme));
+    if (params.has('tags')) syncURL();
   }
   function syncURL() {
     const params = new URLSearchParams(location.search);
     if (input.value.trim()) params.set('q', input.value.trim()); else params.delete('q');
-    if (tags.size) params.set('tags',[...tags].join(',')); else params.delete('tags');
+    if (themes.size) params.set('themes',[...themes].join(',')); else params.delete('themes');
+    params.delete('tags');
     history.replaceState(null,'',location.pathname + (params.size ? '?' + params : ''));
   }
   function syncButtons() {
-    if (cloud) cloud.querySelectorAll('[data-tag]').forEach(b => b.setAttribute('aria-pressed',String(tags.has(b.dataset.tag.toLowerCase()))));
-    if (clear) clear.hidden = !tags.size && !input.value;
+    for (const [slug, button] of filterButtons) {
+      button.setAttribute('aria-pressed', String(themes.has(slug)));
+    }
+    if (clear) clear.hidden = !themes.size && !input.value;
   }
-  function toggle(tag) {
-    tag = tag.trim().toLowerCase();
-    if (tags.has(tag)) tags.delete(tag); else tags.add(tag);
+  function toggle(theme) {
+    if (themes.has(theme)) themes.delete(theme); else themes.add(theme);
     limit = 10; syncURL(); refresh();
   }
   function highlightedTitle(title) {
@@ -55,27 +71,36 @@
     const excerpt = item.summary || item.contents || '';
     p.textContent = excerpt.length > 180 ? excerpt.slice(0,180).replace(/\s+\S*$/,'') + '…' : excerpt;
     el.append(p);
-    const tagRow = document.createElement('div'); tagRow.className = 'search-result-tags';
-    (item.tags || []).forEach(t => {
-      const b = document.createElement('button'); b.type = 'button'; b.textContent = t;
-      b.setAttribute('aria-pressed',String(tags.has(t.toLowerCase())));
-      b.addEventListener('click',() => toggle(t)); tagRow.append(b);
+    const themeRow = document.createElement('div'); themeRow.className = 'search-result-themes';
+    item.themes.forEach(theme => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = theme.title;
+      button.setAttribute('aria-pressed', String(themes.has(theme.slug)));
+      button.addEventListener('click', () => {
+        const hadFocus = document.activeElement === button;
+        toggle(theme.slug);
+        if (hadFocus) (filterButtons.get(theme.slug) ?? input).focus();
+      });
+      themeRow.append(button);
     });
-    el.append(tagRow); return el;
+    el.append(themeRow); return el;
   }
   function render() {
     syncButtons(); results.replaceChildren(); more.hidden = true;
     const q = normalize(input.value);
-    retry.hidden = !q || !failed;
+    recovery.hidden = !q || !failed;
     if (q && !fuse) {
       status.textContent = failed
-        ? 'La recherche n’a pas pu être chargée. Réessaie ou consulte la liste des articles.'
+        ? 'La recherche n’a pas pu être chargée.'
         : 'Chargement de la recherche…';
       return;
     }
-    if (!q && !tags.size) { status.textContent = ''; return; }
-    let found = q ? fuse.search(q).map(r => items[r.item.index]) : items.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
-    found = found.filter(item => [...tags].every(t => (item.tags || []).some(it => it.toLowerCase() === t)));
+    if (!q && !themes.size) { status.textContent = ''; return; }
+    let found = q
+      ? fuse.search(q).map(r => items[r.item.index])
+      : items.slice().sort((a,b) => Number(b.pinned) - Number(a.pinned) || new Date(b.date) - new Date(a.date));
+    if (themes.size) found = found.filter(item => item.themes.some(theme => themes.has(theme.slug)));
     const n = found.length;
     status.textContent = n ? n + ' résultat' + (n > 1 ? 's' : '') + (n > limit ? ' · ' + limit + ' affichés' : '') : 'Aucun résultat. Essaie un autre mot ou retire un filtre.';
     found.slice(0,limit).forEach(item => results.append(card(item)));
@@ -92,8 +117,14 @@
       if (!response.ok) throw new Error('Index unavailable');
       const articles = await response.json();
       if (!Array.isArray(articles)) throw new Error('Invalid index');
-      const indexed = articles.map((item,index) => ({index,title:normalize(item.title),summary:normalize(item.summary),contents:normalize(item.contents),tags:(item.tags || []).map(normalize),categories:(item.categories || []).map(normalize)}));
-      fuse = new Fuse(indexed,{keys:[{name:'title',weight:3},{name:'tags',weight:2},'categories','summary','contents'],threshold:.2,ignoreLocation:true});
+      const indexed = articles.map((item,index) => ({
+        index,
+        title: normalize(item.title),
+        summary: normalize(item.summary),
+        contents: normalize(item.contents),
+        themes: item.themes.map(theme => normalize(theme.title))
+      }));
+      fuse = new Fuse(indexed,{keys:[{name:'title',weight:3},{name:'themes',weight:2},'summary','contents'],threshold:.2,ignoreLocation:true});
       items = articles;
     } catch (_) {
       failed = true;
@@ -108,10 +139,23 @@
   }
   input.addEventListener('input',() => { clearTimeout(timer); timer = setTimeout(() => { limit = 10; syncURL(); refresh(); },180); });
   root.querySelector('form').addEventListener('submit',e => { e.preventDefault(); clearTimeout(timer); limit = 10; syncURL(); refresh(); });
-  if (cloud) cloud.addEventListener('click',e => { const b = e.target.closest('[data-tag]'); if (b) toggle(b.dataset.tag); });
-  clear?.addEventListener('click',() => { clearTimeout(timer); tags.clear(); input.value = ''; limit = 10; syncURL(); render(); input.focus(); });
-  more.addEventListener('click',() => { limit += 10; render(); });
-  retry.addEventListener('click',() => { failed = false; refresh(); });
+  if (filters) filters.addEventListener('click',e => { const b = e.target.closest('[data-theme]'); if (b) toggle(b.dataset.theme); });
+  clear?.addEventListener('click',() => { clearTimeout(timer); themes.clear(); input.value = ''; limit = 10; syncURL(); render(); input.focus(); });
+  more.addEventListener('click', () => {
+    const previousLimit = limit;
+    const hadFocus = document.activeElement === more;
+    limit += 10;
+    render();
+    if (hadFocus) {
+      const firstNewLink = results.children[previousLimit]?.querySelector('h2 a');
+      (firstNewLink ?? input).focus();
+    }
+  });
+  retry.addEventListener('click', () => {
+    if (document.activeElement === retry) input.focus();
+    failed = false;
+    refresh();
+  });
   addEventListener('popstate',() => { clearTimeout(timer); fromURL(); limit = 10; refresh(); });
   fromURL(); refresh();
 })();

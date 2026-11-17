@@ -1,1 +1,0 @@
-{{ define "main" }}<main id="main" class="list-shell" tabindex="-1">{{ partial "page-heading.html" . }}<div class="term-list">{{ range .Data.Terms.ByCount }}<a class="term-row" href="{{ .Page.RelPermalink }}"><h2>{{ .Page.Title }}</h2><span>{{ .Count }} article{{ if gt .Count 1 }}s{{ end }}</span><span aria-hidden="true">↗</span></a>{{ end }}</div></main>{{ end }}

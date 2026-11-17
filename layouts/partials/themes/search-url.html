@@ -1,0 +1,5 @@
+{{- $url := "search/" | relURL -}}
+{{- with . -}}
+  {{- $url = printf "%s?themes=%s" $url (. | urlquery) -}}
+{{- end -}}
+{{- return $url -}}

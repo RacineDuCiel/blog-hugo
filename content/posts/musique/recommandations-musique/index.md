@@ -1,10 +1,9 @@
 ---
 title: Recommandations musicales
-categories: ["Musique"]
+themes: ["musique"]
 date: 2025-11-18
 showOnHome: false
 pinned: true
-pinCategories: ["Musique"]
 pageClass: "music-recs"
 ---
 

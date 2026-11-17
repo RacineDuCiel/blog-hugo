@@ -1,0 +1,25 @@
+{{- with .Site.GetPage "/themes" -}}
+  {{- $archives := slice . -}}
+  {{- range .Pages -}}
+    {{- $archives = $archives | append . -}}
+  {{- end -}}
+  {{- range $archives -}}
+    {{- $page := . -}}
+    {{- $url := partial "themes/search-url.html" (.Data.Term | default "") | absURL -}}
+    {{- $redirect := partial "themes/redirect.html" $url -}}
+    {{- $paths := slice .Path -}}
+    {{- range .Param "archivePaths" -}}
+      {{- $paths = $paths | append . -}}
+    {{- end -}}
+    {{- range $paths -}}
+      {{- $dir := strings.TrimPrefix "/" . -}}
+      {{- (resources.FromString (path.Join $dir "index.html") $redirect).Publish -}}
+      {{- if eq $page.Kind "term" -}}
+        {{- (resources.FromString (path.Join $dir "page/1/index.html") $redirect).Publish -}}
+      {{- end -}}
+      {{- $feedPath := path.Join $dir "index.xml" -}}
+      {{- $rss := partial "themes/legacy-rss.xml" (dict "page" $page "path" $feedPath "url" $url) -}}
+      {{- (resources.FromString $feedPath $rss).Publish -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

@@ -2,5 +2,5 @@
 <main id="main" class="list-shell" tabindex="-1">
 {{ partial "page-heading.html" . }}
 {{ $pages := where .RegularPagesRecursive "Params.unlisted" "!=" true }}
-{{ partial "article-list.html" (dict "page" . "pages" $pages "pinned" slice) }}
+{{ partial "article-list.html" (dict "page" . "pages" $pages) }}
 </main>{{ end }}

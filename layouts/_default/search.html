@@ -2,13 +2,43 @@
 <main id="main" class="list-shell search-shell" tabindex="-1">
 {{ partial "page-heading.html" . }}
 {{ $fuse := resources.Get "js/fuse.js" | fingerprint }}
-<div class="search-container" data-index="{{ "index.json" | relURL }}" data-fuse-module="{{ $fuse.RelPermalink }}">
-<form role="search" class="search-form"><label class="sr-only" for="search-input">Rechercher dans les articles</label><input type="search" id="search-input" placeholder="Un titre, un sujet, un mot…" autocomplete="off"><button type="submit" aria-label="Lancer la recherche">↗</button></form>
-{{ with .Site.Taxonomies.tags }}<div class="tag-filter-bar"><div class="tag-filter-head"><span>Filtrer par tag</span><button type="button" id="tag-filter-clear" hidden>Tout effacer</button></div><div id="tag-cloud" class="tag-cloud" role="group" aria-label="Filtrer par tag">{{ range .ByCount }}<button type="button" class="tag-pill" data-tag="{{ .Name }}" aria-pressed="false">{{ .Name }} <span>{{ .Count }}</span></button>{{ end }}</div></div>{{ end }}
-<p id="search-count" class="search-count" role="status"></p><div id="search-results"></div><button type="button" id="search-more" hidden>Afficher plus de résultats</button><button type="button" id="search-retry" hidden>Réessayer</button>
+{{ $metadata := partial "search-index.html" (dict "site" .Site "fullText" false) | jsonify }}
+{{ $indexURL := printf "%s?v=%s" ("index.json" | relURL) (sha256 $metadata) }}
+{{ $themes := (.Site.GetPage "/themes").Pages.ByTitle }}
+{{ $legacyTags := dict }}
+{{ range $themes }}
+  {{ $slug := .Data.Term }}
+  {{ range .Param "archivePaths" }}
+    {{ $archive := strings.TrimSuffix "/" . }}
+    {{ if eq (path.Dir $archive) "/tags" }}
+      {{ $legacyTags = merge $legacyTags (dict (path.Base $archive) $slug) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+<div class="search-container" data-index="{{ $indexURL }}" data-fuse-module="{{ $fuse.RelPermalink }}">
+<form role="search" class="search-form"><label class="sr-only" for="search-input">Rechercher dans les articles</label><input type="search" id="search-input" placeholder="Un titre, un sujet, un mot…" autocomplete="off" enterkeyhint="search"></form>
+{{ with $themes }}
+<div class="theme-filter-bar">
+  <div class="theme-filter-head"><span>Filtrer par thème</span><button type="button" id="theme-filter-clear" hidden>Tout effacer</button></div>
+  <div id="theme-filters" class="theme-filters" role="group" aria-label="Filtrer par thème">
+  {{ range . }}
+    {{ $count := len (where .Pages "Params.unlisted" "!=" true) }}
+    {{ if $count }}<button type="button" class="theme-pill" data-theme="{{ .Data.Term }}" aria-pressed="false">{{ .Title }} <span>{{ $count }}</span></button>{{ end }}
+  {{ end }}
+  </div>
+</div>
+{{ end }}
+<p id="search-count" class="search-count" role="status"></p>
+<div id="search-results"></div>
+<button type="button" id="search-more" hidden>Afficher plus de résultats</button>
+<div id="search-recovery" class="search-recovery" hidden>
+  <button type="button" id="search-retry">Réessayer</button>
+  <a href="{{ "posts/" | relURL }}">Tous les articles</a>
+</div>
 <noscript><p>La recherche nécessite JavaScript. <a href="{{ "posts/" | relURL }}">Parcourir tous les articles</a>.</p></noscript>
 </div></main>
-<script type="application/json" id="search-metadata">{{ partial "search-index.html" (dict "site" .Site "fullText" false) | jsonify | safeJS }}</script>
+<script type="application/json" id="search-metadata">{{ $metadata | safeJS }}</script>
+<script type="application/json" id="search-legacy-tags">{{ $legacyTags | jsonify | safeJS }}</script>
 <script type="importmap">{{ dict "integrity" (dict $fuse.RelPermalink $fuse.Data.Integrity) | jsonify }}</script>
 {{ $js := resources.Get "js/search.js" | minify | fingerprint }}
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>

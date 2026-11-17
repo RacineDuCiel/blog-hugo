@@ -1,6 +1,6 @@
 # RacineDuCiel — personnaliser et maintenir le site
 
-Le site reste un projet Hugo, sans CMS ni service supplémentaire. Les articles, leurs adresses, leurs catégories et leurs images d’origine n’ont pas été modifiés.
+Le site est un projet Hugo sans CMS. Les articles gardent leurs adresses sous `/posts/`.
 
 ## Les deux espaces personnels
 
@@ -39,7 +39,24 @@ Ces espaces ne sont pas secrets : leur contenu est visible sur l’accueil et le
 
 ## Articles et apparence
 
-Continue à écrire les articles comme auparavant dans `content/posts/`. Les réglages `showOnHome`, `pinned`, `pinCategories`, `pageClass` et les shortcodes existants sont conservés.
+Continue à écrire les articles dans `content/posts/`. `showOnHome` règle leur présence sur l’accueil. Dans la recherche par thème, `pinned: true` place les articles épinglés en tête de liste quand le champ de recherche est vide.
+
+### Choisir un thème
+
+La question « What does it mean to be human…? » donne une direction au site. Les thèmes partent du sujet précis que le lecteur peut explorer dans chaque texte.
+
+| Thème | Ce qu’il rassemble |
+| --- | --- |
+| Littérature | Les romans et les portraits d’écrivains. Kafka, Dostoïevski et `Crime et châtiment` éclairent des questions humaines par la fiction. |
+| Écologie et société | Les textes sur les modes de vie et leurs effets collectifs. L’essai de Keucheyan y trouve sa place par son sujet, la fabrication des besoins, la consommation et leurs conséquences écologiques. |
+| Cybersécurité et vie privée | Les fiches SecurityX et l’analyse de Tor abordent la sécurité des systèmes et la protection des données. « Certification » désignait le format des fiches, déjà reconnaissable à leur titre. |
+| Intelligence artificielle | Les bases de l’IA et de l’apprentissage automatique. Le nom développé remplace les deux entrées « IA ». |
+| Musique | Les sélections et recommandations personnelles d’albums. |
+| Corps et santé | La dépense énergétique, la nutrition et la pratique physique. |
+
+Indique le sujet principal dans le front matter, par exemple `themes: ["litterature"]`. Les identifiants et les textes de présentation sont dans `content/themes/`. Garde les noms d’auteurs, d’œuvres et les notions précises dans le titre, le résumé ou le texte, où la recherche les retrouve. Un nouveau thème doit ouvrir une piste de lecture assez claire pour accueillir plusieurs articles au fil du temps.
+
+La page Recherche réunit les filtres par thème. Les liens de thème sur les articles ouvrent la recherche avec le filtre déjà actif. Les anciennes adresses d’archives et les flux RSS conduisent au même endroit. Un lien de recherche avec `?tags=` est converti en `?themes=`, ce qui peut élargir un ancien filtre très précis. Choisir plusieurs thèmes affiche les articles qui relèvent de l’un d’eux.
 
 Le thème conserve Hugo et les ressources utiles d’ablog. L’habillage est maintenant défini dans les gabarits locaux de `layouts/` et les modules suivants :
 
@@ -53,7 +70,7 @@ Les polices sont locales. Le thème suit la préférence système jusqu’au cho
 
 ## Prévisualiser et vérifier
 
-Depuis le dossier du projet, avec Hugo Extended 0.162.0 :
+Depuis le dossier du projet, avec Hugo 0.170.0 et Dart Sass :
 
 ```sh
 hugo server --bind 127.0.0.1 --port 1313 --disableLiveReload
@@ -71,4 +88,4 @@ python3 scripts/test_fragments.py
 
 Le premier contrôle vérifie la structure HTML, les ressources et liens locaux, les ancres, la recherche, les flux et le sitemap. Le second teste huit variantes de fragments dans des dossiers temporaires sans toucher au contenu réel.
 
-Le workflow GitHub effectue ces contrôles sur les pull requests. Seul un push ou un lancement manuel sur `main` peut déclencher le déploiement. La refonte livrée est locale : aucun push ni déploiement n’a été effectué.
+Le workflow GitHub effectue ces contrôles sur les pull requests. Un push ou un lancement manuel sur `main` déclenche le déploiement.

@@ -1,8 +1,7 @@
 ---
 title: "CompTIA SecurityX — Domaine 4 : Security Operations"
 date: 2026-02-25
-categories: ["Securite-Vie-Privee"]
-tags: ["cybersécurité", "certification"]
+themes: ["cybersecurite-et-vie-privee"]
 description: "Fiche de révision SecurityX (ex CASP+) — Domaine 4 : opérations sécurité, analyse de données, threat hunting et réponse aux incidents."
 showOnHome: false
 pageClass: "fiche-revision"

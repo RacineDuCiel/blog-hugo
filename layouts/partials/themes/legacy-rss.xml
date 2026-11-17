@@ -1,0 +1,30 @@
+{{- $page := .page -}}
+{{- $items := where $page.Pages "Params.unlisted" "!=" true -}}
+{{- $limit := $page.Site.Config.Services.RSS.Limit -}}
+{{- $items = $items.ByDate.Reverse -}}
+{{- if ge $limit 1 -}}
+  {{- $items = $items | first $limit -}}
+{{- end -}}
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ $page.Title }} — {{ $page.Site.Title }}</title>
+    <link>{{ .url }}</link>
+    <description>{{ $page.Description }}</description>
+    <language>{{ $page.Site.Language.Locale }}</language>
+    <atom:link href="{{ .path | absURL }}" rel="self" type="application/rss+xml" />
+    {{ range $items }}
+    {{ $url := .Permalink }}
+    {{ if eq .Kind "term" }}
+      {{ $url = partial "themes/search-url.html" .Data.Term | absURL }}
+    {{ end }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ $url }}</link>
+      <guid>{{ .Permalink }}</guid>
+      {{ if not .Date.IsZero }}<pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>{{ end }}
+      <description>{{ if eq $page.Site.Params.rssFeedDescription "full" }}{{ .Content | html }}{{ else }}{{ .Summary | html }}{{ end }}</description>
+    </item>
+    {{ end }}
+  </channel>
+</rss>

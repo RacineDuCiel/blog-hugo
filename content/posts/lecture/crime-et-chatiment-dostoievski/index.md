@@ -1,8 +1,7 @@
 ---
 title: "Crime et châtiment — Dostoïevski"
 date: 2026-05-29
-categories: ["Lecture"]
-tags: ["dostoïevski"]
+themes: ["litterature"]
 showOnHome: true
 ---
 

@@ -7,7 +7,6 @@
 {{ range .Site.Menus.main }}
 {{ $active := or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}
 {{ if and (eq .URL "/posts/") (eq $page.Section "posts") }}{{ $active = true }}{{ end }}
-{{ if and (eq .URL "/categories/") (eq $page.Section "categories") }}{{ $active = true }}{{ end }}
 <a href="{{ .URL | relURL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
 {{ end }}
 </nav>
