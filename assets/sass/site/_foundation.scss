@@ -35,6 +35,12 @@
 }
 html.dark { @include dark-colors; }
 @media (prefers-color-scheme: dark) { html:not(.light) { @include dark-colors; } }
+html.theme-transition::view-transition-group(root),
+html.theme-transition::view-transition-old(root),
+html.theme-transition::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-in-out;
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
@@ -60,4 +66,7 @@ p { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  html.theme-transition::view-transition-group(root),
+  html.theme-transition::view-transition-old(root),
+  html.theme-transition::view-transition-new(root) { animation-duration: 0ms; }
 }

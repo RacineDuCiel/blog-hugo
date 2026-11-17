@@ -24,15 +24,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.162.0
+      HUGO_VERSION: "0.170.0"
+      HUGO_SHA256: "0930754ec22ad2dd1a252f8c31a5e57faccc9d15f1c3d381ddafcb96eeb8aef0"
+      DART_SASS_VERSION: "1.108.2"
+      DART_SASS_SHA256: "32d2eb5b83cbc180fce9657ff3c57401a9006c59eccfe0bfdde0aa755a66d42f"
     steps:
-      - name: Install Hugo CLI
+      - name: Install Hugo and Dart Sass
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
-          sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          hugo_archive="$RUNNER_TEMP/hugo.tar.gz"
+          sass_archive="$RUNNER_TEMP/dart-sass.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --output "$hugo_archive" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_linux-amd64.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --output "$sass_archive" \
+            "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
+          printf '%s  %s\n' "$HUGO_SHA256" "$hugo_archive" "$DART_SASS_SHA256" "$sass_archive" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/hugo"
+          tar -xzf "$hugo_archive" -C "$RUNNER_TEMP/hugo" hugo
+          tar -xzf "$sass_archive" -C "$RUNNER_TEMP"
+          printf '%s\n' "$RUNNER_TEMP/hugo" "$RUNNER_TEMP/dart-sass" >> "$GITHUB_PATH"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
           fetch-depth: 0
@@ -54,7 +66,7 @@ jobs:
         run: python3 scripts/test_albums.py
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: ./public
 
@@ -71,5 +83,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5.0.1
 

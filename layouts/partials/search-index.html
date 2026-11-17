@@ -1,0 +1,20 @@
+{{ $items := slice }}
+{{ range where (where .site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
+  {{ $summary := .Summary | plainify }}
+  {{ if and (not $.fullText) (not $summary) }}
+    {{ $summary = .Plain | truncate 180 }}
+  {{ end }}
+  {{ $item := dict
+    "title" .Title
+    "tags" (.Params.tags | default slice)
+    "categories" (.Params.categories | default slice)
+    "permalink" .RelPermalink
+    "date" .Date
+    "summary" $summary
+  }}
+  {{ if $.fullText }}
+    {{ $item = merge $item (dict "contents" .Plain) }}
+  {{ end }}
+  {{ $items = $items | append $item }}
+{{ end }}
+{{ return $items }}

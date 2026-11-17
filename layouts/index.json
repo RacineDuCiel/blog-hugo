@@ -1,1 +1,1 @@
-{{ $items := slice }}{{ range where (where .Site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}{{ $items = $items | append (dict "title" .Title "tags" (.Params.tags | default slice) "categories" (.Params.categories | default slice) "contents" .Plain "permalink" .RelPermalink "date" .Date "summary" (.Summary | plainify)) }}{{ end }}{{ $items | jsonify }}
+{{ partial "search-index.html" (dict "site" .Site "fullText" true) | jsonify }}

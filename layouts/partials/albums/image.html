@@ -4,7 +4,7 @@
 {{ $candidates := slice }}
 {{ $fallback := false }}
 {{ range ($widths | uniq) }}
-  {{ $image := $.image.Resize (printf "%dx webp q90" .) }}
+  {{ $image := $.image.Resize (printf "%dx webp q78" .) }}
   {{ $candidates = $candidates | append (printf "%s %dw" $image.RelPermalink $image.Width) }}
   {{ if or (not $fallback) (le . 640) }}{{ $fallback = $image }}{{ end }}
 {{ end }}

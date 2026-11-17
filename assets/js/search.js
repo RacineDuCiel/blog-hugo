@@ -12,7 +12,8 @@
   const retry = document.getElementById('search-retry');
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const tags = new Set();
-  let items = [], fuse, loaded = false, loading = false, failed = false, limit = 10, timer;
+  let items = JSON.parse(document.getElementById('search-metadata').textContent);
+  let fuse, loading = false, failed = false, limit = 10, timer;
   function fromURL() {
     const params = new URLSearchParams(location.search);
     input.value = params.get('q') || '';
@@ -31,12 +32,12 @@
   }
   function syncButtons() {
     if (cloud) cloud.querySelectorAll('[data-tag]').forEach(b => b.setAttribute('aria-pressed',String(tags.has(b.dataset.tag.toLowerCase()))));
-    clear.hidden = !tags.size && !input.value;
+    if (clear) clear.hidden = !tags.size && !input.value;
   }
   function toggle(tag) {
     tag = tag.trim().toLowerCase();
     if (tags.has(tag)) tags.delete(tag); else tags.add(tag);
-    limit = 10; syncURL(); render();
+    limit = 10; syncURL(); refresh();
   }
   function highlightedTitle(title) {
     const fragment = document.createDocumentFragment();
@@ -64,11 +65,15 @@
   }
   function render() {
     syncButtons(); results.replaceChildren(); more.hidden = true;
-    if (loading) { status.textContent = 'Chargement de la recherche…'; return; }
-    if (failed) { status.textContent = 'La recherche n’a pas pu être chargée. Réessaie ou consulte la liste des articles.'; return; }
-    if (!loaded) return;
     const q = normalize(input.value);
-    if (!q && !tags.size) { status.textContent = 'Saisis un mot ou choisis un tag pour explorer les articles.'; return; }
+    retry.hidden = !q || !failed;
+    if (q && !fuse) {
+      status.textContent = failed
+        ? 'La recherche n’a pas pu être chargée. Réessaie ou consulte la liste des articles.'
+        : 'Chargement de la recherche…';
+      return;
+    }
+    if (!q && !tags.size) { status.textContent = ''; return; }
     let found = q ? fuse.search(q).map(r => items[r.item.index]) : items.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
     found = found.filter(item => [...tags].every(t => (item.tags || []).some(it => it.toLowerCase() === t)));
     const n = found.length;
@@ -77,25 +82,36 @@
     more.hidden = n <= limit;
   }
   async function load() {
-    if (loading) return;
-    loading = true; failed = false; retry.hidden = true; render();
+    if (loading || fuse) return;
+    loading = true;
     try {
-      const response = await fetch(root.dataset.index);
+      const [response, { default: Fuse }] = await Promise.all([
+        fetch(root.dataset.index),
+        import(root.dataset.fuseModule)
+      ]);
       if (!response.ok) throw new Error('Index unavailable');
-      items = await response.json();
-      if (!Array.isArray(items)) throw new Error('Invalid index');
-      const indexed = items.map((item,index) => ({index,title:normalize(item.title),summary:normalize(item.summary),contents:normalize(item.contents),tags:(item.tags || []).map(normalize),categories:(item.categories || []).map(normalize)}));
+      const articles = await response.json();
+      if (!Array.isArray(articles)) throw new Error('Invalid index');
+      const indexed = articles.map((item,index) => ({index,title:normalize(item.title),summary:normalize(item.summary),contents:normalize(item.contents),tags:(item.tags || []).map(normalize),categories:(item.categories || []).map(normalize)}));
       fuse = new Fuse(indexed,{keys:[{name:'title',weight:3},{name:'tags',weight:2},'categories','summary','contents'],threshold:.2,ignoreLocation:true});
-      loaded = true;
-    } catch (_) { failed = true; retry.hidden = false; }
-    loading = false; render();
+      items = articles;
+    } catch (_) {
+      failed = true;
+    } finally {
+      loading = false;
+      render();
+    }
   }
-  input.addEventListener('input',() => { clearTimeout(timer); timer = setTimeout(() => { limit = 10; syncURL(); render(); },180); });
-  root.querySelector('form').addEventListener('submit',e => { e.preventDefault(); clearTimeout(timer); limit = 10; syncURL(); render(); });
+  function refresh() {
+    if (normalize(input.value) && !failed) load();
+    render();
+  }
+  input.addEventListener('input',() => { clearTimeout(timer); timer = setTimeout(() => { limit = 10; syncURL(); refresh(); },180); });
+  root.querySelector('form').addEventListener('submit',e => { e.preventDefault(); clearTimeout(timer); limit = 10; syncURL(); refresh(); });
   if (cloud) cloud.addEventListener('click',e => { const b = e.target.closest('[data-tag]'); if (b) toggle(b.dataset.tag); });
-  clear.addEventListener('click',() => { clearTimeout(timer); tags.clear(); input.value = ''; limit = 10; syncURL(); render(); input.focus(); });
+  clear?.addEventListener('click',() => { clearTimeout(timer); tags.clear(); input.value = ''; limit = 10; syncURL(); render(); input.focus(); });
   more.addEventListener('click',() => { limit += 10; render(); });
-  retry.addEventListener('click',load);
-  addEventListener('popstate',() => { fromURL(); limit = 10; render(); });
-  fromURL(); load();
+  retry.addEventListener('click',() => { failed = false; refresh(); });
+  addEventListener('popstate',() => { clearTimeout(timer); fromURL(); limit = 10; refresh(); });
+  fromURL(); refresh();
 })();

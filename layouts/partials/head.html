@@ -30,12 +30,20 @@
 <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
 <link rel="apple-touch-icon" href="{{ (resources.Get "icons/apple-touch-icon.png").RelPermalink }}">
 {{ partial "webmanifest.html" . }}
-{{ partial "stylesheet.html" "sass/site.scss" }}
-{{ if eq .Layout "search" }}{{ partial "stylesheet.html" "sass/search.scss" }}{{ end }}
-{{ if .HasShortcode "calculator" }}{{ partial "stylesheet.html" "sass/calculator.scss" }}{{ end }}
-{{ if .HasShortcode "tor-circuit" }}{{ partial "stylesheet.html" "sass/tor-circuit.scss" }}{{ end }}
-{{ if .HasShortcode "onion-rendezvous" }}{{ partial "stylesheet.html" "sass/onion-rendezvous.scss" }}{{ end }}
-{{ if or (and (ne .Params.pageClass "music-recs") (or (.HasShortcode "album") (.HasShortcode "grid"))) (.HasShortcode "cover") (.HasShortcode "youtube-card") (.HasShortcode "youtube-playlist") }}{{ partial "stylesheet.html" "sass/media.scss" }}{{ end }}
-{{ if eq .Params.pageClass "music-recs" }}{{ partial "stylesheet.html" "sass/music.scss" }}{{ end }}
+{{/* Keep the site styles in cascade order for both LibSass and Dart Sass. */}}
+{{ $siteStyles := slice
+  (resources.Get "sass/site/_fonts.scss")
+  (resources.Get "sass/site/_foundation.scss")
+  (resources.Get "sass/site/_shell.scss")
+  (resources.Get "sass/site/_prose.scss")
+  (resources.Get "sass/site/_reading.scss")
+}}
+{{ partial "stylesheet.html" (resources.Concat "sass/site.scss" $siteStyles) }}
+{{ if eq .Layout "search" }}{{ partial "stylesheet.html" (resources.Get "sass/search.scss") }}{{ end }}
+{{ if .HasShortcode "calculator" }}{{ partial "stylesheet.html" (resources.Get "sass/calculator.scss") }}{{ end }}
+{{ if .HasShortcode "tor-circuit" }}{{ partial "stylesheet.html" (resources.Get "sass/tor-circuit.scss") }}{{ end }}
+{{ if .HasShortcode "onion-rendezvous" }}{{ partial "stylesheet.html" (resources.Get "sass/onion-rendezvous.scss") }}{{ end }}
+{{ if or (and (ne .Params.pageClass "music-recs") (or (.HasShortcode "album") (.HasShortcode "grid"))) (.HasShortcode "cover") (.HasShortcode "youtube-card") (.HasShortcode "youtube-playlist") }}{{ partial "stylesheet.html" (resources.Get "sass/media.scss") }}{{ end }}
+{{ if eq .Params.pageClass "music-recs" }}{{ partial "stylesheet.html" (resources.Get "sass/music.scss") }}{{ end }}
 {{ if or .Params.math .Site.Params.math }}{{ partial "helpers/katex.html" . }}{{ end }}
 </head>

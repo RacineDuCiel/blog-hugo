@@ -24,19 +24,32 @@
   var mode = document.getElementById('mode');
   var root = document.documentElement;
   var system = matchMedia('(prefers-color-scheme: dark)');
+  var reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   function isDark() { return root.classList.contains('dark') || (!root.classList.contains('light') && system.matches); }
   function update() {
     var dark = isDark();
     mode.setAttribute('aria-label', dark ? 'Activer le thème clair' : 'Activer le thème sombre');
     document.querySelector('meta[name="theme-color"]').content = dark ? '#191a19' : '#fafaf8';
   }
+  function changeTheme() {
+    var theme = isDark() ? 'light' : 'dark';
+    root.classList.remove('light', 'dark'); root.classList.add(theme);
+    try { localStorage.setItem('theme', theme); } catch (_) {}
+    update();
+  }
+  function finishThemeTransition() {
+    root.classList.remove('theme-transition');
+  }
   if (mode) {
     mode.hidden = false; update(); system.addEventListener('change', update);
     mode.addEventListener('click', function () {
-      var theme = isDark() ? 'light' : 'dark';
-      root.classList.remove('light', 'dark'); root.classList.add(theme);
-      try { localStorage.setItem('theme', theme); } catch (_) {}
-      update();
+      if (root.classList.contains('theme-transition')) return;
+      if (!document.startViewTransition || reducedMotion.matches) {
+        changeTheme();
+        return;
+      }
+      root.classList.add('theme-transition');
+      document.startViewTransition(changeTheme).finished.then(finishThemeTransition, finishThemeTransition);
     });
   }
   // Keyboard users can scroll wide tables and code blocks independently.

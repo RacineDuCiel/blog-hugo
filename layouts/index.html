@@ -2,7 +2,7 @@
 <main id="main" class="home-shell" tabindex="-1">
 {{ partial "fragment.html" "ouverture" }}
 <section class="home-articles" aria-labelledby="recent-heading">
-<div class="section-label"><h2 id="recent-heading">Articles récents</h2><a href="{{ "categories/" | relURL }}">Par thème <span aria-hidden="true">↗</span></a></div>
+<h2 id="recent-heading" class="section-label">Articles récents</h2>
 {{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.showOnHome" true }}
 {{ range first 5 ($articles.ByDate.Reverse) }}{{ partial "postCard.html" . }}{{ end }}
 <a class="all-posts" href="{{ "posts/" | relURL }}">Tous les articles <span aria-hidden="true">→</span></a>
