@@ -39,7 +39,12 @@
   (resources.Get "sass/site/_reading.scss")
 }}
 {{ partial "stylesheet.html" (resources.Concat "sass/site.scss" $siteStyles) }}
-{{ if eq .Layout "search" }}{{ partial "stylesheet.html" (resources.Get "sass/search.scss") }}{{ end }}
+{{ $isCatalogue := in (slice "archives" "search") .Layout }}
+{{ $isLectures := eq .Layout "lectures" }}
+{{ if or .IsHome $isCatalogue $isLectures }}{{ partial "stylesheet.html" (resources.Get "sass/article-index.scss") }}{{ end }}
+{{ if .IsHome }}{{ partial "stylesheet.html" (resources.Get "sass/home.scss") }}{{ end }}
+{{ if $isLectures }}{{ partial "stylesheet.html" (resources.Get "sass/lectures.scss") }}{{ end }}
+{{ if $isCatalogue }}{{ partial "stylesheet.html" (resources.Get "sass/catalogue.scss") }}{{ end }}
 {{ if .HasShortcode "calculator" }}{{ partial "stylesheet.html" (resources.Get "sass/calculator.scss") }}{{ end }}
 {{ if .HasShortcode "tor-circuit" }}{{ partial "stylesheet.html" (resources.Get "sass/tor-circuit.scss") }}{{ end }}
 {{ if .HasShortcode "onion-rendezvous" }}{{ partial "stylesheet.html" (resources.Get "sass/onion-rendezvous.scss") }}{{ end }}

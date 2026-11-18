@@ -27,7 +27,7 @@
 {{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
 {{ $related := $articles.Related . | first 3 }}
 {{ if not $isMusic }}{{ with $related }}<section class="related-posts" aria-label="Pour aller plus loin"><h2 class="section-label">Pour aller plus loin</h2>{{ range . }}{{ partial "postCard.html" . }}{{ end }}</section>{{ end }}{{ end }}
-<a class="article-back" href="{{ "posts/" | relURL }}">← Tous les articles</a>
+<a class="article-back" href="{{ "posts/" | relURL }}"><span aria-hidden="true">←</span> Archives</a>
 {{ end }}
 </div>
 </main>

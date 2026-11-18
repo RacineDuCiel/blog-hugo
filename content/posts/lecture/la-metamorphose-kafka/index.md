@@ -2,6 +2,8 @@
 title: "La Métamorphose — Kafka"
 date: 2026-05-31
 themes: ["litterature"]
+readingKind: fiction
+readingExcerpt: "Quand Gregor ne peut plus travailler, le regard de sa famille change et la place qu’elle lui laisse se réduit."
 showOnHome: true
 ---
 

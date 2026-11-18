@@ -1,11 +1,18 @@
 {{ define "main" }}
 <main id="main" class="home-shell" tabindex="-1">
 {{ partial "fragment.html" "ouverture" }}
+{{ partial "home-dossiers.html" . }}
 <section class="home-articles" aria-labelledby="recent-heading">
-<h2 id="recent-heading" class="section-label">Articles choisis</h2>
-{{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.showOnHome" true }}
-{{ range first 5 ($articles.ByDate.Reverse) }}{{ partial "postCard.html" . }}{{ end }}
-<a class="all-posts" href="{{ "posts/" | relURL }}">Tous les articles <span aria-hidden="true">→</span></a>
+  <header class="home-articles-heading">
+    <h2 id="recent-heading" class="home-section-title">Derniers articles</h2>
+    <a class="all-posts" href="{{ "posts/" | relURL }}">Tous les articles <span aria-hidden="true">→</span></a>
+  </header>
+  {{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.showOnHome" true }}
+  {{ with first 5 ($articles.ByDate.Reverse) }}
+  <ol class="article-index" role="list">
+    {{ range . }}<li>{{ partial "postCard.html" . }}</li>{{ end }}
+  </ol>
+  {{ end }}
 </section>
 {{ partial "fragment.html" "interlude" }}
 </main>

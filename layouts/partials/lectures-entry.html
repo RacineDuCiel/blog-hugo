@@ -1,0 +1,20 @@
+{{ $labels := dict "fiction" "Fiction" "essai" "Essai" }}
+{{ $kind := .Params.readingKind | default "" }}
+{{ $entryID := printf "lecture-%s" (.Path | anchorize) }}
+{{ $excerpt := .Params.readingExcerpt | default .Description }}
+<li>
+  <a class="post-item lectures-entry" href="{{ .RelPermalink }}" aria-labelledby="{{ $entryID }}"{{ if $excerpt }} aria-describedby="{{ $entryID }}-excerpt"{{ end }}>
+    <div class="post-item-main">
+      <h3 id="{{ $entryID }}" class="post-item-title">{{ .Title }}</h3>
+      {{ with $excerpt }}<p class="post-item-excerpt" id="{{ $entryID }}-excerpt">{{ . }}</p>{{ end }}
+      {{ with index $labels $kind }}<p class="lectures-kind">{{ . }}</p>{{ end }}
+    </div>
+    <div class="post-item-meta">
+      {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}
+      {{ $format := cond (eq $kind "portrait") "2 Jan 2006" "2 Jan" }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format $format }}</time>
+      {{ end }}
+      {{ if gt .ReadingTime 0 }}<span>{{ .ReadingTime }} min</span>{{ end }}
+    </div>
+  </a>
+</li>

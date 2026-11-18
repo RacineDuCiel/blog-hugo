@@ -13,7 +13,6 @@
   ));
   const clear = document.getElementById('theme-filter-clear');
   const more = document.getElementById('search-more');
-  const recovery = document.getElementById('search-recovery');
   const retry = document.getElementById('search-retry');
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const themes = new Set();
@@ -64,14 +63,36 @@
     fragment.append(mark,title.slice(i+q.length)); return fragment;
   }
   function card(item) {
-    const el = document.createElement('article'); el.className = 'search-result-item';
-    const h = document.createElement('h2'), a = document.createElement('a');
-    a.href = item.permalink; a.append(highlightedTitle(item.title)); h.append(a); el.append(h);
-    const p = document.createElement('p');
+    const article = document.createElement('article');
+    article.className = 'post-item search-result-item';
+    const copy = document.createElement('div');
+    copy.className = 'post-item-main';
+    const title = document.createElement('h2');
+    title.className = 'post-item-title search-result-title';
+    const link = document.createElement('a');
+    link.href = item.permalink;
+    link.append(highlightedTitle(item.title));
+    title.append(link);
+    copy.append(title);
+    article.append(copy);
+    if (item.dateLabel) {
+      const meta = document.createElement('div');
+      meta.className = 'post-item-meta';
+      const time = document.createElement('time');
+      time.dateTime = item.date.slice(0, 10);
+      time.textContent = item.dateLabel;
+      meta.append(time);
+      article.append(meta);
+    }
     const excerpt = item.summary || item.contents || '';
-    p.textContent = excerpt.length > 180 ? excerpt.slice(0,180).replace(/\s+\S*$/,'') + '…' : excerpt;
-    el.append(p);
-    const themeRow = document.createElement('div'); themeRow.className = 'search-result-themes';
+    if (excerpt) {
+      const p = document.createElement('p'); p.className = 'post-item-excerpt';
+      p.textContent = excerpt.length > 180 ? excerpt.slice(0,180).replace(/\s+\S*$/,'') + '…' : excerpt;
+      copy.append(p);
+    }
+    if (!item.themes.length) return article;
+    const themeRow = document.createElement('div');
+    themeRow.className = 'post-item-themes search-result-themes';
     item.themes.forEach(theme => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -84,12 +105,13 @@
       });
       themeRow.append(button);
     });
-    el.append(themeRow); return el;
+    copy.append(themeRow);
+    return article;
   }
   function render() {
     syncButtons(); results.replaceChildren(); more.hidden = true;
     const q = normalize(input.value);
-    recovery.hidden = !q || !failed;
+    retry.hidden = !q || !failed;
     if (q && !fuse) {
       status.textContent = failed
         ? 'La recherche n’a pas pu être chargée.'
@@ -97,10 +119,10 @@
       return;
     }
     if (!q && !themes.size) { status.textContent = ''; return; }
-    let found = q
-      ? fuse.search(q).map(r => items[r.item.index])
-      : items.slice().sort((a,b) => Number(b.pinned) - Number(a.pinned) || new Date(b.date) - new Date(a.date));
-    if (themes.size) found = found.filter(item => item.themes.some(theme => themes.has(theme.slug)));
+    const matches = q
+      ? fuse.search(q).sort((a, b) => a.item.index - b.item.index).map(result => items[result.item.index])
+      : items;
+    const found = themes.size ? matches.filter(item => item.themes.some(theme => themes.has(theme.slug))) : matches;
     const n = found.length;
     status.textContent = n ? n + ' résultat' + (n > 1 ? 's' : '') + (n > limit ? ' · ' + limit + ' affichés' : '') : 'Aucun résultat. Essaie un autre mot ou retire un filtre.';
     found.slice(0,limit).forEach(item => results.append(card(item)));

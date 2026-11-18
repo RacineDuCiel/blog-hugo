@@ -2,6 +2,7 @@
 title: "Dostoïevski"
 date: 2026-05-30
 themes: ["litterature"]
+readingKind: portrait
 description: "Un guide pour entrer dans l'œuvre de Dostoïevski : sa vie, ses romans, ses idées, ses lectures et ses limites."
 showOnHome: true
 ---

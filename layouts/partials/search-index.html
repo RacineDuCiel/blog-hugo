@@ -1,5 +1,6 @@
 {{ $items := slice }}
-{{ range where (where .site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
+{{ $articles := where (where .site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
+{{ range $articles.ByDate.Reverse }}
   {{ $summary := .Summary | plainify | htmlUnescape }}
   {{ if not $summary }}
     {{ $summary = .Plain | htmlUnescape | truncate 180 }}
@@ -8,11 +9,16 @@
   {{ range .GetTerms "themes" }}
     {{ $themes = $themes | append (dict "slug" .Data.Term "title" .Title) }}
   {{ end }}
+  {{ $dateLabel := "" }}
+  {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}
+    {{ $dateLabel = .Date | time.Format "2 Jan 2006" }}
+  {{ end }}
   {{ $item := dict
     "title" .Title
     "themes" $themes
     "permalink" .RelPermalink
     "date" .Date
+    "dateLabel" $dateLabel
     "pinned" (.Params.pinned | default false)
     "summary" $summary
   }}

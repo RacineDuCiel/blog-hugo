@@ -1,5 +1,5 @@
 {{ define "main" }}
-<main id="main" class="list-shell search-shell" tabindex="-1">
+<main id="main" class="list-shell catalogue-shell search-shell" tabindex="-1">
 {{ partial "page-heading.html" . }}
 {{ $fuse := resources.Get "js/fuse.js" | fingerprint }}
 {{ $metadata := partial "search-index.html" (dict "site" .Site "fullText" false) | jsonify }}
@@ -16,7 +16,11 @@
   {{ end }}
 {{ end }}
 <div class="search-container" data-index="{{ $indexURL }}" data-fuse-module="{{ $fuse.RelPermalink }}">
-<form role="search" class="search-form"><label class="sr-only" for="search-input">Rechercher dans les articles</label><input type="search" id="search-input" placeholder="Un titre, un sujet, un mot…" autocomplete="off" enterkeyhint="search"></form>
+<form role="search" class="search-form">
+  <label class="sr-only" for="search-input">Rechercher dans les articles</label>
+  <span class="search-icon" aria-hidden="true"></span>
+  <input type="search" id="search-input" placeholder="Un titre, un sujet, un mot…" autocomplete="off" enterkeyhint="search">
+</form>
 {{ with $themes }}
 <div class="theme-filter-bar">
   <div class="theme-filter-head"><span>Filtrer par thème</span><button type="button" id="theme-filter-clear" hidden>Tout effacer</button></div>
@@ -29,13 +33,13 @@
 </div>
 {{ end }}
 <p id="search-count" class="search-count" role="status"></p>
-<div id="search-results"></div>
-<button type="button" id="search-more" hidden>Afficher plus de résultats</button>
-<div id="search-recovery" class="search-recovery" hidden>
-  <button type="button" id="search-retry">Réessayer</button>
-  <a href="{{ "posts/" | relURL }}">Tous les articles</a>
+<div id="search-results" class="article-index"></div>
+<div class="search-actions">
+  <button type="button" id="search-more" class="catalogue-action" hidden>Afficher plus de résultats</button>
+  <button type="button" id="search-retry" class="catalogue-action" hidden>Réessayer</button>
+  <a class="catalogue-action" href="{{ "posts/" | relURL }}">Parcourir les archives</a>
 </div>
-<noscript><p>La recherche nécessite JavaScript. <a href="{{ "posts/" | relURL }}">Parcourir tous les articles</a>.</p></noscript>
+<noscript><p class="search-count">La recherche nécessite JavaScript.</p></noscript>
 </div></main>
 <script type="application/json" id="search-metadata">{{ $metadata | safeJS }}</script>
 <script type="application/json" id="search-legacy-tags">{{ $legacyTags | jsonify | safeJS }}</script>

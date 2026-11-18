@@ -1,0 +1,31 @@
+{{ define "main" }}
+{{ $articles := where .RegularPagesRecursive "Params.unlisted" "!=" true }}
+{{ $readings := where $articles "Params.readingKind" "!=" "portrait" }}
+{{ $portraits := where $articles "Params.readingKind" "==" "portrait" }}
+{{ $pager := .Paginate $readings.ByDate.Reverse 15 }}
+<main id="main" class="list-shell catalogue-shell lectures-shell" tabindex="-1">
+  {{ partial "page-heading.html" . }}
+  {{ range $pager.Pages.GroupByDate "2006" "desc" }}
+  {{ $year := .Key }}
+  <section class="article-index-group lectures-year" aria-labelledby="lectures-year-{{ $year }}">
+    <h2 id="lectures-year-{{ $year }}">{{ if eq $year "0001" }}Sans date{{ else }}{{ $year }}{{ end }}</h2>
+    <ol class="article-index" role="list">
+      {{ range .Pages.ByDate.Reverse }}{{ partial "lectures-entry.html" . }}{{ end }}
+    </ol>
+  </section>
+  {{ else }}
+  <p class="empty-state">Aucune lecture publiée pour le moment.</p>
+  {{ end }}
+  {{ partial "pagination.html" $pager }}
+  {{ if eq $pager.PageNumber 1 }}
+    {{ with $portraits }}
+    <section class="article-index-group lectures-portraits" aria-labelledby="lectures-portraits-heading">
+      <h2 id="lectures-portraits-heading">Portraits d’auteurs</h2>
+      <ul class="article-index" role="list">
+        {{ range .ByDate.Reverse }}{{ partial "lectures-entry.html" . }}{{ end }}
+      </ul>
+    </section>
+    {{ end }}
+  {{ end }}
+</main>
+{{ end }}

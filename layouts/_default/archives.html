@@ -1,0 +1,10 @@
+{{ define "main" }}
+<main id="main" class="list-shell catalogue-shell archives-shell" tabindex="-1">
+  <header class="page-heading archives-heading">
+    <h1>{{ .Title }}</h1>
+    <a class="catalogue-action" href="{{ "search/" | relURL }}">Rechercher</a>
+  </header>
+  {{ $articles := where .RegularPagesRecursive "Params.unlisted" "!=" true }}
+  {{ partial "article-list.html" (dict "page" . "pages" $articles.ByDate.Reverse "continuous" true) }}
+</main>
+{{ end }}

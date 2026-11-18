@@ -2,6 +2,8 @@
 title: "Crime et châtiment — Dostoïevski"
 date: 2026-05-29
 themes: ["litterature"]
+readingKind: fiction
+readingExcerpt: "La théorie du crime de Raskolnikov à l’épreuve du remords, de l’aveu et du regard des autres."
 showOnHome: true
 ---
 

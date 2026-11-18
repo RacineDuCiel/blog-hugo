@@ -1,5 +1,15 @@
-{{ $pager := .page.Paginate .pages 15 }}
-{{ range $pager.Pages.GroupByDate "2006" }}
-<section class="year-group" aria-label="{{ .Key }}"><h2 class="year-label">{{ .Key }}</h2><div>{{ range .Pages }}{{ partial "postCard.html" . }}{{ end }}</div></section>
+{{ $pages := .pages }}
+{{ $pager := false }}
+{{ if not .continuous }}
+  {{ $pager = .page.Paginate $pages 15 }}
+  {{ $pages = $pager.Pages }}
+{{ end }}
+{{ range $pages.GroupByDate "2006" "desc" }}
+<section class="year-group article-index-group" aria-labelledby="year-{{ .Key }}">
+  <h2 class="year-label" id="year-{{ .Key }}">{{ if eq .Key "0001" }}Sans date{{ else }}{{ .Key }}{{ end }}</h2>
+  <ol class="year-list article-index" role="list">
+    {{ range .Pages }}<li>{{ partial "postCard.html" . }}</li>{{ end }}
+  </ol>
+</section>
 {{ else }}<p class="empty-state">Aucun article pour le moment.</p>{{ end }}
-{{ if gt $pager.TotalPages 1 }}<nav class="pagination" aria-label="Pagination">{{ if $pager.HasPrev }}<a href="{{ $pager.Prev.URL }}">← Précédente</a>{{ end }}{{ range $pager.Pagers }}<a href="{{ .URL }}"{{ if eq . $pager }} aria-current="page"{{ end }}>{{ .PageNumber }}</a>{{ end }}{{ if $pager.HasNext }}<a href="{{ $pager.Next.URL }}">Suivante →</a>{{ end }}</nav>{{ end }}
+{{ with $pager }}{{ partial "pagination.html" . }}{{ end }}

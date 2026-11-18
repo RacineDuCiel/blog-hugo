@@ -91,7 +91,7 @@ defaultContentLanguage = "fr-fr"
     weight = 10
   [[Languages.fr-fr.menu.main]]
     pageRef = "posts"
-    name = "Articles"
+    name = "Archives"
     url = "/posts/"
     weight = 20
   [[Languages.fr-fr.menu.main]]

@@ -9,20 +9,7 @@
 .site-nav a[aria-current] { text-decoration: underline; text-underline-offset: 7px; }
 .theme-toggle { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; padding: 0; border: 0; }
 .menu-toggle { display: none; }
-.home-shell, .list-shell { max-width: 832px; margin: 0 auto; padding: 0 32px; min-height: 55vh; }
-.fragment { padding: 56px 0; display: grid; align-items: center; gap: 36px; }
-.fragment-with-image { grid-template-columns: 180px minmax(0,1fr); }
-.fragment figure { align-self: center; }
-.fragment img { max-height: 230px; object-fit: contain; object-position: left center; }
-.fragment-copy { min-width: 0; font-family: var(--serif); font-size: 25px; line-height: 1.5; }
-.fragment-copy > :last-child { margin-bottom: 0; }
-.fragment-copy p { margin: 0 0 1rem; }
-.fragment-copy blockquote { margin: 0; }
-.fragment-handwritten .fragment-copy { font-family: 'Nothing You Could Do', cursive; font-size: 25px; }
-.fragment-copy .fragment-caption, .fragment-copy .fragment-link { display: block; margin-top: 16px; font: 12px/1.6 var(--sans); color: var(--muted); }
-.home-articles { margin: 12px 0 64px; }
-.home-shell > .home-articles:first-child { margin-top: 64px; }
-.home-shell > .fragment:last-child { border-top: 1px solid var(--line); padding-top: 40px; }
+.list-shell { max-width: 832px; margin: 0 auto; padding: 0 32px; min-height: 55vh; }
 .section-label { margin: 0 0 12px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .post-item { display: flex; justify-content: space-between; gap: 24px; padding: 24px 0; border-top: 1px solid var(--line); }
 .post-item-main { min-width: 0; }
@@ -43,6 +30,7 @@
 .page-heading p { color: var(--muted); font-size: 14px; margin: 14px 0 0; }
 .year-group { display: grid; grid-template-columns: 65px minmax(0,1fr); gap: 28px; margin: 0 0 44px; }
 .year-label { margin: 0; padding-top: 28px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.year-list { margin: 0; padding: 0; list-style: none; }
 .pagination { display: flex; flex-wrap: wrap; gap: 24px; margin: 40px 0; font-size: 13px; }
 .pagination [aria-current] { text-decoration: none; font-weight: 700; }
 .site-footer { max-width: 1056px; margin: 88px auto 0; padding: 25px 0 32px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 11px; }
@@ -66,10 +54,7 @@
   .site-nav { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 4px 24px; padding: 0 0 12px; }
   .site-nav a { font-size: 14px; }
   .js .site-nav:not(.is-open) { display: none; }
-  .home-shell,.list-shell { padding: 0 24px; }
-  .fragment { padding: 40px 0; gap: 28px; }
-  .fragment-with-image { grid-template-columns: 140px minmax(0,1fr); }
-  .fragment-copy,.fragment-handwritten .fragment-copy { font-size: 22px; }
+  .list-shell { padding: 0 24px; }
   .page-heading { margin: 48px 0 36px; }
   .page-heading h1 { font-size: 34px; }
   .post-item { gap: 16px; }
@@ -79,9 +64,6 @@
   .site-footer { margin: 60px 24px 0; }
 }
 @media(max-width: 480px) {
-  .fragment-with-image { grid-template-columns: 1fr; gap: 24px; }
-  .fragment img { width: 140px; max-height: 180px; }
-  .fragment-copy { max-width: 290px; }
   .post-item { flex-direction: column; gap: 9px; padding: 22px 0; }
   .post-item-meta { flex-basis: auto; display: flex; gap: 12px; text-align: left; padding: 0; }
   .post-item-meta > * + *::before { content: '·'; margin-right: 12px; }

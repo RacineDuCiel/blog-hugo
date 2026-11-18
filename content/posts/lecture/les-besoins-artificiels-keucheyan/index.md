@@ -2,6 +2,8 @@
 title: "Les besoins artificiels — Razmig Keucheyan"
 date: 2026-05-21
 themes: ["ecologie-et-societe"]
+readingKind: essai
+readingExcerpt: "Comment nos modes de vie façonnent ce que nous désirons et ce que nous jugeons nécessaire."
 description: "Notes de lecture sur Les besoins artificiels de Razmig Keucheyan"
 showOnHome: true
 ---
