@@ -1,1 +1,16 @@
-<nav class="toc-nav" aria-label="Sections de l’article">{{ partial "toc-level.html" .Fragments.Headings }}</nav>
+<div class="toc-content">
+  {{ if ge (len .Fragments.Identifiers) 30 }}
+  <div class="toc-filter" hidden>
+    <div class="toc-filter-field">
+      <label for="toc-search" class="sr-only">Filtrer les sections</label>
+      <input id="toc-search" type="search" placeholder="Filtrer les sections" autocomplete="off"
+             spellcheck="false" enterkeyhint="search" aria-controls="toc-sections">
+      <button type="button" class="toc-filter-clear" aria-label="Effacer le filtre" hidden>×</button>
+    </div>
+    <p class="toc-filter-status" role="status"></p>
+  </div>
+  {{ end }}
+  <nav id="toc-sections" class="toc-nav" aria-label="Sections de l’article">
+    {{ partial "toc-level.html" .Fragments.Headings }}
+  </nav>
+</div>

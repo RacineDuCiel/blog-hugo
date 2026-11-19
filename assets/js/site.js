@@ -53,7 +53,7 @@
     });
   }
   // Keyboard users can scroll wide tables and code blocks independently.
-  document.querySelectorAll('.prose table, .prose pre').forEach(function (el) {
+  document.querySelectorAll('.prose:not(#article-content) table, .prose:not(#article-content) pre').forEach(function (el) {
     el.tabIndex = 0;
     if (el.tagName === 'PRE') el.setAttribute('role', 'region');
     el.setAttribute('aria-label', el.tagName === 'TABLE' ? 'Tableau, défilement horizontal si nécessaire' : 'Extrait de code');

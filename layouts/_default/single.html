@@ -1,38 +1,74 @@
 {{ define "main" }}
-{{ $isArticle := eq .Section "posts" }}
+{{ $isPost := eq .Section "posts" }}
 {{ $isMusic := eq .Params.pageClass "music-recs" }}
-{{ $hasToc := and $isArticle (ne .Params.pageClass "music-recs") (strings.Contains .TableOfContents "<li>") }}
-<main id="main" class="article-shell{{ if $hasToc }} with-toc{{ end }}{{ if eq .Params.pageClass "music-recs" }} music-shell{{ end }}" tabindex="-1">
-{{ if $hasToc }}<aside class="toc-sidebar" aria-label="Sommaire"><div class="toc-inner"><p class="toc-label">Dans cet article</p>{{ partial "toc-tree.html" . }}</div></aside>{{ end }}
+{{ $isArticle := and $isPost (not $isMusic) }}
+{{ $hasToc := and $isArticle .Fragments.Headings }}
+{{ $dateFormat := cond $isArticle ":date_long" "02.01.2006" }}
+<main id="main" class="article-shell{{ if $isArticle }} article-reader{{ end }}{{ if $isMusic }} music-shell{{ end }}" tabindex="-1">
 <div class="article-column">
 <article>
 <header class="article-header">
-{{ if $isArticle }}{{ with .GetTerms "themes" }}<div class="article-themes">{{ range . }}<a href="{{ partial "themes/search-url.html" .Data.Term }}">{{ .Title }}</a>{{ end }}</div>{{ end }}{{ end }}
+{{ if $isPost }}{{ with .GetTerms "themes" }}<div class="article-themes">{{ range . }}<a href="{{ partial "themes/search-url.html" .Data.Term }}">{{ .Title }}</a>{{ end }}</div>{{ end }}{{ end }}
 <h1>{{ .Title }}</h1>
-<div class="article-meta-line"><div class="post-meta">
-{{ if and (not .Date.IsZero) (ne .Params.showDate false) }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "02.01.2006" }}</time>
-{{ if ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02") }}<span>Mis à jour le <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod | time.Format "02.01.2006" }}</time></span>{{ end }}
-{{ if and $isArticle (not $isMusic) }}<span>{{ .ReadingTime }} min de lecture</span>{{ end }}{{ end }}</div>
-{{ if and $isArticle (not $isMusic) }}{{ partial "reading-settings.html" . }}{{ end }}</div>
+{{ if $isArticle }}{{ with .Description }}<p class="article-description">{{ . }}</p>{{ end }}{{ end }}
+<div class="article-meta-line">
+  <div class="post-meta">
+    {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format $dateFormat }}</time>
+    {{ if and (not .Lastmod.IsZero) (ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
+    <span>Mis à jour le <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod | time.Format $dateFormat }}</time></span>
+    {{ end }}
+    {{ end }}
+    {{ if and $isArticle (gt .ReadingTime 0) }}<span>{{ .ReadingTime }} min de lecture</span>{{ end }}
+  </div>
+  {{ if $isArticle }}{{ partial "reading-settings.html" . }}{{ end }}
+</div>
 </header>
-{{ if $hasToc }}<details class="toc-mobile"><summary>Dans cet article</summary>{{ partial "toc-tree.html" . }}</details>{{ end }}
-<div class="prose page-content">
-{{ if eq .Params.pageClass "fiche-revision" }}<aside class="disclaimer-revision" role="note">
+<div class="article-body">
+  {{ if $hasToc }}
+  <a class="skip-link" href="#article-content">Aller au texte de l’article</a>
+  <aside class="article-toc" aria-label="Sommaire">
+    <button type="button" class="toc-open" hidden aria-controls="toc-dialog" aria-haspopup="dialog">Sommaire</button>
+    <details class="toc-details">
+      <summary class="toc-summary">Sommaire</summary>
+      <div class="toc-inline">{{ partial "toc-tree.html" . }}</div>
+    </details>
+  </aside>
+  {{ end }}
+  <div class="prose page-content"{{ if $isArticle }} id="article-content" tabindex="-1"{{ end }}>
+  {{ if eq .Params.pageClass "fiche-revision" }}<aside class="disclaimer-revision" role="note">
                         <strong>Fiche de révision personnelle</strong> — Ce document est un support de mémorisation rédigé à titre personnel, sans affiliation avec CompTIA. Il peut contenir des inexactitudes ou ne pas refléter la version la plus récente des examens : vérifiez toujours les informations auprès des sources officielles. CompTIA SecurityX™ et CASP+™ sont des marques déposées de CompTIA, Inc.
                     </aside>{{ end }}
-{{ .Content }}
+  {{ .Content }}
+  </div>
 </div>
 </article>
-{{ if $isArticle }}
-{{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
-{{ $related := $articles.Related . | first 3 }}
-{{ if not $isMusic }}{{ with $related }}<section class="related-posts" aria-label="Pour aller plus loin"><h2 class="section-label">Pour aller plus loin</h2>{{ range . }}{{ partial "postCard.html" . }}{{ end }}</section>{{ end }}{{ end }}
-<a class="article-back" href="{{ "posts/" | relURL }}"><span aria-hidden="true">←</span> Archives</a>
+{{ if $isPost }}
+<footer class="article-footer">
+  {{ if $isArticle }}
+  {{ $articles := where (where .Site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
+  {{ with $articles.Related . | first 3 }}
+  <section class="related-posts" aria-labelledby="related-heading">
+    <h2 id="related-heading">Pour aller plus loin</h2>
+    <ul class="article-index" role="list">
+      {{ range . }}<li>{{ partial "postCard.html" . }}</li>{{ end }}
+    </ul>
+  </section>
+  {{ end }}
+  {{ end }}
+  <a class="article-back" href="{{ "posts/" | relURL }}"><span aria-hidden="true">←</span> Archives</a>
+</footer>
 {{ end }}
 </div>
 </main>
 {{ if $hasToc }}
-<button class="toc-fab" hidden aria-controls="toc-dialog" aria-haspopup="dialog">Sommaire <span aria-hidden="true">↑</span></button>
-<dialog id="toc-dialog" aria-labelledby="toc-dialog-title"><div class="toc-dialog-header"><h2 id="toc-dialog-title">Dans cet article</h2><button class="toc-close" aria-label="Fermer le sommaire">Fermer ×</button></div>{{ partial "toc-tree.html" . }}</dialog>
+<button type="button" class="toc-fab" hidden aria-controls="toc-dialog" aria-haspopup="dialog">Sommaire</button>
+<dialog id="toc-dialog" aria-labelledby="toc-dialog-title">
+  <div class="toc-dialog-header">
+    <h2 id="toc-dialog-title">Sommaire</h2>
+    <form method="dialog"><button class="toc-close" autofocus>Fermer</button></form>
+  </div>
+  <div class="toc-dialog-content"></div>
+</dialog>
 {{ end }}
 {{ end }}

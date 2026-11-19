@@ -1,4 +1,5 @@
 <head>
+{{ $isArticle := and .IsPage (eq .Section "posts") (ne .Params.pageClass "music-recs") }}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ $title := .Title }}{{ if not .IsHome }}{{ $title = printf "%s | %s" .Title .Site.Title }}{{ end }}
@@ -25,7 +26,7 @@
 {{ end }}
 {{ with .OutputFormats.Get "RSS" }}<link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .RelPermalink }}">{{ end }}
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none';">
-<script>{{ (resources.Get "js/appearance.js").Content | safeJS }}</script>
+<script{{ if $isArticle }} data-reader{{ end }}>{{ (resources.Get "js/appearance.js").Content | safeJS }}</script>
 <meta name="theme-color" content="#fafaf8">
 <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
 <link rel="apple-touch-icon" href="{{ (resources.Get "icons/apple-touch-icon.png").RelPermalink }}">
@@ -36,13 +37,16 @@
   (resources.Get "sass/site/_foundation.scss")
   (resources.Get "sass/site/_shell.scss")
   (resources.Get "sass/site/_prose.scss")
-  (resources.Get "sass/site/_reading.scss")
 }}
 {{ partial "stylesheet.html" (resources.Concat "sass/site.scss" $siteStyles) }}
 {{ $isCatalogue := in (slice "archives" "search") .Layout }}
 {{ $isLectures := eq .Layout "lectures" }}
 {{ $isDiscotheque := eq .Layout "musique" }}
-{{ if or .IsHome $isCatalogue $isLectures $isDiscotheque }}{{ partial "stylesheet.html" (resources.Get "sass/article-index.scss") }}{{ end }}
+{{ if or .IsHome $isCatalogue $isLectures $isDiscotheque $isArticle }}{{ partial "stylesheet.html" (resources.Get "sass/article-index.scss") }}{{ end }}
+{{ if $isArticle }}
+  {{ $readingStyles := slice (resources.Get "sass/article.scss") (resources.Get "sass/site/_reading.scss") }}
+  {{ partial "stylesheet.html" (resources.Concat "sass/reader.scss" $readingStyles) }}
+{{ end }}
 {{ if .IsHome }}{{ partial "stylesheet.html" (resources.Get "sass/home.scss") }}{{ end }}
 {{ if $isLectures }}{{ partial "stylesheet.html" (resources.Get "sass/lectures.scss") }}{{ end }}
 {{ if $isCatalogue }}{{ partial "stylesheet.html" (resources.Get "sass/catalogue.scss") }}{{ end }}

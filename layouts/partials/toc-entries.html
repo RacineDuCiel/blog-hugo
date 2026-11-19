@@ -1,5 +1,14 @@
 {{ range . }}
 {{ if .Title }}
-<li>{{ if .Headings }}<details><summary><a href="#{{ .ID }}">{{ .Title | safeHTML }}</a><span class="toc-disclosure" aria-hidden="true">+</span></summary>{{ partial "toc-level.html" .Headings }}</details>{{ else }}<a href="#{{ .ID }}">{{ .Title | safeHTML }}</a>{{ end }}</li>
+{{ $title := .Title | plainify | htmlUnescape }}
+<li class="toc-item">
+  <a class="toc-link" href="#{{ .ID }}">{{ $title }}</a>
+  {{ if .Headings }}
+  <details class="toc-branch">
+    <summary class="toc-disclosure" aria-label="Sous-sections de {{ $title }}"></summary>
+    {{ partial "toc-level.html" .Headings }}
+  </details>
+  {{ end }}
+</li>
 {{ else }}{{ partial "toc-entries.html" .Headings }}{{ end }}
 {{ end }}

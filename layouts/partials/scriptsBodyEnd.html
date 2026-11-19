@@ -1,4 +1,4 @@
 {{ $scripts := slice "js/site.js" }}
-{{ if and .IsPage (eq .Section "posts") (ne .Params.pageClass "music-recs") }}{{ $scripts = $scripts | append "js/reading-settings.js" "js/reading-progress.js" "js/toc-spy.js" }}{{ end }}
+{{ if and .IsPage (eq .Section "posts") (ne .Params.pageClass "music-recs") }}{{ $scripts = $scripts | append "js/reading-settings.js" "js/reading-content.js" "js/toc-spy.js" }}{{ end }}
 {{ range $scripts }}{{ $js := resources.Get . | minify | fingerprint }}<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>{{ end }}
 {{ range .Site.Params.additionalScripts }}{{ $js := resources.Get . | minify | fingerprint }}<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>{{ end }}

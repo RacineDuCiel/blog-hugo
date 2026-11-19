@@ -1,208 +1,171 @@
-/* ==========================================================================
- * Réglages de lecture — taille + police de la prose d'un article.
- * - Écrit --reading-font-scale / --reading-font-family sur <html>.
- * - Persiste dans localStorage (lu avant le paint par custom-head.html).
- * - Popover accessible : clavier, Échap, clic extérieur, focus géré.
- * IIFE sans dépendance ; ne fait rien si le widget est absent de la page.
- * ========================================================================== */
 (function () {
-  "use strict";
+  'use strict';
 
-  var root = document.querySelector("[data-reading-settings]");
-  if (!root) return;
+  const widget = document.querySelector('[data-reading-settings]');
+  if (!widget) return;
 
-  var toggle = root.querySelector(".reading-settings-toggle");
-  var panel = root.querySelector(".reading-settings-panel");
-  if (!toggle || !panel) return;
+  const root = document.documentElement;
+  const toggle = widget.querySelector('.reading-settings-toggle');
+  const panel = widget.querySelector('.reading-settings-panel');
+  const size = panel.querySelector('#reading-size');
+  const ranges = [...panel.querySelectorAll('[data-rs-scale]')];
+  const rangeValues = new Map(ranges.map(range => [range, panel.querySelector('output[for="' + range.id + '"]')]));
+  const decrease = panel.querySelector('[data-rs-size="dec"]');
+  const increase = panel.querySelector('[data-rs-size="inc"]');
+  const font = panel.querySelector('#reading-font');
+  const spacing = [...panel.querySelectorAll('[name="reading-spacing"]')];
+  const hasPopover = typeof panel.showPopover === 'function';
+  const desktop = matchMedia('(min-width: 761px)');
 
-  var doc = document.documentElement;
-  var store;
-  try { store = window.localStorage; } catch (_) {}
+  const fontKey = 'reading-font-family';
+  const spacingKey = 'reading-line-spacing';
 
-  var KEY_SCALE = "reading-font-scale";
-  var KEY_FAMILY = "reading-font-family";
-
-  // Doivent refléter les stacks SCSS (typography.scss).
-  var FONTS = {
-    serif: "'Source Serif', Georgia, 'Times New Roman', serif",
-    sans: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-  };
-
-  var STEPS = [0.9, 1.0, 1.1, 1.25, 1.4];
-  var DEFAULT_INDEX = 1; // 1.0
-
-  // ── Helpers de stockage ───────────────────────────────────────────────────
-  function read(key) {
-    try { return store.getItem(key); } catch (e) { return null; }
-  }
-  function write(key, val) {
-    try { store.setItem(key, val); } catch (e) {}
-  }
-  function remove(key) {
-    try { store.removeItem(key); } catch (e) {}
+  function save(key, value) {
+    try {
+      if (value === '') localStorage.removeItem(key);
+      else localStorage.setItem(key, value);
+    } catch (_) {}
   }
 
-  // ── État taille ───────────────────────────────────────────────────────────
-  var sizeValueEl = panel.querySelector("[data-rs-size-value]");
-  var decBtn = panel.querySelector('[data-rs-size="dec"]');
-  var incBtn = panel.querySelector('[data-rs-size="inc"]');
-
-  function nearestIndex(scale) {
-    var best = DEFAULT_INDEX, diff = Infinity;
-    for (var i = 0; i < STEPS.length; i++) {
-      var d = Math.abs(STEPS[i] - scale);
-      if (d < diff) { diff = d; best = i; }
-    }
-    return best;
-  }
-
-  var sizeIndex = DEFAULT_INDEX;
-  var savedScale = parseFloat(read(KEY_SCALE));
-  if (!isNaN(savedScale)) sizeIndex = nearestIndex(savedScale);
-
-  function applySize(persist) {
-    var scale = STEPS[sizeIndex];
-    doc.style.setProperty("--reading-font-scale", String(scale));
-    if (sizeValueEl) {
-      sizeValueEl.innerHTML = Math.round(scale * 100) + "&nbsp;%";
-    }
-    if (decBtn) decBtn.disabled = sizeIndex <= 0;
-    if (incBtn) incBtn.disabled = sizeIndex >= STEPS.length - 1;
-    if (persist) {
-      if (sizeIndex === DEFAULT_INDEX) remove(KEY_SCALE);
-      else write(KEY_SCALE, String(scale));
+  function updateScale(range) {
+    const percent = range.valueAsNumber;
+    const property = '--' + range.dataset.rsScale;
+    if (range.value === range.defaultValue) root.style.removeProperty(property);
+    else root.style.setProperty(property, percent / 100);
+    rangeValues.get(range).value = percent + '\u00a0%';
+    range.setAttribute('aria-valuetext', percent + ' %');
+    if (range === size) {
+      decrease.setAttribute('aria-disabled', String(percent <= Number(size.min)));
+      increase.setAttribute('aria-disabled', String(percent >= Number(size.max)));
     }
   }
 
-  function stepSize(delta) {
-    var next = Math.min(STEPS.length - 1, Math.max(0, sizeIndex + delta));
-    if (next === sizeIndex) return;
-    var focused = document.activeElement;
-    sizeIndex = next;
-    applySize(true);
-    // Keep keyboard focus inside the panel when a limit disables its button.
-    if (focused === incBtn && incBtn.disabled) decBtn.focus();
-    if (focused === decBtn && decBtn.disabled) incBtn.focus();
+  function saveScale(range) {
+    save(range.dataset.rsScale, range.value === range.defaultValue ? '' : String(range.valueAsNumber / 100));
   }
 
-  if (decBtn) decBtn.addEventListener("click", function () { stepSize(-1); });
-  if (incBtn) incBtn.addEventListener("click", function () { stepSize(1); });
-
-  // ── État police ───────────────────────────────────────────────────────────
-  var fontBtns = panel.querySelectorAll("[data-rs-font]");
-
-  // Police naturelle de la page (sans réglage utilisateur) : les fiches CompTIA
-  // sont en sans, les articles standards en serif.
-  var naturalFont = document.body.classList.contains("fiche-revision") ? "sans" : "serif";
-
-  function markFontActive(name) {
-    for (var i = 0; i < fontBtns.length; i++) {
-      var active = fontBtns[i].getAttribute("data-rs-font") === name;
-      fontBtns[i].setAttribute("aria-checked", active ? "true" : "false");
-      fontBtns[i].classList.toggle("is-active", active);
-      fontBtns[i].tabIndex = active ? 0 : -1;
-    }
+  function setChoice(name, key, value) {
+    if (value) root.dataset[name] = value;
+    else delete root.dataset[name];
+    save(key, value);
   }
 
-  function applyFont(name, persist) {
-    doc.style.setProperty("--reading-font-family", FONTS[name]);
-    markFontActive(name);
-    if (persist) {
-      if (name === naturalFont) {
-        remove(KEY_FAMILY);
-        doc.style.removeProperty("--reading-font-family");
-      } else {
-        write(KEY_FAMILY, FONTS[name]);
-      }
-    }
+  for (const range of ranges) {
+    const savedScale = Number(root.style.getPropertyValue('--' + range.dataset.rsScale));
+    range.value = savedScale ? Math.round(savedScale * 100) : range.defaultValue;
+    updateScale(range);
+    range.addEventListener('input', () => updateScale(range));
+    range.addEventListener('change', () => {
+      saveScale(range);
+      if (range !== size) schedulePosition();
+    });
   }
+  font.value = root.dataset.readingFont || '';
+  for (const option of spacing) option.checked = option.value === (root.dataset.readingSpacing || '');
 
-  // Init police : si une valeur est mémorisée, marquer le bouton correspondant ;
-  // sinon refléter la police naturelle SANS poser la variable.
-  var savedFamily = read(KEY_FAMILY);
-  if (savedFamily) {
-    markFontActive(savedFamily.indexOf("Source Serif") !== -1 ? "serif" : "sans");
-  } else {
-    markFontActive(naturalFont);
-  }
-
-  for (var i = 0; i < fontBtns.length; i++) {
-    (function (btn) {
-      btn.addEventListener("click", function () {
-        applyFont(btn.getAttribute("data-rs-font"), true);
-      });
-    })(fontBtns[i]);
-  }
-
-  panel.querySelector('[role="radiogroup"]').addEventListener('keydown', function (event) {
-    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
-    event.preventDefault();
-    var next = event.target.dataset.rsFont === 'serif' ? 'sans' : 'serif';
-    applyFont(next, true);
-    panel.querySelector('[data-rs-font="' + next + '"]').focus();
-  });
-  root.addEventListener('focusout', function () {
-    setTimeout(function () { if (isOpen && !root.contains(document.activeElement)) closePanel(false); }, 0);
-  });
-
-  // ── Réinitialiser ─────────────────────────────────────────────────────────
-  var resetBtn = panel.querySelector("[data-rs-reset]");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", function () {
-      sizeIndex = DEFAULT_INDEX;
-      applySize(true);
-      remove(KEY_FAMILY);
-      doc.style.removeProperty("--reading-font-family");
-      markFontActive(naturalFont);
+  for (const [button, direction] of [[decrease, -1], [increase, 1]]) {
+    button.addEventListener('click', () => {
+      if (button.getAttribute('aria-disabled') === 'true') return;
+      size.stepUp(direction);
+      updateScale(size);
+      saveScale(size);
     });
   }
 
-  // ── Ouverture / fermeture du popover ──────────────────────────────────────
-  var isOpen = false;
+  font.addEventListener('change', () => setChoice('readingFont', fontKey, font.value));
+  for (const option of spacing) {
+    option.addEventListener('change', () => setChoice('readingSpacing', spacingKey, option.value));
+  }
 
-  function openPanel() {
-    if (isOpen) return;
-    isOpen = true;
-    panel.hidden = false;
-    toggle.setAttribute("aria-expanded", "true");
-    // requestAnimationFrame : laisse jouer la transition CSS ET diffère l'ajout
-    // des écouteurs de fermeture après la propagation du clic d'ouverture (sinon
-    // ce même clic, en remontant jusqu'à document, refermerait aussitôt le panel).
-    requestAnimationFrame(function () {
-      panel.classList.add("is-open");
-      document.addEventListener("keydown", onKeydown, true);
-      document.addEventListener("click", onOutsideClick, true);
+  panel.querySelector('[data-rs-reset]').addEventListener('click', () => {
+    for (const range of ranges) {
+      range.value = range.defaultValue;
+      updateScale(range);
+      saveScale(range);
+    }
+    font.value = '';
+    setChoice('readingFont', fontKey, '');
+    for (const option of spacing) option.checked = option.defaultChecked;
+    setChoice('readingSpacing', spacingKey, '');
+    schedulePosition();
+  });
+
+  function isOpen() {
+    return hasPopover ? panel.matches(':popover-open') : !panel.hidden;
+  }
+
+  function positionPanel() {
+    if (!desktop.matches) return;
+    const anchor = toggle.getBoundingClientRect();
+    const gutter = 12;
+    const maxLeft = root.clientWidth - panel.offsetWidth - gutter;
+    const maxTop = root.clientHeight - panel.offsetHeight - gutter;
+    const below = anchor.bottom + 8;
+    const above = anchor.top - panel.offsetHeight - 8;
+    const top = below <= maxTop ? below : above;
+    panel.style.setProperty('--rs-left', Math.max(gutter, Math.min(maxLeft, anchor.right - panel.offsetWidth)) + 'px');
+    panel.style.setProperty('--rs-top', Math.max(gutter, Math.min(maxTop, top)) + 'px');
+  }
+
+  let positionFrame = 0;
+  function schedulePosition() {
+    if (positionFrame || !isOpen()) return;
+    positionFrame = requestAnimationFrame(() => {
+      positionFrame = 0;
+      if (isOpen()) positionPanel();
     });
-    var firstBtn = panel.querySelector(".rs-btn:not([disabled])");
-    if (firstBtn) firstBtn.focus();
   }
 
   function closePanel(restoreFocus) {
-    if (!isOpen) return;
-    isOpen = false;
-    panel.classList.remove("is-open");
-    toggle.setAttribute("aria-expanded", "false");
-    document.removeEventListener("keydown", onKeydown, true);
-    document.removeEventListener("click", onOutsideClick, true);
-    panel.hidden = true;
-    if (restoreFocus) toggle.focus();
+    if (!isOpen()) return;
+    if (hasPopover) panel.hidePopover();
+    else panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) toggle.focus({ preventScroll: true });
   }
 
-  function onKeydown(e) {
-    if (e.key === "Escape" || e.key === "Esc") {
-      e.preventDefault();
+  toggle.addEventListener('click', event => {
+    event.preventDefault();
+    if (isOpen()) {
       closePanel(true);
+      return;
     }
-  }
-
-  function onOutsideClick(e) {
-    if (!root.contains(e.target)) closePanel(false);
-  }
-
-  toggle.addEventListener("click", function () {
-    if (isOpen) closePanel(true); else openPanel();
+    if (hasPopover) panel.showPopover({ source: toggle });
+    else panel.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    positionPanel();
+    panel.scrollTop = 0;
+    size.focus({ preventScroll: true });
   });
 
-  // ── Application initiale de la taille (sans persister) ────────────────────
-  applySize(false);
+  panel.querySelector('.rs-close').addEventListener('click', () => closePanel(true));
+  let tabbing = false;
+  widget.addEventListener('keydown', event => {
+    if (event.key === 'Tab') {
+      tabbing = true;
+      requestAnimationFrame(() => { tabbing = false; });
+    } else if (!hasPopover && event.key === 'Escape' && isOpen()) {
+      event.preventDefault();
+      closePanel(true);
+    }
+  });
+  widget.addEventListener('focusout', event => {
+    if (tabbing && !widget.contains(event.relatedTarget)) closePanel(false);
+  });
+
+  if (hasPopover) {
+    panel.hidden = false;
+    panel.addEventListener('beforetoggle', event => {
+      toggle.setAttribute('aria-expanded', String(event.newState === 'open'));
+    });
+  } else {
+    panel.removeAttribute('popover');
+    document.addEventListener('click', event => {
+      if (!widget.contains(event.target)) closePanel(false);
+    });
+  }
+
+  window.addEventListener('scroll', schedulePosition, { passive: true });
+  window.addEventListener('resize', schedulePosition, { passive: true });
+  widget.dataset.ready = '';
 })();
