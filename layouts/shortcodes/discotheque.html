@@ -1,0 +1,37 @@
+{{ $page := .Page }}
+{{ $data := partial "music/data.html" $page }}
+{{ $visible := 5 }}
+<div class="music-columns">
+  <aside class="music-collection article-index-group" id="classiques" aria-labelledby="collection-musique">
+    <h2 id="collection-musique"><span id="hautement-recommandés">Recommandations</span></h2>
+    {{ with $data.recommendations }}
+      <ul class="music-list" role="list">
+        {{ range $index, $album := . }}
+          {{ partial "music/record.html" (dict "page" $page "album" $album "eager" (eq $index 0)) }}
+        {{ end }}
+      </ul>
+    {{ else }}
+      <p class="music-empty">Aucun disque ajouté pour le moment.</p>
+    {{ end }}
+  </aside>
+  <section class="music-journal article-index-group" aria-labelledby="ecoutes-du-moment">
+    <h2 id="ecoutes-du-moment">Écoutes du moment</h2>
+    {{ with $data.journal }}
+      <ol class="music-list" role="list">
+        {{ range first $visible . }}{{ partial "music/record.html" (dict "page" $page "album" .album "note" .note) }}{{ end }}
+      </ol>
+      {{ with after $visible . }}
+      <details class="music-journal-more">
+        <summary class="music-disclosure">
+          <span>Voir les écoutes précédentes</span><span class="music-disclosure-icon" aria-hidden="true"></span>
+        </summary>
+        <ol class="music-list" role="list" start="{{ add $visible 1 }}">
+          {{ range . }}{{ partial "music/record.html" (dict "page" $page "album" .album "note" .note) }}{{ end }}
+        </ol>
+      </details>
+      {{ end }}
+    {{ else }}
+      <p class="music-empty">Aucune écoute publiée pour le moment.</p>
+    {{ end }}
+  </section>
+</div>

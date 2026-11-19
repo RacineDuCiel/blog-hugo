@@ -1,0 +1,11 @@
+{{ $image := .page.Resources.Get .album.cover }}
+{{ if not $image }}
+  {{ errorf "Albums (%s): pochette introuvable '%s' pour '%s'" .page.File.Path .album.cover .album.title }}
+{{ else if ne $image.ResourceType "image" }}
+  {{ errorf "Albums (%s): '%s' n'est pas une image" .page.File.Path .album.cover }}
+{{ else }}
+  {{ $source := partial "albums/image.html" (dict "image" $image "presentation" .presentation) }}
+  <div class="album-cover">
+    <img class="album-cover-img" src="{{ $source.src }}" srcset="{{ $source.srcset }}" sizes="{{ $source.sizes }}" alt="" width="{{ $source.width }}" height="{{ $source.height }}" loading="{{ if .eager }}eager{{ else }}lazy{{ end }}" decoding="async">
+  </div>
+{{ end }}

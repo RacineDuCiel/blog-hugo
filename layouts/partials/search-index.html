@@ -2,6 +2,9 @@
 {{ $articles := where (where .site.RegularPages "Section" "posts") "Params.unlisted" "!=" true }}
 {{ range $articles.ByDate.Reverse }}
   {{ $summary := .Summary | plainify | htmlUnescape }}
+  {{ if and (eq .Layout "musique") .Description }}
+    {{ $summary = .Description }}
+  {{ end }}
   {{ if not $summary }}
     {{ $summary = .Plain | htmlUnescape | truncate 180 }}
   {{ end }}

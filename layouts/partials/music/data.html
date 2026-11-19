@@ -1,0 +1,59 @@
+{{ $page := . }}
+{{ $file := $page.Resources.Get "albums.yaml" }}
+{{ $recommendations := slice }}
+{{ $albums := collections.NewScratch }}
+{{ $journal := slice }}
+{{ $count := 0 }}
+{{ if $file }}
+  {{ $data := $file.Content | transform.Unmarshal }}
+  {{ if reflect.IsMap $data }}
+    {{ range $group := slice "classiques" "recommandes" "ecoutes" }}
+      {{ if isset $data $group }}
+        {{ $items := index $data $group }}
+        {{ $isJournal := eq $group "ecoutes" }}
+        {{ if reflect.IsSlice $items }}
+          {{ range $position, $entry := $items }}
+            {{ if not (reflect.IsMap $entry) }}
+              {{ errorf "Discothèque (%s): chaque entrée de '%s' doit décrire un disque" $page.File.Path $group }}
+            {{ else }}
+              {{ $album := $entry }}
+              {{ if and $isJournal (isset $entry "album") }}
+                {{ $reference := string $entry.album }}
+                {{ $album = $albums.Get $reference }}
+                {{ if not $album }}
+                  {{ errorf "Discothèque (%s): aucun disque défini avant l’écoute avec l'identifiant '%s'" $page.File.Path $reference }}
+                {{ end }}
+              {{ else }}
+                {{ $count = add $count 1 }}
+                {{ with $entry.id }}
+                  {{ $id := string . }}
+                  {{ if $albums.Get $id }}
+                    {{ errorf "Discothèque (%s): identifiant de disque '%s' utilisé plusieurs fois" $page.File.Path $id }}
+                  {{ else }}
+                    {{ $albums.Set $id $album }}
+                  {{ end }}
+                {{ end }}
+                {{ $shelf := cond $isJournal ($entry.collection | default "ecoutes") $group }}
+                {{ if in (slice "classiques" "recommandes") $shelf }}
+                  {{ $recommendations = $recommendations | append $album }}
+                {{ else if ne $shelf "ecoutes" }}
+                  {{ errorf "Discothèque (%s): collection '%s' inconnue pour '%s'" $page.File.Path $shelf $album.title }}
+                {{ end }}
+              {{ end }}
+              {{ if and $isJournal $album }}
+                {{ $journal = $journal | append (dict "album" $album "note" $entry.note "position" $position) }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        {{ else }}
+          {{ errorf "Discothèque (%s): '%s' doit être une liste" $page.File.Path $group }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ else }}
+    {{ errorf "Discothèque (%s): albums.yaml doit contenir des collections" $page.File.Path }}
+  {{ end }}
+{{ else }}
+  {{ errorf "Discothèque (%s): fichier albums.yaml introuvable" $page.File.Path }}
+{{ end }}
+{{ return (dict "recommendations" $recommendations "journal" (sort $journal "position" "desc") "count" $count) }}

@@ -3,7 +3,10 @@
 {{ with .GetTerms "themes" }}<div class="post-item-themes">{{ range . }}<a href="{{ partial "themes/search-url.html" .Data.Term }}">{{ .Title }}</a>{{ end }}</div>{{ end }}</div>
 <div class="post-item-meta">
 {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "2 Jan" }}<span class="post-item-year"> {{ .Date.Format "2006" }}</span></time>{{ end }}
-{{ if eq .Params.pageClass "music-recs" }}
+{{ if eq .Layout "musique" }}
+  {{ $count := (partial "music/data.html" .).count }}
+  <span>{{ $count }} disque{{ if ne $count 1 }}s{{ end }}</span>
+{{ else if eq .Params.pageClass "music-recs" }}
   {{ with .Resources.Get "albums.yaml" }}
     {{ $albums := .Content | transform.Unmarshal }}
     {{ $count := 0 }}

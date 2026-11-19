@@ -1,0 +1,21 @@
+{{ $valid := true }}
+{{ range slice "artist" "title" }}
+  {{ if not (index $.album .) }}
+    {{ errorf "Albums (%s): champ obligatoire '%s' absent (%v)" $.page.File.Path . $.album }}
+    {{ $valid = false }}
+  {{ end }}
+{{ end }}
+{{ if $valid }}
+<li class="music-record">
+  {{ if .album.cover }}
+    {{ partial "albums/cover.html" (dict "page" .page "album" .album "presentation" "compact" "eager" .eager) }}
+  {{ else }}
+    <span class="album-cover music-cover-placeholder" aria-hidden="true"></span>
+  {{ end }}
+  <div class="music-record-info">
+    <p class="music-record-title">{{ .album.title }}</p>
+    <p class="music-record-artist">{{ .album.artist }}</p>
+    {{ with .note }}<p class="music-note">{{ . }}</p>{{ end }}
+  </div>
+</li>
+{{ end }}

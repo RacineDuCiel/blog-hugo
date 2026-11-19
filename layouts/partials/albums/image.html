@@ -1,17 +1,25 @@
-{{/* Image policy shared by both interfaces. sizes mirrors music.scss's columns. */}}
+{{/* Resize from the original, with smaller derivatives for rows in the collection and journal. */}}
+{{ $targetWidths := slice 320 640 960 }}
+{{ $fallbackWidth := 640 }}
+{{ if eq .presentation "compact" }}
+  {{ $targetWidths = slice 48 96 144 }}
+  {{ $fallbackWidth = 96 }}
+{{ end }}
 {{ $widths := slice }}
-{{ range slice 320 640 960 }}{{ $widths = $widths | append (math.Min . $.image.Width | int) }}{{ end }}
+{{ range $targetWidths }}{{ $widths = $widths | append (math.Min . $.image.Width | int) }}{{ end }}
 {{ $candidates := slice }}
 {{ $fallback := false }}
 {{ range ($widths | uniq) }}
   {{ $image := $.image.Resize (printf "%dx webp q78" .) }}
   {{ $candidates = $candidates | append (printf "%s %dw" $image.RelPermalink $image.Width) }}
-  {{ if or (not $fallback) (le . 640) }}{{ $fallback = $image }}{{ end }}
+  {{ if or (not $fallback) (le . $fallbackWidth) }}{{ $fallback = $image }}{{ end }}
 {{ end }}
 {{ $sizes := "(max-width: 359px) calc(100vw - 48px), (max-width: 760px) calc((100vw - 68px) / 2), (max-width: 1000px) calc((100vw - 96px) / 2), (max-width: 1120px) calc((100vw - 336px) / 3), 261px" }}
 {{ if eq .presentation "classics" }}
   {{ $sizes = "(max-width: 359px) calc(100vw - 48px), (max-width: 760px) calc((100vw - 68px) / 2), (max-width: 1000px) calc((100vw - 96px) / 2), (max-width: 1120px) calc((100vw - 320px) / 2), 400px" }}
 {{ else if eq .presentation "legacy" }}
   {{ $sizes = "(max-width: 760px) 50vw, 25vw" }}
+{{ else if eq .presentation "compact" }}
+  {{ $sizes = "44px" }}
 {{ end }}
 {{ return (dict "src" $fallback.RelPermalink "srcset" (delimit $candidates ", ") "sizes" $sizes "width" .image.Width "height" .image.Height) }}
