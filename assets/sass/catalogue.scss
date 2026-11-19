@@ -15,7 +15,6 @@
   background: var(--wash);
 }
 
-.archives-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; }
 .archives-shell .post-item-year { display: none; }
 
 html:not(.js) .search-shell :is(.search-form, .theme-filter-bar) { display: none; }

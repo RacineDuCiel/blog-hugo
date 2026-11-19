@@ -1,51 +1,29 @@
-{{ $lectures := .Site.GetPage "/posts/lecture" }}
-{{ $music := .Site.GetPage "/posts/musique/recommandations-musique" }}
-{{ $sport := .Site.GetPage "/posts/sport-sante" }}
-{{ if and $music (eq $music.Params.unlisted true) }}{{ $music = false }}{{ end }}
-{{ if or $lectures $music $sport }}
+{{ $dossiers := slice }}
+{{ with .Site.GetPage "/posts/lecture" }}
+  {{ $dossiers = $dossiers | append (dict "slug" "lectures" "href" .RelPermalink "title" "Lectures" "description" "Les fictions et essais qui m'ont marqué") }}
+{{ end }}
+{{ with .Site.GetPage "/posts/musique/recommandations-musique" }}
+  {{ if ne .Params.unlisted true }}
+    {{ $dossiers = $dossiers | append (dict "slug" "music" "href" .RelPermalink "title" "Musique" "description" "Mes albums/EP de références et découvertes") }}
+  {{ end }}
+{{ end }}
+{{ with .Site.GetPage "/posts/sport-sante" }}
+  {{ $dossiers = $dossiers | append (dict "slug" "sport" "href" .RelPermalink "title" "Santé et sport" "description" "Articles sur le corps et son fonctionnement") }}
+{{ end }}
+{{ with $dossiers }}
 <section class="home-dossiers" aria-label="Dossiers épinglés">
-  <div class="home-dossiers-grid{{ if and $lectures $music $sport }} home-dossiers-grid--three{{ end }}">
-    {{ with $lectures }}
-    <a class="home-dossier home-dossier--lectures" href="{{ .RelPermalink }}" aria-labelledby="home-lectures-title" aria-describedby="home-lectures-description">
-      <div class="home-dossier-copy">
-        <h2 id="home-lectures-title" class="home-dossier-title"><span>Lectures</span> <span class="home-dossier-arrow" aria-hidden="true">→</span></h2>
-        <p id="home-lectures-description" class="home-dossier-description">{{ .Description }}</p>
-      </div>
-      {{ $articles := where .RegularPagesRecursive "Params.unlisted" "!=" true }}
-      {{ $articles = where $articles "Params.readingKind" "!=" "portrait" }}
-      {{ range first 1 ($articles.ByDate.Reverse) }}
-      <div class="home-reading-sheets">
-        <div class="home-reading-sheet">
-          {{ if and (not .Date.IsZero) (ne .Params.showDate false) }}
-          <time datetime="{{ .Date.Format "2006-01" }}">{{ .Date | time.Format "January 2006" }}</time>
-          {{ end }}
-          <p>{{ .Title }}</p>
-        </div>
-      </div>
+  {{ range . }}
+    {{ $titleID := printf "home-%s-title" .slug }}
+    {{ $descriptionID := printf "home-%s-description" .slug }}
+    <a class="home-dossier" href="{{ .href }}" aria-labelledby="{{ $titleID }}"{{ if .description }} aria-describedby="{{ $descriptionID }}"{{ end }}>
+      <h2 id="{{ $titleID }}" class="home-dossier-title">
+        <span>{{ .title }}</span>
+        <span class="home-dossier-arrow" aria-hidden="true">→</span>
+      </h2>
+      {{ with .description }}
+      <p id="{{ $descriptionID }}" class="home-dossier-description">{{ . }}</p>
       {{ end }}
     </a>
-    {{ end }}
-    {{ with $music }}
-    <a class="home-dossier home-dossier--music" href="{{ .RelPermalink }}" aria-labelledby="home-music-title" aria-describedby="home-music-description">
-      <div class="home-dossier-copy">
-        <h2 id="home-music-title" class="home-dossier-title">Musique</h2>
-        <p id="home-music-description" class="home-dossier-description">Albums de référence et découvertes.</p>
-      </div>
-      <div class="home-records" aria-hidden="true">
-        <span class="home-record home-record--back"></span>
-        <span class="home-record home-record--front"></span>
-      </div>
-    </a>
-    {{ end }}
-    {{ with $sport }}
-    <a class="home-dossier home-dossier--sport" href="{{ .RelPermalink }}" aria-labelledby="home-sport-title" aria-describedby="home-sport-description">
-      <div class="home-dossier-copy">
-        <h2 id="home-sport-title" class="home-dossier-title">Santé et sport</h2>
-        <p id="home-sport-description" class="home-dossier-description">Comprendre le corps et l’entraînement.</p>
-      </div>
-      <span class="home-dossier-arrow" aria-hidden="true">→</span>
-    </a>
-    {{ end }}
-  </div>
+  {{ end }}
 </section>
 {{ end }}
